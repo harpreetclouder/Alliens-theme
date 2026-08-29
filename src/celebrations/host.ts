@@ -7,6 +7,7 @@ export interface CelebrationShowArgs {
   caption: string;
   tint: string;
   reduceMotion: boolean;
+  dataReduceAuto?: boolean;
   durationMs: number;
   extensionUri: vscode.Uri;
   sfxUri?: vscode.Uri;
@@ -21,7 +22,8 @@ export class CelebrationHost {
   show(args: CelebrationShowArgs): void {
     this.dispose();
 
-    const { mode, loop, caption, tint, reduceMotion, durationMs, extensionUri, sfxUri } = args;
+    const { mode, loop, caption, tint, reduceMotion, dataReduceAuto, durationMs, extensionUri, sfxUri } =
+      args;
     const vscode = this.vscodeApi;
 
     const panel = vscode.window.createWebviewPanel(
@@ -45,6 +47,7 @@ export class CelebrationHost {
       caption,
       tint,
       reduceMotion,
+      dataReduceAuto,
       cspSource: panel.webview.cspSource,
       sfxUri: sfxUri ? panel.webview.asWebviewUri(sfxUri).toString() : undefined,
     });
@@ -93,12 +96,14 @@ function buildHtml(opts: {
   caption: string;
   tint: string;
   reduceMotion: boolean;
+  dataReduceAuto?: boolean;
   cspSource: string;
   sfxUri?: string;
 }): string {
   const modeClass = opts.mode === 'toast' ? 'mode-toast' : 'mode-overlay';
   const motionClass = opts.reduceMotion ? 'reduce-motion' : '';
   const bodyClasses = [modeClass, motionClass].filter(Boolean).join(' ');
+  const bodyAttrs = opts.dataReduceAuto ? ' data-reduce="auto"' : '';
   const audioTag = opts.sfxUri
     ? `<audio autoplay src="${opts.sfxUri}" aria-hidden="true"></audio>`
     : '';
@@ -112,7 +117,7 @@ function buildHtml(opts: {
   <link rel="stylesheet" href="${opts.cssUri}">
   <style>body { --tint: ${opts.tint}; }</style>
 </head>
-<body class="${bodyClasses}">
+<body class="${bodyClasses}"${bodyAttrs}>
   ${audioTag}
   <div class="celebration">
     <div class="loop ${opts.loopClass}" aria-hidden="true"></div>

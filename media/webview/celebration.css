@@ -114,6 +114,14 @@ body.reduce-motion .loop::after {
   opacity: 1 !important;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  body[data-reduce="auto"] .loop,
+  body[data-reduce="auto"] .loop::before,
+  body[data-reduce="auto"] .loop::after {
+    animation: none !important;
+  }
+}
+
 /* ── Keyframes ── */
 
 @keyframes beam-pulse {
