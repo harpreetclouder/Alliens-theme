@@ -1,14 +1,26 @@
 # Work Progress — Orbital
 
 ## Status
-**v1 implemented** · packaging done · Task 13 complete · engine floor restored to `^1.85.0`
+v1 implemented on `master` · final review: Ready with follow-ups · F5 smoke still needed
 
-All 13 implementation tasks complete. Extension packages as `orbital-0.0.1.vsix`.
+## Done
+- Spec + implementation plan
+- Tasks 1–13 (themes, celebrations, SFX, engine, commands, onboarding, triggers, packaging)
+- Final review fixes: SFX `enableScripts`, debug copy, phpunit regex, engine floor `^1.85.0`
+- Artifact: `orbital-0.0.1.vsix`
 
-## Ledger
-See `.superpowers/sdd/progress.md`
+## Try it
+1. Open this folder in Cursor/VS Code
+2. F5 → Extension Development Host
+3. Or: Install from VSIX → `orbital-0.0.1.vsix`
+4. Commands: `Orbital: Preview Celebration`, `Switch Pack`, `Toggle Sound`
 
-## Artifacts
+## Follow-ups
+- Manual F5 matrix (onboarding, toast/overlay, triggers, SFX)
+- Richer theme tokens
+- Optional: tighten debug success detection
+
+## Docs
 - Spec: `docs/superpowers/specs/2026-08-29-orbital-design.md`
 - Plan: `docs/superpowers/plans/2026-08-29-orbital-implementation.md`
-- Package: `orbital-0.0.1.vsix` (gitignored; build with `npm run package`)
+- Ledger: `.superpowers/sdd/progress.md`
