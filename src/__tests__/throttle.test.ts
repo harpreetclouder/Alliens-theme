@@ -14,4 +14,11 @@ describe('CelebrationThrottle', () => {
     t.allow({ kind: 'commit', size: 'small' }, 1000);
     expect(t.allow({ kind: 'build', size: 'big' }, 2000)).toBe(true);
   });
+
+  it('big wins do not reset small-win window', () => {
+    const t = new CelebrationThrottle(45_000);
+    expect(t.allow({ kind: 'commit', size: 'small' }, 1000)).toBe(true);
+    expect(t.allow({ kind: 'build', size: 'big' }, 2000)).toBe(true);
+    expect(t.allow({ kind: 'commit', size: 'small' }, 20_000)).toBe(false);
+  });
 });
