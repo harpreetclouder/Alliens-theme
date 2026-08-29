@@ -1,0 +1,42 @@
+{
+  "name": "orbital",
+  "displayName": "Orbital",
+  "description": "Alien/UFO theme and celebration companion for Cursor/VS Code",
+  "version": "0.0.1",
+  "publisher": "orbital",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "themes": [],
+    "commands": [],
+    "configuration": {}
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "package": "vsce package",
+    "vscode:prepublish": "npm run compile"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "@types/vscode": "^1.134.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  }
+}
