@@ -54,7 +54,10 @@ export function registerGitTrigger(
     inner.push(...disposables);
   };
 
+  let disposed = false;
+
   const composite = new vscode.Disposable(() => {
+    disposed = true;
     for (const disposable of inner) {
       disposable.dispose();
     }
@@ -63,7 +66,7 @@ export function registerGitTrigger(
   let wired = false;
 
   const tryWire = (): void => {
-    if (wired || !gitExt.isActive) {
+    if (disposed || wired || !gitExt.isActive) {
       return;
     }
     try {
