@@ -119,6 +119,8 @@ body.reduce-motion .loop::after {
   body[data-reduce="auto"] .loop::before,
   body[data-reduce="auto"] .loop::after {
     animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
   }
 }
 
