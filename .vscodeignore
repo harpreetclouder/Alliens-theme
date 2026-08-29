@@ -1,0 +1,13 @@
+.vscode/**
+.vscode-test/**
+src/**
+**/*.ts
+**/*.map
+node_modules/**
+.git/**
+.superpowers/**
+docs/superpowers/plans/**
+WORK_PROGRESS.md
+vitest.config.ts
+tsconfig.json
+.gitignore

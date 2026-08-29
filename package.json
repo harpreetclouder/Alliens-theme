@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "publisher": "orbital",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.134.0"
   },
   "categories": [
     "Themes"
@@ -124,12 +124,19 @@
     "watch": "tsc -watch -p ./",
     "test": "vitest run",
     "test:watch": "vitest",
-    "package": "vsce package",
+    "package": "vsce package --allow-missing-repository --no-rewrite-relative-links",
     "vscode:prepublish": "npm run compile"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "theme",
+    "celebration",
+    "ufo",
+    "alien",
+    "cursor",
+    "vscode"
+  ],
+  "author": "Orbital",
+  "license": "MIT",
   "type": "commonjs",
   "devDependencies": {
     "@types/node": "^26.4.0",
