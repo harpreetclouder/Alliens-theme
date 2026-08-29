@@ -1,7 +1,7 @@
 # Work Progress — Orbital
 
 ## Status
-v1 implemented on `master` · kept as-is (GitHub setup deferred) · F5 smoke still recommended
+v0.0.2 on `master` — test trigger + visibility fixes after demo feedback
 
 ## Done
 - Spec + implementation plan

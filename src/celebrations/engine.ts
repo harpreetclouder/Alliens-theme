@@ -2,12 +2,14 @@ import * as vscode from 'vscode';
 import { resolveSfxUri } from '../audio/sfxPlayer';
 import { readSettings } from '../config/settings';
 import { getPack } from '../packs/registry';
+import { PACK_EMOJI } from './emojis';
 import { captionFor } from './captions';
 import { classifyKind, resolveDisplay } from './classifier';
 import { CelebrationHost } from './host';
 import { pickLoop } from './picker';
 import { CelebrationThrottle } from './throttle';
 import { WinKind } from './types';
+import { orbitalLog } from '../util/log';
 
 export class CelebrationEngine {
   private readonly throttle = new CelebrationThrottle();
@@ -38,12 +40,14 @@ export class CelebrationEngine {
     const settings = readSettings(() => vscode.workspace.getConfiguration('orbital'));
 
     if (!settings.celebrationsEnabled) {
+      orbitalLog(`Celebration skipped (${kind}) — celebrations disabled`);
       return;
     }
 
     const size = classifyKind(kind, meta);
 
     if (!bypassThrottle && !this.throttle.allow({ kind, size })) {
+      orbitalLog(`Celebration skipped (${kind}) — throttled`);
       return;
     }
 
@@ -74,6 +78,13 @@ export class CelebrationEngine {
       extensionUri: this.ctx.extensionUri,
       sfxUri,
     });
+
+    orbitalLog(`Celebration shown: ${settings.pack} · ${kind} · ${mode} · ${loop.id}`);
+
+    if (mode === 'toast') {
+      const emoji = PACK_EMOJI[settings.pack];
+      void vscode.window.showInformationMessage(`${emoji} ${caption}`);
+    }
 
     this.celebrationIndex++;
   }

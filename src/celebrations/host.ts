@@ -29,7 +29,7 @@ export class CelebrationHost {
     const panel = vscode.window.createWebviewPanel(
       'orbital.celebration',
       'Orbital',
-      { viewColumn: vscode.ViewColumn.Active, preserveFocus: true },
+      { viewColumn: vscode.ViewColumn.Active, preserveFocus: false },
       {
         enableScripts: true,
         localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')],
@@ -51,6 +51,8 @@ export class CelebrationHost {
       cspSource: panel.webview.cspSource,
       sfxUri: sfxUri ? panel.webview.asWebviewUri(sfxUri).toString() : undefined,
     });
+
+    panel.reveal(vscode.ViewColumn.Active, false);
 
     this.panel = panel;
     this.disposeTimer = setTimeout(() => this.dispose(), durationMs);

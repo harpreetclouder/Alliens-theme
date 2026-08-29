@@ -1,8 +1,11 @@
 import * as vscode from 'vscode';
 import { CelebrationEngine } from '../celebrations/engine';
 import { OrbitalSettings } from '../config/settings';
+import { orbitalLog } from '../util/log';
+import { registerTerminalTestTrigger } from './terminalTestTrigger';
 
-const TEST_NAME_RE = /test|jest|vitest|pytest|mocha|phpunit/i;
+const TEST_NAME_RE =
+  /test|jest|vitest|pytest|mocha|phpunit|npm.*test|pnpm.*test|yarn test|run tests/i;
 const FULL_SUITE_RE = /suite|all|ci/i;
 
 export function registerTestTrigger(
@@ -20,13 +23,17 @@ export function registerTestTrigger(
       }
 
       const name = e.execution.task.name;
-      if (!TEST_NAME_RE.test(name)) {
+      const def = e.execution.task.definition as { command?: string; script?: string } | undefined;
+      const label = `${name} ${def?.command ?? ''} ${def?.script ?? ''}`;
+      if (!TEST_NAME_RE.test(label)) {
         return;
       }
 
-      const fullSuite = FULL_SUITE_RE.test(name);
+      const fullSuite = FULL_SUITE_RE.test(label);
+      orbitalLog(`Task test passed (${name}) → celebrating`);
       engine.handle('tests', { fullSuite });
     }),
+    ...registerTerminalTestTrigger(engine, getSettings),
   ];
 
   // vscode.tests exposes createTestController only — no global results listener in the public API.

@@ -2,7 +2,7 @@
   "name": "orbital",
   "displayName": "Orbital",
   "description": "Alien/UFO theme and celebration companion for Cursor/VS Code",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "orbital",
   "engines": {
     "vscode": "^1.85.0"

@@ -59,9 +59,12 @@ Settings → search `orbital.celebrations.intensity`:
 Preview after each change.
 
 ### 5. Trigger a real win (optional)
+- **Terminal:** run `npm test` in the integrated terminal (now detected in v0.0.2+)
 - **Commit** something in a git repo → small celebration (if trigger on)
-- **Run a task** named `test` or `build` with exit 0
+- **Run a VS Code task** named `test` or `build` with exit 0
 - **Save file** — only if you enable `orbital.celebrations.triggers.save`
+
+**Debug:** View → Output → **Orbital** — logs when celebrations fire or get skipped.
 
 ---
 
