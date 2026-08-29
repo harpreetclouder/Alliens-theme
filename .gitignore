@@ -3,4 +3,5 @@ node_modules/
 *.vsix
 .DS_Store
 out/
+.orbital/
 .vscode-test/

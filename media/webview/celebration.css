@@ -11,36 +11,59 @@
 html,
 body {
   width: 100%;
-  height: 100%;
+  min-height: 120px;
+  height: auto;
   overflow: hidden;
   background: transparent;
 }
 
 body {
   --tint: #1cff9a;
+  --duration: 5000ms;
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  animation: scene-in 0.55s ease-out forwards;
 }
 
-/* ── Display modes ── */
+body.exiting {
+  animation: scene-out 0.55s ease-in forwards;
+  pointer-events: none;
+}
 
 body.mode-toast {
   align-items: flex-end;
   justify-content: flex-end;
   padding: 1rem 1.25rem;
-  background: rgba(4, 8, 14, 0.55);
-  backdrop-filter: blur(2px);
+  background: rgba(4, 8, 14, 0);
+  backdrop-filter: blur(0);
+}
+
+body.mode-toast:not(.exiting) {
+  animation: scene-in-toast 0.5s ease-out forwards;
+}
+
+body.mode-overlay {
+  background: rgba(2, 6, 12, 0);
+  backdrop-filter: blur(0);
 }
 
 body.mode-toast .celebration {
-  width: 240px;
-  padding: 0.85rem 1rem 1rem;
+  width: 260px;
+  padding: 0.9rem 1rem 1rem;
   border-radius: 14px;
   background: rgba(8, 12, 18, 0.94);
   border: 1px solid color-mix(in srgb, var(--tint) 45%, transparent);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 24px color-mix(in srgb, var(--tint) 25%, transparent);
+  transform: translateY(28px) scale(0.92);
+  opacity: 0;
+  animation: card-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
+}
+
+body.exiting .celebration {
+  animation: card-out 0.5s ease-in forwards !important;
 }
 
 body.mode-toast .loop {
@@ -59,20 +82,22 @@ body.mode-overlay .celebration {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: min(420px, 90vw);
-  padding: 2.5rem 2rem;
+  width: min(440px, 92vw);
+  padding: 2.5rem 2rem 2rem;
   border-radius: 20px;
   background: rgba(6, 10, 16, 0.92);
   border: 2px solid color-mix(in srgb, var(--tint) 55%, transparent);
   box-shadow:
     0 0 60px color-mix(in srgb, var(--tint) 35%, transparent),
     0 24px 80px rgba(0, 0, 0, 0.65);
-  animation: pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(36px) scale(0.88);
+  opacity: 0;
+  filter: blur(8px);
+  animation: card-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
 }
 
-body.mode-overlay {
-  background: rgba(2, 6, 12, 0.78);
-  backdrop-filter: blur(4px);
+body.mode-overlay:not(.exiting) {
+  animation: scene-in-overlay 0.6s ease-out forwards;
 }
 
 body.mode-overlay .loop {
@@ -86,6 +111,23 @@ body.mode-overlay .caption {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-align: center;
+  animation: text-in 0.6s ease-out 0.35s both;
+}
+
+.subline {
+  margin-top: 0.45rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: color-mix(in srgb, var(--tint) 72%, #c8d0dc);
+  opacity: 0;
+  animation: text-in 0.55s ease-out 0.5s both;
+}
+
+body.mode-toast .subline {
+  font-size: 0.75rem;
+  margin-top: 0.35rem;
 }
 
 .hero-emoji {
@@ -93,12 +135,207 @@ body.mode-overlay .caption {
   line-height: 1;
   margin-bottom: 0.5rem;
   filter: drop-shadow(0 0 12px color-mix(in srgb, var(--tint) 50%, transparent));
-  animation: float 1.8s ease-in-out infinite;
+  animation: hero-pop 0.7s cubic-bezier(0.22, 1, 0.36, 1) both, float 1.8s ease-in-out 0.7s infinite;
+  z-index: 2;
+  position: relative;
 }
 
 body.mode-overlay .hero-emoji {
-  font-size: 4.5rem;
-  margin-bottom: 0.75rem;
+  font-size: 3.25rem;
+  margin-bottom: 0.35rem;
+}
+
+body.has-gif .hero-emoji {
+  font-size: 2.75rem;
+  margin-bottom: 0.25rem;
+}
+
+body.mode-overlay.has-gif .hero-emoji {
+  font-size: 3rem;
+}
+
+.hero-gif {
+  width: min(220px, 70vw);
+  height: auto;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin: 0.25rem 0 0.75rem;
+  box-shadow:
+    0 0 32px color-mix(in srgb, var(--tint) 40%, transparent),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+  animation: gif-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+  z-index: 1;
+}
+
+body.mode-overlay .hero-gif {
+  width: min(280px, 78vw);
+  max-height: 220px;
+}
+
+body.mode-toast .hero-gif {
+  width: 120px;
+  max-height: 100px;
+  margin-bottom: 0.5rem;
+}
+
+.emoji-orbit {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 0.35rem;
+  pointer-events: none;
+}
+
+body.mode-overlay .emoji-orbit {
+  width: 160px;
+  height: 160px;
+  margin-bottom: 0.15rem;
+}
+
+body.has-gif .emoji-orbit {
+  width: 140px;
+  height: 140px;
+}
+
+.orbit-item {
+  position: absolute;
+  font-size: 1.35rem;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--tint) 45%, transparent));
+  animation: orbit-spin 4s linear infinite;
+}
+
+body.mode-overlay .orbit-item {
+  font-size: 1.65rem;
+}
+
+.orbit-1 {
+  top: 50%;
+  left: 50%;
+  margin: -0.7rem 0 0 -0.7rem;
+  animation-delay: 0s;
+}
+
+.orbit-2 {
+  top: 50%;
+  left: 50%;
+  margin: -0.7rem 0 0 -0.7rem;
+  animation: orbit-spin-alt 4.5s linear infinite;
+  animation-delay: -1.5s;
+}
+
+.orbit-3 {
+  top: 50%;
+  left: 50%;
+  margin: -0.7rem 0 0 -0.7rem;
+  animation-delay: -3s;
+}
+
+@keyframes hero-pop {
+  from {
+    transform: scale(0.4) rotate(-12deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes gif-in {
+  from {
+    transform: translateY(24px) scale(0.85);
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes orbit-spin {
+  from { transform: rotate(0deg) translateX(52px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(52px) rotate(-360deg); }
+}
+
+@keyframes orbit-spin-alt {
+  from { transform: rotate(140deg) translateX(54px) rotate(-140deg); }
+  to { transform: rotate(500deg) translateX(54px) rotate(-500deg); }
+}
+
+@keyframes scene-in-overlay {
+  from {
+    background: rgba(2, 6, 12, 0);
+    backdrop-filter: blur(0);
+    opacity: 0;
+  }
+  to {
+    background: rgba(2, 6, 12, 0.82);
+    backdrop-filter: blur(6px);
+    opacity: 1;
+  }
+}
+
+@keyframes scene-in-toast {
+  from {
+    background: rgba(4, 8, 14, 0);
+    backdrop-filter: blur(0);
+    opacity: 0;
+  }
+  to {
+    background: rgba(4, 8, 14, 0.55);
+    backdrop-filter: blur(3px);
+    opacity: 1;
+  }
+}
+
+@keyframes scene-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scene-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes card-in {
+  from {
+    transform: translateY(36px) scale(0.88);
+    opacity: 0;
+    filter: blur(8px);
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes card-out {
+  from {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+  to {
+    transform: translateY(-20px) scale(0.94);
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+
+@keyframes text-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pop-in {
@@ -139,10 +376,17 @@ body.mode-overlay .hero-emoji {
 
 body.reduce-motion .loop,
 body.reduce-motion .loop::before,
-body.reduce-motion .loop::after {
+body.reduce-motion .loop::after,
+body.reduce-motion .celebration,
+body.reduce-motion .caption,
+body.reduce-motion .subline,
+body.reduce-motion .hero-emoji,
+body.reduce-motion .hero-gif,
+body.reduce-motion .orbit-item {
   animation: none !important;
   transform: none !important;
   opacity: 1 !important;
+  filter: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -577,3 +821,145 @@ body.reduce-motion .loop::after {
   border: 2px solid var(--tint);
   animation: ping 1.2s ease-out 0.4s infinite;
 }
+
+/* ── Shared layout columns ── */
+
+.celebration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.visual-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body.mode-overlay .celebration,
+body.mode-toast .celebration {
+  flex-direction: column;
+}
+
+/* ── Bottom panel mode (default) ── */
+
+body.mode-panel {
+  opacity: 1;
+  animation: none;
+  background: var(--vscode-panel-background, #1e1e1e);
+  align-items: stretch;
+  justify-content: center;
+  padding: 0;
+}
+
+body.mode-panel.exiting {
+  animation: panel-out 0.45s ease-in forwards;
+}
+
+body.mode-panel .celebration {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  width: 100%;
+  min-height: 120px;
+  padding: 0.65rem 1rem;
+  border-top: 2px solid color-mix(in srgb, var(--tint) 55%, transparent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--tint) 8%, transparent),
+    transparent 55%
+  );
+  animation: panel-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body.mode-panel .visual-col {
+  flex-shrink: 0;
+  min-width: 100px;
+}
+
+body.mode-panel .text-col {
+  align-items: flex-start;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+}
+
+body.mode-panel .hero-emoji {
+  font-size: 2rem;
+  margin-bottom: 0;
+}
+
+body.mode-panel .emoji-orbit {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 0.15rem;
+}
+
+body.mode-panel .hero-gif {
+  width: 96px;
+  max-height: 72px;
+  margin: 0;
+}
+
+body.mode-panel .loop {
+  width: 72px;
+  height: 72px;
+  margin: 0;
+}
+
+body.mode-panel .caption {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: left;
+  animation: text-in 0.45s ease-out 0.15s both;
+}
+
+body.mode-panel .subline {
+  text-align: left;
+  font-size: 0.8125rem;
+  margin-top: 0.2rem;
+}
+
+body.mode-panel.mode-idle .celebration.idle {
+  flex-direction: row;
+  gap: 0.65rem;
+  min-height: 48px;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--tint) 25%, transparent);
+  animation: none;
+  background: transparent;
+}
+
+body.mode-panel .idle-icon {
+  font-size: 1.25rem;
+  opacity: 0.7;
+}
+
+body.mode-panel .idle-text {
+  font-size: 0.8125rem;
+  color: var(--vscode-descriptionForeground, #999);
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes panel-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+

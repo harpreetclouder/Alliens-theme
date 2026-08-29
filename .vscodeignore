@@ -11,3 +11,5 @@ WORK_PROGRESS.md
 vitest.config.ts
 tsconfig.json
 .gitignore
+.orbital/**
+.vscode/orbital-test-pass.json

@@ -3,6 +3,17 @@ import type { PackId } from '../packs/types';
 
 export type Intensity = 'chill' | 'normal' | 'hype';
 export type ReduceMotion = 'auto' | 'always' | 'never';
+export type CelebrationDisplay = 'terminal' | 'panel' | 'overlay';
+export type CelebrationSurfaceSetting = 'terminal' | 'panel' | 'overlay' | 'statusbar';
+
+export interface SurfaceOverrides {
+  tests?: CelebrationSurfaceSetting;
+  build?: CelebrationSurfaceSetting;
+  commit?: CelebrationSurfaceSetting;
+  debug?: CelebrationSurfaceSetting;
+  save?: CelebrationSurfaceSetting;
+  preview?: CelebrationSurfaceSetting;
+}
 
 export interface TriggerSettings {
   tests: boolean;
@@ -15,6 +26,8 @@ export interface TriggerSettings {
 export interface OrbitalSettings {
   pack: PackId;
   celebrationsEnabled: boolean;
+  display: CelebrationDisplay;
+  surfaces: SurfaceOverrides;
   intensity: Intensity;
   triggers: TriggerSettings;
   soundEnabled: boolean;
@@ -26,12 +39,34 @@ export interface ConfigLike {
   get<T>(section: string, defaultValue: T): T;
 }
 
+const SURFACE_KEYS = ['tests', 'build', 'commit', 'debug', 'save', 'preview'] as const;
+const VALID_SURFACES = new Set<CelebrationSurfaceSetting>([
+  'terminal',
+  'panel',
+  'overlay',
+  'statusbar',
+]);
+
+function readSurfaceOverrides(c: ConfigLike): SurfaceOverrides {
+  const raw = c.get<Record<string, string>>('celebrations.surfaces', {});
+  const out: SurfaceOverrides = {};
+  for (const key of SURFACE_KEYS) {
+    const v = raw[key];
+    if (typeof v === 'string' && VALID_SURFACES.has(v as CelebrationSurfaceSetting)) {
+      out[key] = v as CelebrationSurfaceSetting;
+    }
+  }
+  return out;
+}
+
 const DEFAULTS: OrbitalSettings = {
   pack: 'mothership',
   celebrationsEnabled: true,
+  display: 'terminal',
+  surfaces: {},
   intensity: 'normal',
   triggers: { tests: true, build: true, commit: true, debug: true, save: false },
-  soundEnabled: false,
+  soundEnabled: true,
   mutedPacks: [],
   reduceMotion: 'auto',
 };
@@ -40,6 +75,7 @@ export function readSettings(getConfig: () => ConfigLike): OrbitalSettings {
   const c = getConfig();
   const packRaw = c.get<string>('pack', DEFAULTS.pack);
   const intensityRaw = c.get<string>('celebrations.intensity', DEFAULTS.intensity);
+  const displayRaw = c.get<string>('celebrations.display', DEFAULTS.display);
   const reduceRaw = c.get<string>('reduceMotion', DEFAULTS.reduceMotion);
   const muted = c.get<string[]>('sound.mutedPacks', []);
 
@@ -53,9 +89,18 @@ export function readSettings(getConfig: () => ConfigLike): OrbitalSettings {
       ? reduceRaw
       : 'auto';
 
+  const display: CelebrationDisplay =
+    displayRaw === 'overlay'
+      ? 'overlay'
+      : displayRaw === 'panel'
+        ? 'panel'
+        : 'terminal';
+
   return {
     pack: isPackId(packRaw) ? packRaw : 'mothership',
     celebrationsEnabled: c.get('celebrations.enabled', true),
+    display,
+    surfaces: readSurfaceOverrides(c),
     intensity,
     triggers: {
       tests: c.get('celebrations.triggers.tests', true),
@@ -64,7 +109,7 @@ export function readSettings(getConfig: () => ConfigLike): OrbitalSettings {
       debug: c.get('celebrations.triggers.debug', true),
       save: c.get('celebrations.triggers.save', false),
     },
-    soundEnabled: c.get('sound.enabled', false),
+    soundEnabled: c.get('sound.enabled', DEFAULTS.soundEnabled),
     mutedPacks: muted.filter(isPackId),
     reduceMotion,
   };

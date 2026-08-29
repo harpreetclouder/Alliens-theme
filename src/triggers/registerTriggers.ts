@@ -6,6 +6,7 @@ import { registerDebugTrigger } from './debugTrigger';
 import { registerGitTrigger } from './gitTrigger';
 import { registerSaveTrigger } from './saveTrigger';
 import { registerTestTrigger } from './testTrigger';
+import { registerVitestSignalTrigger } from './vitestSignalTrigger';
 
 export function registerTriggers(
   _context: vscode.ExtensionContext,
@@ -14,6 +15,7 @@ export function registerTriggers(
 ): vscode.Disposable[] {
   return [
     ...registerTestTrigger(engine, getSettings),
+    registerVitestSignalTrigger(engine, getSettings),
     ...registerBuildTrigger(engine, getSettings),
     ...registerGitTrigger(engine, getSettings),
     ...registerDebugTrigger(engine, getSettings),

@@ -30,7 +30,7 @@ export function registerTestTrigger(
       }
 
       const fullSuite = FULL_SUITE_RE.test(label);
-      orbitalLog(`Task test passed (${name}) → celebrating`);
+      orbitalLog('Task test passed', `${name} → celebration`);
       engine.handle('tests', { fullSuite });
     }),
     ...registerTerminalTestTrigger(engine, getSettings),

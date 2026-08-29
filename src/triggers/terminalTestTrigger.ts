@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { CelebrationEngine } from '../celebrations/engine';
+import { CELEBRATION_DURATION_MS, EXIT_LEAD_MS } from '../celebrations/durations';
 import { OrbitalSettings } from '../config/settings';
-import { orbitalLog } from '../util/log';
+import { orbitalLog, orbitalLogSkip } from '../util/log';
 
 const TEST_CMD_RE =
   /(?:npm|pnpm|yarn)\s+(?:run\s+)?test\b|\b(?:vitest|jest|pytest|mocha|phpunit)\b|\btest\b/i;
@@ -15,10 +16,9 @@ const PASS_SNIPPETS = [
   /\d+\s+passed(?:,\s*\d+\s+failed)?\s*$/m,
 ];
 
-const FAIL_SNIPPETS = [/Tests?\s+\d+\s+failed/i, /\bfailed\b/i, /\bFAIL\b/, /✗|×/];
-
 type ShellEndEvent = {
   exitCode?: number;
+  terminal?: vscode.Terminal;
   execution?: { commandLine?: { value?: string } };
 };
 
@@ -32,7 +32,8 @@ type ExtendedWindow = typeof vscode.window & {
   onDidWriteTerminalData?: vscode.Event<TerminalDataEvent>;
 };
 
-const TERMINAL_COOLDOWN_MS = 8000;
+/** Prevent double-fire from output + shell-end on the same run. */
+const TERMINAL_COOLDOWN_MS = CELEBRATION_DURATION_MS.overlay + EXIT_LEAD_MS + 250;
 const MAX_BUFFER = 12_000;
 
 export function registerTerminalTestTrigger(
@@ -47,18 +48,20 @@ export function registerTerminalTestTrigger(
   const celebrate = (source: string, fullSuite: boolean): void => {
     const settings = getSettings();
     if (!settings.triggers.tests) {
+      orbitalLogSkip('test trigger disabled in settings', source);
       return;
     }
 
     const now = Date.now();
     if (now - lastCelebrateAt < TERMINAL_COOLDOWN_MS) {
-      orbitalLog(`Test detected (${source}) — skipped (cooldown)`);
+      const waitSec = Math.ceil((TERMINAL_COOLDOWN_MS - (now - lastCelebrateAt)) / 1000);
+      orbitalLogSkip(`cooldown (${waitSec}s left — same run may have fired twice)`, source);
       return;
     }
 
     lastCelebrateAt = now;
-    orbitalLog(`Test passed (${source}) → celebrating`);
-    engine.handle('tests', { fullSuite });
+    orbitalLog('Test win detected', `${source} → ${settings.display} celebration`);
+    engine.handle('tests', { fullSuite, returnFocus: 'terminal', terminalNative: true });
   };
 
   const looksLikePassOutput = (text: string): boolean => {
@@ -67,7 +70,14 @@ export function registerTerminalTestTrigger(
       return false;
     }
     const recent = tail.slice(-1200);
-    return !FAIL_SNIPPETS.some((re) => re.test(recent));
+    // Avoid false blocks from vitest's "N passed (M)" lines or paths containing "failed"
+    if (/Tests?\s+\d+\s+failed/i.test(recent)) {
+      return false;
+    }
+    if (/\bFAIL\b/.test(recent) || /✗|×/.test(recent)) {
+      return false;
+    }
+    return true;
   };
 
   if (typeof win.onDidEndTerminalShellExecution === 'function') {
@@ -82,7 +92,7 @@ export function registerTerminalTestTrigger(
           return;
         }
 
-        celebrate(`shell: ${cmd}`, FULL_SUITE_RE.test(cmd));
+        celebrate(`shell exit 0 · ${cmd}`, FULL_SUITE_RE.test(cmd));
       }),
     );
   }
@@ -97,7 +107,7 @@ export function registerTerminalTestTrigger(
         buffers.set(event.terminal, buf);
 
         if (looksLikePassOutput(buf)) {
-          celebrate('terminal output', FULL_SUITE_RE.test(buf));
+          celebrate('vitest/npm output in terminal', FULL_SUITE_RE.test(buf));
         }
       }),
     );
@@ -105,8 +115,11 @@ export function registerTerminalTestTrigger(
 
   if (disposables.length === 0) {
     orbitalLog(
-      'Terminal test detection unavailable in this editor — use Tasks or Orbital: Preview Celebration',
+      'Terminal shell-integration API unavailable',
+      'use npm test (posttest signal) or Orbital: Preview Celebration',
     );
+  } else {
+    orbitalLog('Terminal test listener registered', `${disposables.length} hook(s)`);
   }
 
   return disposables;

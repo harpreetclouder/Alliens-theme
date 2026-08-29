@@ -14,8 +14,10 @@ describe('readSettings', () => {
     const s = readSettings(() => fakeConfig({}) as never);
     expect(s.pack).toBe('mothership');
     expect(s.celebrationsEnabled).toBe(true);
+    expect(s.display).toBe('terminal');
+    expect(s.surfaces).toEqual({});
     expect(s.intensity).toBe('normal');
-    expect(s.soundEnabled).toBe(false);
+    expect(s.soundEnabled).toBe(true);
     expect(s.triggers.tests).toBe(true);
     expect(s.triggers.save).toBe(false);
   });

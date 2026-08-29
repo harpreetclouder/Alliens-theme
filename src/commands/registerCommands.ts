@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { CelebrationEngine } from '../celebrations/engine';
 import { PACKS } from '../packs/registry';
+import { orbitalLog } from '../util/log';
 import type { PackId } from '../packs/types';
 
 export const PACK_THEME_LABELS: Record<PackId, string> = {
@@ -35,7 +36,7 @@ export async function applyPack(packId: PackId): Promise<void> {
 }
 
 export function registerCommands(
-  _context: vscode.ExtensionContext,
+  context: vscode.ExtensionContext,
   engine: CelebrationEngine,
 ): vscode.Disposable[] {
   return [
@@ -46,12 +47,23 @@ export function registerCommands(
       }
     }),
     vscode.commands.registerCommand('orbital.previewCelebration', () => {
+      orbitalLog('Preview command invoked', 'terminal fullscreen');
+      const script = vscode.Uri.joinPath(context.extensionUri, 'scripts', 'terminal-celebration.mjs');
+      const term = vscode.window.activeTerminal ?? vscode.window.createTerminal('Orbital');
+      term.show(true);
+      term.sendText(`node "${script.fsPath}"`, true);
       engine.preview();
+    }),
+    vscode.commands.registerCommand('orbital.signalTestPass', () => {
+      engine.handle('tests', { returnFocus: 'terminal' });
     }),
     vscode.commands.registerCommand('orbital.toggleSound', async () => {
       const config = vscode.workspace.getConfiguration('orbital');
       const current = config.get<boolean>('sound.enabled', false);
       await config.update('sound.enabled', !current, vscode.ConfigurationTarget.Global);
+    }),
+    vscode.commands.registerCommand('orbital.openPanel', () => {
+      void vscode.commands.executeCommand('orbital.celebrationView.focus');
     }),
   ];
 }

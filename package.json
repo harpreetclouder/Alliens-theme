@@ -2,7 +2,7 @@
   "name": "orbital",
   "displayName": "Orbital",
   "description": "Alien/UFO theme and celebration companion for Cursor/VS Code",
-  "version": "0.0.3",
+  "version": "0.0.16",
   "publisher": "orbital",
   "engines": {
     "vscode": "^1.85.0"
@@ -49,8 +49,30 @@
       {
         "command": "orbital.toggleSound",
         "title": "Orbital: Toggle Sound"
+      },
+      {
+        "command": "orbital.openPanel",
+        "title": "Orbital: Open Celebration Panel"
       }
     ],
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "orbital-panel",
+          "title": "Orbital",
+          "icon": "media/orbital-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "orbital-panel": [
+        {
+          "type": "webview",
+          "id": "orbital.celebrationView",
+          "name": "Celebration"
+        }
+      ]
+    },
     "configuration": {
       "title": "Orbital",
       "properties": {
@@ -68,7 +90,48 @@
         "orbital.celebrations.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Enable celebration overlays and toasts"
+          "description": "Enable celebrations on dev wins"
+        },
+        "orbital.celebrations.display": {
+          "type": "string",
+          "enum": [
+            "terminal",
+            "panel",
+            "overlay"
+          ],
+          "default": "terminal",
+          "description": "Fallback for commit/build/debug wins: panel (bottom tab) or overlay (fullscreen tab). Tests always use the integrated terminal."
+        },
+        "orbital.celebrations.surfaces": {
+          "type": "object",
+          "default": {},
+          "description": "Per-trigger surface overrides (terminal | panel | overlay | statusbar). Unset triggers use built-in defaults.",
+          "properties": {
+            "tests": {
+              "type": "string",
+              "enum": ["terminal", "panel", "overlay", "statusbar"]
+            },
+            "build": {
+              "type": "string",
+              "enum": ["terminal", "panel", "overlay", "statusbar"]
+            },
+            "commit": {
+              "type": "string",
+              "enum": ["terminal", "panel", "overlay", "statusbar"]
+            },
+            "debug": {
+              "type": "string",
+              "enum": ["terminal", "panel", "overlay", "statusbar"]
+            },
+            "save": {
+              "type": "string",
+              "enum": ["terminal", "panel", "overlay", "statusbar"]
+            },
+            "preview": {
+              "type": "string",
+              "enum": ["terminal", "panel", "overlay", "statusbar"]
+            }
+          }
         },
         "orbital.celebrations.intensity": {
           "type": "string",
@@ -78,7 +141,7 @@
             "hype"
           ],
           "default": "normal",
-          "description": "Celebration visual intensity"
+          "description": "chill = status bar whispers; normal = terminal tests + panel commits; hype = animated terminal + overlay on big wins"
         },
         "orbital.celebrations.triggers.tests": {
           "type": "boolean",
@@ -107,7 +170,7 @@
         },
         "orbital.sound.enabled": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Play pack SFX during celebrations"
         },
         "orbital.sound.mutedPacks": {
@@ -141,8 +204,10 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "test": "vitest run",
+    "posttest": "node scripts/signal-test-pass.mjs",
     "test:watch": "vitest",
-    "package": "vsce package --allow-missing-repository --no-rewrite-relative-links",
+    "package": "node scripts/package.mjs",
+    "generate:sfx": "node scripts/generate-sfx.mjs",
     "vscode:prepublish": "npm run compile"
   },
   "keywords": [

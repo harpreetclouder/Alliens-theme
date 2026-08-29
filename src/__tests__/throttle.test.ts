@@ -21,4 +21,12 @@ describe('CelebrationThrottle', () => {
     expect(t.allow({ kind: 'build', size: 'big' }, 2000)).toBe(true);
     expect(t.allow({ kind: 'commit', size: 'small' }, 20_000)).toBe(false);
   });
+
+  it('always allows test wins even inside small-win window', () => {
+    const t = new CelebrationThrottle(45_000);
+    expect(t.allow({ kind: 'commit', size: 'small' }, 1000)).toBe(true);
+    expect(t.allow({ kind: 'tests', size: 'small' }, 2000)).toBe(true);
+    expect(t.allow({ kind: 'tests', size: 'small' }, 3000)).toBe(true);
+    expect(t.allow({ kind: 'commit', size: 'small' }, 4000)).toBe(false);
+  });
 });
