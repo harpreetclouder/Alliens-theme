@@ -1,0 +1,22 @@
+import { Intensity } from '../config/settings';
+import { WinKind, WinSize } from './types';
+
+export function classifyKind(
+  kind: WinKind,
+  meta: { fullSuite?: boolean } = {},
+): WinSize {
+  if (kind === 'build') return 'big';
+  if (kind === 'tests' && meta.fullSuite) return 'big';
+  return 'small';
+}
+
+export function resolveDisplay(
+  size: WinSize,
+  intensity: Intensity,
+  celebrationIndex: number,
+): 'toast' | 'overlay' {
+  if (intensity === 'chill') return 'toast';
+  if (size === 'big') return 'overlay';
+  if (intensity === 'hype' && celebrationIndex % 3 === 0) return 'overlay';
+  return 'toast';
+}
