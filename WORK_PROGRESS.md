@@ -1,7 +1,7 @@
 # Work Progress — Orbital
 
 ## Status
-Design approved in chat · spec written · awaiting user review of spec file
+Design approved in chat · spec committed (`e61db78`) · awaiting user review of spec file
 
 ## Locked decisions
 - Name: **Orbital**
