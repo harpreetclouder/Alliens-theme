@@ -37,7 +37,20 @@
         "path": "./themes/root-access-color-theme.json"
       }
     ],
-    "commands": [],
+    "commands": [
+      {
+        "command": "orbital.switchPack",
+        "title": "Orbital: Switch Pack"
+      },
+      {
+        "command": "orbital.previewCelebration",
+        "title": "Orbital: Preview Celebration"
+      },
+      {
+        "command": "orbital.toggleSound",
+        "title": "Orbital: Toggle Sound"
+      }
+    ],
     "configuration": {
       "title": "Orbital",
       "properties": {
