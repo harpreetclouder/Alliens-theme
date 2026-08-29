@@ -5,6 +5,7 @@ export interface CelebrationShowArgs {
   mode: 'toast' | 'overlay';
   loop: LoopDef;
   caption: string;
+  emoji: string;
   tint: string;
   reduceMotion: boolean;
   dataReduceAuto?: boolean;
@@ -22,7 +23,7 @@ export class CelebrationHost {
   show(args: CelebrationShowArgs): void {
     this.dispose();
 
-    const { mode, loop, caption, tint, reduceMotion, dataReduceAuto, durationMs, extensionUri, sfxUri } =
+    const { mode, loop, caption, emoji, tint, reduceMotion, dataReduceAuto, durationMs, extensionUri, sfxUri } =
       args;
     const vscode = this.vscodeApi;
 
@@ -45,6 +46,7 @@ export class CelebrationHost {
       mode,
       loopClass: loop.cssClass,
       caption,
+      emoji,
       tint,
       reduceMotion,
       dataReduceAuto,
@@ -96,6 +98,7 @@ function buildHtml(opts: {
   mode: 'toast' | 'overlay';
   loopClass: string;
   caption: string;
+  emoji: string;
   tint: string;
   reduceMotion: boolean;
   dataReduceAuto?: boolean;
@@ -122,6 +125,7 @@ function buildHtml(opts: {
 <body class="${bodyClasses}"${bodyAttrs}>
   ${audioTag}
   <div class="celebration">
+    <div class="hero-emoji" aria-hidden="true">${opts.emoji}</div>
     <div class="loop ${opts.loopClass}" aria-hidden="true"></div>
     <p class="caption">${escapeHtml(opts.caption)}</p>
   </div>

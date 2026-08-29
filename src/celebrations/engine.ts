@@ -51,14 +51,15 @@ export class CelebrationEngine {
       return;
     }
 
-    const mode = resolveDisplay(size, settings.intensity, this.celebrationIndex);
+    const mode = resolveDisplay(kind, size, settings.intensity, this.celebrationIndex);
     const loop = pickLoop(settings.pack);
     const caption = captionFor(kind, settings.pack);
     const packDef = getPack(settings.pack);
+    const emoji = PACK_EMOJI[settings.pack];
 
     const reduceMotion = settings.reduceMotion === 'always';
     const dataReduceAuto = settings.reduceMotion === 'auto';
-    const durationMs = mode === 'toast' ? 1500 : 2500;
+    const durationMs = mode === 'toast' ? 2500 : 3500;
 
     const sfxUri = resolveSfxUri(
       settings.pack,
@@ -71,6 +72,7 @@ export class CelebrationEngine {
       mode,
       loop,
       caption,
+      emoji,
       tint: packDef.tint,
       reduceMotion,
       dataReduceAuto,
@@ -80,11 +82,6 @@ export class CelebrationEngine {
     });
 
     orbitalLog(`Celebration shown: ${settings.pack} · ${kind} · ${mode} · ${loop.id}`);
-
-    if (mode === 'toast') {
-      const emoji = PACK_EMOJI[settings.pack];
-      void vscode.window.showInformationMessage(`${emoji} ${caption}`);
-    }
 
     this.celebrationIndex++;
   }

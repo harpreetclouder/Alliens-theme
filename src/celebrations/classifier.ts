@@ -11,12 +11,22 @@ export function classifyKind(
 }
 
 export function resolveDisplay(
+  kind: WinKind,
   size: WinSize,
   intensity: Intensity,
   celebrationIndex: number,
 ): 'toast' | 'overlay' {
-  if (intensity === 'chill') return 'toast';
-  if (size === 'big') return 'overlay';
-  if (intensity === 'hype' && celebrationIndex % 3 === 0) return 'overlay';
+  if (intensity === 'chill') {
+    return 'toast';
+  }
+  if (kind === 'tests' || kind === 'preview') {
+    return 'overlay';
+  }
+  if (size === 'big') {
+    return 'overlay';
+  }
+  if (intensity === 'hype' && celebrationIndex % 3 === 0) {
+    return 'overlay';
+  }
   return 'toast';
 }

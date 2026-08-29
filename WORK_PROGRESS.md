@@ -1,13 +1,13 @@
 # Work Progress — Orbital
 
 ## Status
-v0.0.2 on `master` — test trigger + visibility fixes after demo feedback
+v0.0.3 on `master` — full-screen overlay for test wins (not plain notification)
 
 ## Done
 - Spec + implementation plan
 - Tasks 1–13 (themes, celebrations, SFX, engine, commands, onboarding, triggers, packaging)
 - Final review fixes: SFX `enableScripts`, debug copy, phpunit regex, engine floor `^1.85.0`
-- Artifact: `orbital-0.0.1.vsix`
+- Artifact: `orbital-0.0.2.vsix`
 
 ## Try it
 1. **Installed locally:** `orbital-0.0.1.vsix` → Cursor (reload window if needed)
