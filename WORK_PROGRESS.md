@@ -1,7 +1,7 @@
 # Work Progress — Orbital
 
 ## Status
-Design approved in chat · spec committed (`e61db78`) · awaiting user review of spec file
+Spec approved · implementation plan written · awaiting execution choice
 
 ## Locked decisions
 - Name: **Orbital**
@@ -15,7 +15,9 @@ Design approved in chat · spec committed (`e61db78`) · awaiting user review of
 
 ## Artifacts
 - Spec: `docs/superpowers/specs/2026-08-29-orbital-design.md`
+- Plan: `docs/superpowers/plans/2026-08-29-orbital-implementation.md`
 - Brainstorm mockups: `.superpowers/brainstorm/`
 
 ## Next
-- User reviews spec → implementation plan (`writing-plans`) → build
+- Choose execution: subagent-driven (recommended) or inline
+- Implement Tasks 1–13
