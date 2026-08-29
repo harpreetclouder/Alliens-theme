@@ -38,7 +38,73 @@
       }
     ],
     "commands": [],
-    "configuration": {}
+    "configuration": {
+      "title": "Orbital",
+      "properties": {
+        "orbital.pack": {
+          "type": "string",
+          "enum": ["mothership", "glitch", "soft", "root"],
+          "default": "mothership",
+          "description": "Active celebration pack and theme family"
+        },
+        "orbital.celebrations.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable celebration overlays and toasts"
+        },
+        "orbital.celebrations.intensity": {
+          "type": "string",
+          "enum": ["chill", "normal", "hype"],
+          "default": "normal",
+          "description": "Celebration visual intensity"
+        },
+        "orbital.celebrations.triggers.tests": {
+          "type": "boolean",
+          "default": true,
+          "description": "Celebrate when tests pass"
+        },
+        "orbital.celebrations.triggers.build": {
+          "type": "boolean",
+          "default": true,
+          "description": "Celebrate on successful build"
+        },
+        "orbital.celebrations.triggers.commit": {
+          "type": "boolean",
+          "default": true,
+          "description": "Celebrate on commit"
+        },
+        "orbital.celebrations.triggers.debug": {
+          "type": "boolean",
+          "default": true,
+          "description": "Celebrate when debugging starts"
+        },
+        "orbital.celebrations.triggers.save": {
+          "type": "boolean",
+          "default": false,
+          "description": "Celebrate on file save"
+        },
+        "orbital.sound.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Play pack SFX during celebrations"
+        },
+        "orbital.sound.mutedPacks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["mothership", "glitch", "soft", "root"]
+          },
+          "default": [],
+          "description": "Packs whose SFX are muted"
+        },
+        "orbital.reduceMotion": {
+          "type": "string",
+          "enum": ["auto", "always", "never"],
+          "default": "auto",
+          "description": "Reduce celebration motion (auto follows OS)"
+        }
+      }
+    }
   },
   "scripts": {
     "compile": "tsc -p ./",
