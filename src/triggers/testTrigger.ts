@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { CelebrationEngine } from '../celebrations/engine';
 import { OrbitalSettings } from '../config/settings';
 
-const TEST_NAME_RE = /test|jest|vitest|pytest|mocha/i;
+const TEST_NAME_RE = /test|jest|vitest|pytest|mocha|phpunit/i;
 const FULL_SUITE_RE = /suite|all|ci/i;
 
 export function registerTestTrigger(

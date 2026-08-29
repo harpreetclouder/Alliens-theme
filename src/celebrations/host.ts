@@ -31,7 +31,7 @@ export class CelebrationHost {
       'Orbital',
       { viewColumn: vscode.ViewColumn.Active, preserveFocus: true },
       {
-        enableScripts: false,
+        enableScripts: true,
         localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')],
       },
     );

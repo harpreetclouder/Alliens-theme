@@ -55,7 +55,7 @@ Sound is **off by default**. Enable via **Orbital: Toggle Sound**, first-run pro
 | `orbital.celebrations.triggers.tests` | boolean | `true` | Celebrate when tests pass |
 | `orbital.celebrations.triggers.build` | boolean | `true` | Celebrate on successful build |
 | `orbital.celebrations.triggers.commit` | boolean | `true` | Celebrate on commit |
-| `orbital.celebrations.triggers.debug` | boolean | `true` | Celebrate when debugging starts |
+| `orbital.celebrations.triggers.debug` | boolean | `true` | Celebrate when a debug session ends |
 | `orbital.celebrations.triggers.save` | boolean | `false` | Celebrate on file save |
 | `orbital.sound.enabled` | boolean | `false` | Play pack SFX during celebrations |
 | `orbital.sound.mutedPacks` | string[] | `[]` | Packs whose SFX are muted |

@@ -98,7 +98,7 @@
         "orbital.celebrations.triggers.debug": {
           "type": "boolean",
           "default": true,
-          "description": "Celebrate when debugging starts"
+          "description": "Celebrate when a debug session ends"
         },
         "orbital.celebrations.triggers.save": {
           "type": "boolean",
