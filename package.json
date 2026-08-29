@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "publisher": "orbital",
   "engines": {
-    "vscode": "^1.134.0"
+    "vscode": "^1.85.0"
   },
   "categories": [
     "Themes"
@@ -56,7 +56,12 @@
       "properties": {
         "orbital.pack": {
           "type": "string",
-          "enum": ["mothership", "glitch", "soft", "root"],
+          "enum": [
+            "mothership",
+            "glitch",
+            "soft",
+            "root"
+          ],
           "default": "mothership",
           "description": "Active celebration pack and theme family"
         },
@@ -67,7 +72,11 @@
         },
         "orbital.celebrations.intensity": {
           "type": "string",
-          "enum": ["chill", "normal", "hype"],
+          "enum": [
+            "chill",
+            "normal",
+            "hype"
+          ],
           "default": "normal",
           "description": "Celebration visual intensity"
         },
@@ -105,14 +114,23 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["mothership", "glitch", "soft", "root"]
+            "enum": [
+              "mothership",
+              "glitch",
+              "soft",
+              "root"
+            ]
           },
           "default": [],
           "description": "Packs whose SFX are muted"
         },
         "orbital.reduceMotion": {
           "type": "string",
-          "enum": ["auto", "always", "never"],
+          "enum": [
+            "auto",
+            "always",
+            "never"
+          ],
           "default": "auto",
           "description": "Reduce celebration motion (auto follows OS)"
         }
@@ -140,7 +158,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@types/node": "^26.4.0",
-    "@types/vscode": "^1.134.0",
+    "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
     "typescript": "^7.0.2",

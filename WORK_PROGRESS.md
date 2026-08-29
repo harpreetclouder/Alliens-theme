@@ -1,7 +1,7 @@
 # Work Progress — Orbital
 
 ## Status
-**v1 implemented** · packaging done · Task 13 complete
+**v1 implemented** · packaging done · Task 13 complete · engine floor restored to `^1.85.0`
 
 All 13 implementation tasks complete. Extension packages as `orbital-0.0.1.vsix`.
 
