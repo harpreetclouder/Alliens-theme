@@ -10,9 +10,9 @@ v1 implemented on `master` · kept as-is (GitHub setup deferred) · F5 smoke sti
 - Artifact: `orbital-0.0.1.vsix`
 
 ## Try it
-1. Open this folder in Cursor/VS Code
-2. F5 → Extension Development Host
-3. Or: Install from VSIX → `orbital-0.0.1.vsix`
+1. **Installed locally:** `orbital-0.0.1.vsix` → Cursor (reload window if needed)
+2. **Demo guide:** `DEMO.md` — checklist to try all packs + preview commands
+3. **Dev mode:** F5 → Extension Development Host (for iterating on code)
 4. Commands: `Orbital: Preview Celebration`, `Switch Pack`, `Toggle Sound`
 
 ## Follow-ups
