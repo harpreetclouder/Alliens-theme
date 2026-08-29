@@ -1,0 +1,22 @@
+{
+  "name": "Orbital — Root Access",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#050805",
+    "editor.foreground": "#b0ffb8",
+    "activityBar.background": "#030603",
+    "sideBar.background": "#030603",
+    "statusBar.background": "#33ff66",
+    "statusBar.foreground": "#050805",
+    "titleBar.activeBackground": "#030603",
+    "focusBorder": "#33ff66",
+    "button.background": "#33ff66",
+    "button.foreground": "#050805"
+  },
+  "tokenColors": [
+    { "scope": ["comment"], "settings": { "foreground": "#1a4a22" } },
+    { "scope": ["keyword"], "settings": { "foreground": "#33ff66" } },
+    { "scope": ["string"], "settings": { "foreground": "#ff3344" } },
+    { "scope": ["entity.name.function"], "settings": { "foreground": "#9dffb0" } }
+  ]
+}

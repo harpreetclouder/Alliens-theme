@@ -1,0 +1,22 @@
+{
+  "name": "Orbital — Soft Abduction",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#16121c",
+    "editor.foreground": "#e8e0d4",
+    "activityBar.background": "#100e14",
+    "sideBar.background": "#100e14",
+    "statusBar.background": "#f4a261",
+    "statusBar.foreground": "#16121c",
+    "titleBar.activeBackground": "#100e14",
+    "focusBorder": "#f4a261",
+    "button.background": "#f4a261",
+    "button.foreground": "#16121c"
+  },
+  "tokenColors": [
+    { "scope": ["comment"], "settings": { "foreground": "#6b5a4a" } },
+    { "scope": ["keyword"], "settings": { "foreground": "#f4a261" } },
+    { "scope": ["string"], "settings": { "foreground": "#e9c46a" } },
+    { "scope": ["entity.name.function"], "settings": { "foreground": "#a8dadc" } }
+  ]
+}

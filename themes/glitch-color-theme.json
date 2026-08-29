@@ -1,0 +1,22 @@
+{
+  "name": "Orbital — Glitch Transmission",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#0c1008",
+    "editor.foreground": "#d4e8b0",
+    "activityBar.background": "#080c06",
+    "sideBar.background": "#080c06",
+    "statusBar.background": "#b8ff40",
+    "statusBar.foreground": "#0c1008",
+    "titleBar.activeBackground": "#080c06",
+    "focusBorder": "#b8ff40",
+    "button.background": "#b8ff40",
+    "button.foreground": "#0c1008"
+  },
+  "tokenColors": [
+    { "scope": ["comment"], "settings": { "foreground": "#5a7040" } },
+    { "scope": ["keyword"], "settings": { "foreground": "#b8ff40" } },
+    { "scope": ["string"], "settings": { "foreground": "#ff9f1c" } },
+    { "scope": ["entity.name.function"], "settings": { "foreground": "#ff4d00" } }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Orbital — Mothership OS",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#061018",
+    "editor.foreground": "#c8efe0",
+    "activityBar.background": "#04121a",
+    "sideBar.background": "#04121a",
+    "statusBar.background": "#1cff9a",
+    "statusBar.foreground": "#061018",
+    "titleBar.activeBackground": "#04121a",
+    "focusBorder": "#1cff9a",
+    "button.background": "#1cff9a",
+    "button.foreground": "#061018"
+  },
+  "tokenColors": [
+    { "scope": ["comment"], "settings": { "foreground": "#2f6b58" } },
+    { "scope": ["keyword"], "settings": { "foreground": "#1cff9a" } },
+    { "scope": ["string"], "settings": { "foreground": "#ffe56b" } },
+    { "scope": ["entity.name.function"], "settings": { "foreground": "#7dffd4" } }
+  ]
+}

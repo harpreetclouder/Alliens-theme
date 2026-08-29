@@ -15,7 +15,28 @@
     "onStartupFinished"
   ],
   "contributes": {
-    "themes": [],
+    "themes": [
+      {
+        "label": "Orbital — Mothership OS",
+        "uiTheme": "vs-dark",
+        "path": "./themes/mothership-color-theme.json"
+      },
+      {
+        "label": "Orbital — Glitch Transmission",
+        "uiTheme": "vs-dark",
+        "path": "./themes/glitch-color-theme.json"
+      },
+      {
+        "label": "Orbital — Soft Abduction",
+        "uiTheme": "vs-dark",
+        "path": "./themes/soft-abduction-color-theme.json"
+      },
+      {
+        "label": "Orbital — Root Access",
+        "uiTheme": "vs-dark",
+        "path": "./themes/root-access-color-theme.json"
+      }
+    ],
     "commands": [],
     "configuration": {}
   },
