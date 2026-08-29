@@ -1,0 +1,23 @@
+/** Git commands that create a new commit (SCM UI + palette). */
+export const GIT_COMMIT_COMMANDS = new Set([
+  'git.commit',
+  'git.commitStaged',
+  'git.commitAll',
+  'git.commitSigned',
+  'git.commitStagedSigned',
+  'git.commitAllSigned',
+  'git.commitAmend',
+  'git.commitStagedAmend',
+  'git.commitAllAmend',
+  'git.commitEmpty',
+  'git.commitNoVerify',
+  'git.commitStagedNoVerify',
+  'git.commitAllNoVerify',
+  'git.commitSignedNoVerify',
+  'git.commitStagedSignedNoVerify',
+  'git.commitAllSignedNoVerify',
+  'git.commitAmendNoVerify',
+  'git.commitStagedAmendNoVerify',
+  'git.commitAllAmendNoVerify',
+  'git.commitEmptyNoVerify',
+]);

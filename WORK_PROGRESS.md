@@ -1,7 +1,7 @@
 # Work Progress — Orbital
 
 ## Status
-v0.0.16 — pack SFX wav files + sound on by default
+v0.0.17 — fix commit trigger (git API wiring + command fallback)
 
 ## Done
 - v0.0.15 layered celebrations (terminal animation, status bar, streaks, surfaces)
@@ -12,7 +12,7 @@ v0.0.16 — pack SFX wav files + sound on by default
   - `media/sfx/root.wav` — terminal double-beep
   - `npm run generate:sfx` to regenerate
   - `orbital.sound.enabled` default **true**
-  - Tests assert files exist + `resolveSfxUri`
+- **v0.0.17 commit fix:** robust git `onDidCommit` wiring (retries + `onDidChangeState`) + `git.commit*` command fallback; **Orbital: Preview Commit Celebration**
 
 ## Try it
 1. **Reload window** after install

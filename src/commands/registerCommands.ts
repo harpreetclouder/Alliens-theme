@@ -62,6 +62,10 @@ export function registerCommands(
       const current = config.get<boolean>('sound.enabled', false);
       await config.update('sound.enabled', !current, vscode.ConfigurationTarget.Global);
     }),
+    vscode.commands.registerCommand('orbital.previewCommitCelebration', () => {
+      orbitalLog('Preview commit celebration', 'panel / overlay');
+      engine.handle('commit');
+    }),
     vscode.commands.registerCommand('orbital.openPanel', () => {
       void vscode.commands.executeCommand('orbital.celebrationView.focus');
     }),

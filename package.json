@@ -2,7 +2,7 @@
   "name": "orbital",
   "displayName": "Orbital",
   "description": "Alien/UFO theme and celebration companion for Cursor/VS Code",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "publisher": "orbital",
   "engines": {
     "vscode": "^1.85.0"
@@ -49,6 +49,10 @@
       {
         "command": "orbital.toggleSound",
         "title": "Orbital: Toggle Sound"
+      },
+      {
+        "command": "orbital.previewCommitCelebration",
+        "title": "Orbital: Preview Commit Celebration"
       },
       {
         "command": "orbital.openPanel",

@@ -1,87 +1,130 @@
 import * as vscode from 'vscode';
 import { CelebrationEngine } from '../celebrations/engine';
 import { OrbitalSettings } from '../config/settings';
+import { orbitalLog } from '../util/log';
 
 interface GitRepository {
-  onDidCommit: vscode.Event<void>;
+  readonly rootUri: vscode.Uri;
+  readonly state: { readonly HEAD?: { commit?: string } };
+  readonly onDidCommit: vscode.Event<void>;
 }
 
 interface GitAPI {
-  repositories: GitRepository[];
-  onDidOpenRepository: vscode.Event<GitRepository>;
+  readonly state: 'uninitialized' | 'initialized';
+  readonly repositories: GitRepository[];
+  readonly onDidOpenRepository: vscode.Event<GitRepository>;
+  readonly onDidChangeState: vscode.Event<'uninitialized' | 'initialized'>;
 }
 
-interface GitExtensionExports {
+interface GitExtension {
+  readonly enabled: boolean;
+  readonly onDidChangeEnablement: vscode.Event<boolean>;
   getAPI(version: 1): GitAPI;
 }
 
-function wireGitRepos(
-  api: GitAPI,
-  engine: CelebrationEngine,
-  getSettings: () => OrbitalSettings,
-  add: (...disposables: vscode.Disposable[]) => void,
-): void {
-  const wireRepo = (repo: GitRepository): void => {
-    add(
-      repo.onDidCommit(() => {
-        const settings = getSettings();
-        if (!settings.triggers.commit) {
-          return;
-        }
-        engine.handle('commit');
-      }),
-    );
-  };
-
-  for (const repo of api.repositories) {
-    wireRepo(repo);
-  }
-
-  add(api.onDidOpenRepository(wireRepo));
-}
+const RETRY_MS = [500, 2000, 5000];
 
 export function registerGitTrigger(
   engine: CelebrationEngine,
   getSettings: () => OrbitalSettings,
 ): vscode.Disposable[] {
-  const gitExt = vscode.extensions.getExtension<GitExtensionExports>('vscode.git');
-  if (!gitExt) {
-    return [];
-  }
+  const disposables: vscode.Disposable[] = [];
+  const wiredRoots = new Set<string>();
+  let apiListenersAttached = false;
+  let enablementListenerAttached = false;
 
-  const inner: vscode.Disposable[] = [];
-  const add = (...disposables: vscode.Disposable[]): void => {
-    inner.push(...disposables);
+  const celebrateCommit = (source: string): void => {
+    const settings = getSettings();
+    if (!settings.triggers.commit) {
+      orbitalLog('Commit ignored', 'commit trigger disabled in settings');
+      return;
+    }
+    orbitalLog('Commit win detected', source);
+    engine.handle('commit');
   };
 
-  let disposed = false;
-
-  const composite = new vscode.Disposable(() => {
-    disposed = true;
-    for (const disposable of inner) {
-      disposable.dispose();
+  const wireRepo = (repo: GitRepository): void => {
+    const key = repo.rootUri.toString();
+    if (wiredRoots.has(key)) {
+      return;
     }
-  });
+    wiredRoots.add(key);
 
-  let wired = false;
+    disposables.push(
+      repo.onDidCommit(() => celebrateCommit(`onDidCommit · ${key}`)),
+    );
+    orbitalLog('Git repo wired', key);
+  };
 
-  const tryWire = (): void => {
-    if (disposed || wired || !gitExt.isActive) {
+  const wireAllRepos = (api: GitAPI): void => {
+    for (const repo of api.repositories) {
+      wireRepo(repo);
+    }
+  };
+
+  const attachApiListeners = (api: GitAPI): void => {
+    if (!apiListenersAttached) {
+      apiListenersAttached = true;
+      disposables.push(api.onDidOpenRepository((repo) => wireRepo(repo)));
+      disposables.push(
+        api.onDidChangeState((state) => {
+          if (state === 'initialized') {
+            wireAllRepos(api);
+          }
+        }),
+      );
+
+      for (const ms of RETRY_MS) {
+        const timer = setTimeout(() => wireAllRepos(api), ms);
+        disposables.push({ dispose: () => clearTimeout(timer) });
+      }
+    }
+    wireAllRepos(api);
+  };
+
+  const tryWireGitApi = (git: GitExtension): void => {
+    if (!git.enabled) {
+      orbitalLog('Git extension disabled', 'commit trigger waiting');
       return;
     }
     try {
-      wireGitRepos(gitExt.exports.getAPI(1), engine, getSettings, add);
-      wired = true;
-    } catch {
-      // Git API unavailable — skip silently.
+      const api = git.getAPI(1);
+      attachApiListeners(api);
+      orbitalLog(
+        'Git commit listener active',
+        `${api.repositories.length} repo(s) wired · onDidCommit`,
+      );
+    } catch (err) {
+      orbitalLog('Git API unavailable', String(err));
+    }
+  };
+
+  const gitExt = vscode.extensions.getExtension<GitExtension>('vscode.git');
+  if (!gitExt) {
+    orbitalLog('Git extension not found', 'commit celebrations unavailable');
+    return disposables;
+  }
+
+  const activateGit = (): void => {
+    tryWireGitApi(gitExt.exports);
+
+    if (!enablementListenerAttached) {
+      enablementListenerAttached = true;
+      disposables.push(
+        gitExt.exports.onDidChangeEnablement((enabled) => {
+          if (enabled) {
+            tryWireGitApi(gitExt.exports);
+          }
+        }),
+      );
     }
   };
 
   if (gitExt.isActive) {
-    tryWire();
+    activateGit();
   } else {
-    void gitExt.activate().then(tryWire);
+    void gitExt.activate().then(activateGit);
   }
 
-  return [composite];
+  return disposables;
 }
