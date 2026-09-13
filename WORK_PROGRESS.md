@@ -1,19 +1,22 @@
 # Work Progress — Orbital
 
 ## Status
-v0.0.26 — Joy collage + locale brain shipped  
-**Next:** Orbit Task 8 verify
+v0.0.25 — Orbit gamification shipped (Tasks 1–8)  
+Joy collage WIP (uncommitted)
 
-## Orbit gamification (in progress)
-- Task 1–5 done (rules, store, missions, engine, day-start/pack)
-- Task 6 done + **review approved** (`3157387`): panel idle Orbit HUD (level/XP/streak/mission), paper/joy CSS; refreshes on resolve + after celebration
-- Task 7 done: status bar `L{n} · 🔥{streak}` crumb (low priority); whispers on separate item
+## Orbit gamification (done)
+- XP/level curve, calendar streak, achievements, daily mission, journey triggers
+- Preview wins excluded from streak; `orbital.orbit.enabled` (default **true**) gates tracking
+- **Panel HUD (idle):** Command **Orbital: Open Panel** → bottom **Orbital** tab when idle shows level, XP bar, streak, daily mission (paper/joy card). Refreshes on view resolve + after celebrations.
+- **Status bar:** persistent `L{n} · 🔥{streak}` crumb (low priority); celebration whispers stay on a separate item
+- Day-start check-in + pack-switch wins wired in engine
 
 ## Specs / plans
+- Orbit: `docs/superpowers/specs/2026-09-13-orbital-orbit-gamification-design.md`, plan `docs/superpowers/plans/2026-09-13-orbital-orbit-gamification.md`
 - Joy collage: `docs/superpowers/specs/2026-09-12-joy-collage-location-brain-design.md`
-- Orbit gamification: `docs/superpowers/specs/2026-09-13-orbital-orbit-gamification-design.md`
-- Plan: `docs/superpowers/plans/2026-09-13-orbital-orbit-gamification.md`
 
-## Try joy (current)
-Reload → open Orbital panel (idle HUD) → Preview Celebration  
-Region: `orbital.joy.region`
+## Try Orbit
+Reload window → ensure **Orbital › Orbit: enabled** → open panel (idle HUD) or glance status bar → trigger a win or **Preview Celebration** (preview does not extend streak)
+
+## Try joy (WIP)
+Region: `orbital.joy.region` · Preview from panel when joy lands
