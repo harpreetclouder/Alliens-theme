@@ -54,7 +54,7 @@ describe('OrbitStore', () => {
 
   it('applyWin: big tests win unlocks green-suite and first-liftoff, 80 XP, streak 1', () => {
     const gs = fakeGlobalState();
-    const store = new OrbitStore(gs);
+    const store = new OrbitStore(gs, () => 0);
     const input: ApplyWinInput = {
       dayKey: day,
       size: 'big',

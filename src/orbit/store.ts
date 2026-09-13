@@ -81,7 +81,10 @@ function newAchievements(
 }
 
 export class OrbitStore {
-  constructor(private readonly globalState: GlobalStateLike) {}
+  constructor(
+    private readonly globalState: GlobalStateLike,
+    private readonly random: () => number = Math.random,
+  ) {}
 
   load(): OrbitState {
     const raw = this.globalState.get<OrbitState>(ORBIT_STATE_KEY);
@@ -97,7 +100,7 @@ export class OrbitStore {
 
   applyWin(input: ApplyWinInput): OrbitWinResult {
     const current = this.load();
-    const withMission = ensureMission(current, input.dayKey, Math.random);
+    const withMission = ensureMission(current, input.dayKey, this.random);
     const baseXp = xpForSize(input.size);
     const missionStep = progressMission(withMission, input.kind, baseXp);
     const missionCompleted = missionStep.completed;
