@@ -8,6 +8,8 @@ import {
   nextStreak,
   progressMission,
   xpForSize,
+  xpThresholdForLevel,
+  xpToNextLevel,
 } from '../orbit/rules';
 import type { OrbitState } from '../orbit/types';
 
@@ -22,6 +24,17 @@ describe('levelFromXp', () => {
 
   it('maps 200 XP to level 3', () => {
     expect(levelFromXp(200)).toBe(3);
+  });
+});
+
+describe('xpToNextLevel', () => {
+  it('uses level curve thresholds', () => {
+    expect(xpThresholdForLevel(1)).toBe(0);
+    expect(xpThresholdForLevel(2)).toBe(50);
+    expect(xpThresholdForLevel(3)).toBe(200);
+    expect(xpToNextLevel(0)).toBe(50);
+    expect(xpToNextLevel(50)).toBe(150);
+    expect(xpToNextLevel(200)).toBe(250);
   });
 });
 

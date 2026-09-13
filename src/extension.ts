@@ -14,7 +14,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   showOrbitalOutput();
   orbitalLog('Extension activated', `v${context.extension.packageJSON.version ?? '?'}`);
 
-  const panelProvider = new CelebrationPanelProvider(context.extensionUri, vscode);
+  const orbitStore = new OrbitStore(context.globalState);
+  const panelProvider = new CelebrationPanelProvider(context.extensionUri, vscode, orbitStore);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(CELEBRATION_PANEL_VIEW_ID, panelProvider, {
       webviewOptions: { retainContextWhenHidden: true },
@@ -22,7 +23,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   );
 
   const host = new CelebrationHost(vscode, panelProvider);
-  const orbitStore = new OrbitStore(context.globalState);
   const engine = new CelebrationEngine(context, host, orbitStore);
   context.subscriptions.push({ dispose: () => engine.dispose() });
 

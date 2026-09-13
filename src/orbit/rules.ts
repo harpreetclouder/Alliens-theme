@@ -42,6 +42,18 @@ export function levelFromXp(xp: number): number {
   return Math.floor(Math.sqrt(xp / 50)) + 1;
 }
 
+/** XP required to reach `level` (level 1 → 0, level 2 → 50, level 3 → 200). */
+export function xpThresholdForLevel(level: number): number {
+  const n = Math.max(1, level);
+  return (n - 1) * (n - 1) * 50;
+}
+
+/** XP remaining until the next level from the level curve. */
+export function xpToNextLevel(xp: number): number {
+  const level = levelFromXp(xp);
+  return Math.max(0, xpThresholdForLevel(level + 1) - xp);
+}
+
 export function xpForSize(size: 'small' | 'medium' | 'big'): number {
   switch (size) {
     case 'small':

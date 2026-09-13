@@ -1,3 +1,5 @@
+import { MISSION_POOL, levelFromXp, xpToNextLevel } from '../orbit/rules';
+
 export function escapeHtml(text: string): string {
   return text
     .replace(/&/g, '&amp;')
@@ -84,7 +86,72 @@ export function buildCelebrationHtml(opts: CelebrationHtmlOpts): string {
 </html>`;
 }
 
-export function buildIdlePanelHtml(cspSource: string, cssUri: string): string {
+export interface IdleOrbitView {
+  level: number;
+  xp: number;
+  xpToNext: number;
+  streakDays: number;
+  missionLabel: string;
+  missionProgress: number;
+  missionTarget: number;
+}
+
+/** Snapshot OrbitState for the panel idle HUD (xpToNext from level curve). */
+export function idleOrbitViewFromState(state: {
+  xp: number;
+  level: number;
+  streakDays: number;
+  mission: { id: string; progress: number; target: number } | null;
+}): IdleOrbitView {
+  const level = levelFromXp(state.xp);
+  const missionDef = state.mission
+    ? MISSION_POOL.find((m) => m.id === state.mission!.id)
+    : undefined;
+  return {
+    level,
+    xp: state.xp,
+    xpToNext: xpToNextLevel(state.xp),
+    streakDays: state.streakDays,
+    missionLabel: missionDef?.label ?? (state.mission ? state.mission.id : 'No mission yet'),
+    missionProgress: state.mission?.progress ?? 0,
+    missionTarget: state.mission?.target ?? 0,
+  };
+}
+
+function idleOrbitProgressPct(orbit: IdleOrbitView): number {
+  const level = orbit.level;
+  const bandStart = (level - 1) * (level - 1) * 50;
+  const bandEnd = level * level * 50;
+  const span = Math.max(1, bandEnd - bandStart);
+  const into = Math.max(0, Math.min(span, orbit.xp - bandStart));
+  return Math.round((into / span) * 100);
+}
+
+function renderIdleOrbitCard(orbit: IdleOrbitView): string {
+  const pct = idleOrbitProgressPct(orbit);
+  const mission =
+    orbit.missionTarget > 0
+      ? `${escapeHtml(orbit.missionLabel)} · ${orbit.missionProgress}/${orbit.missionTarget}`
+      : escapeHtml(orbit.missionLabel);
+  return `<div class="idle-orbit-card">
+      <div class="idle-orbit-row">
+        <span class="idle-orbit-level">L${orbit.level}</span>
+        <span class="idle-orbit-xp">${orbit.xp} XP · ${orbit.xpToNext} to next</span>
+        <span class="idle-orbit-streak">${orbit.streakDays > 0 ? `🔥 ${orbit.streakDays}` : '🔥 —'}</span>
+      </div>
+      <div class="idle-orbit-bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100">
+        <div class="idle-orbit-fill" style="width:${pct}%"></div>
+      </div>
+      <div class="idle-orbit-mission">${mission}</div>
+    </div>`;
+}
+
+export function buildIdlePanelHtml(
+  cspSource: string,
+  cssUri: string,
+  orbit?: IdleOrbitView,
+): string {
+  const orbitBlock = orbit ? renderIdleOrbitCard(orbit) : '';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,6 +163,7 @@ export function buildIdlePanelHtml(cspSource: string, cssUri: string): string {
   <div class="celebration idle">
     <span class="idle-icon">🛸</span>
     <span class="idle-text">Orbital standing by — run tests or Preview Celebration</span>
+    ${orbitBlock}
   </div>
 </body>
 </html>`;

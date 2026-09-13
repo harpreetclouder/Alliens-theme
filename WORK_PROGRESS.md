@@ -2,11 +2,11 @@
 
 ## Status
 v0.0.26 — Joy collage + locale brain shipped  
-**Next:** Orbital Orbit Task 6 (panel idle HUD)
+**Next:** Orbit Task 7 (statusbar crumb) / Task 8 verify
 
 ## Orbit gamification (in progress)
-- Task 1–4 done (rules, store, missions, engine wire)
-- Task 5 done: day-start check-in (`orbital.orbit.checkInDay`) + pack-switch small win; WinKind +`checkin|pack|levelup|achievement|mission`
+- Task 1–5 done (rules, store, missions, engine, day-start/pack)
+- Task 6 done: panel idle Orbit HUD (level/XP/streak/mission), paper/joy CSS; refreshes on resolve + after celebration
 
 ## Specs / plans
 - Joy collage: `docs/superpowers/specs/2026-09-12-joy-collage-location-brain-design.md`
@@ -14,6 +14,5 @@ v0.0.26 — Joy collage + locale brain shipped
 - Plan: `docs/superpowers/plans/2026-09-13-orbital-orbit-gamification.md`
 
 ## Try joy (current)
-Reload → Preview Celebration  
-Optional Tenor: Settings → `orbital.tenor.apiKey`  
+Reload → open Orbital panel (idle HUD) → Preview Celebration  
 Region: `orbital.joy.region`

@@ -929,10 +929,12 @@ body.mode-panel .subline {
 
 body.mode-panel.mode-idle .celebration.idle {
   flex-direction: row;
-  gap: 0.65rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 0.85rem;
   min-height: 48px;
-  padding: 0.5rem 1rem;
-  border-top: 1px solid color-mix(in srgb, var(--tint) 25%, transparent);
+  padding: 0.55rem 1rem 0.7rem;
+  border-top: 1px solid color-mix(in srgb, #fff6e8 18%, transparent);
   animation: none;
   background: transparent;
 }
@@ -945,6 +947,67 @@ body.mode-panel .idle-icon {
 body.mode-panel .idle-text {
   font-size: 0.8125rem;
   color: var(--vscode-descriptionForeground, #999);
+}
+
+/* Compact paper/joy Orbit HUD (not neon) */
+body.mode-panel .idle-orbit-card {
+  flex: 1 1 100%;
+  margin: 0.1rem 0 0;
+  padding: 0.55rem 0.75rem 0.6rem;
+  border-radius: 12px;
+  background: color-mix(in srgb, #fff6e8 88%, var(--vscode-panel-background, #1e1e1e));
+  color: #1a1420;
+  border: 2px solid color-mix(in srgb, #1a1420 10%, transparent);
+  box-shadow: 0 6px 16px color-mix(in srgb, #000 18%, transparent);
+  transform: rotate(-0.4deg);
+}
+
+body.mode-panel .idle-orbit-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+body.mode-panel .idle-orbit-level {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #1a1420;
+}
+
+body.mode-panel .idle-orbit-xp {
+  color: color-mix(in srgb, #1a1420 72%, transparent);
+  font-weight: 600;
+}
+
+body.mode-panel .idle-orbit-streak {
+  margin-left: auto;
+  color: color-mix(in srgb, #1a1420 78%, #c45c26);
+}
+
+body.mode-panel .idle-orbit-bar {
+  margin-top: 0.4rem;
+  height: 5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, #1a1420 12%, transparent);
+  overflow: hidden;
+}
+
+body.mode-panel .idle-orbit-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: color-mix(in srgb, #ff8a4c 55%, #fff6e8);
+  transition: width 0.35s ease;
+}
+
+body.mode-panel .idle-orbit-mission {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: color-mix(in srgb, #1a1420 68%, transparent);
 }
 
 @keyframes panel-in {

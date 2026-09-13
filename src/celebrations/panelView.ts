@@ -1,8 +1,14 @@
 import * as vscode from 'vscode';
-import { buildCelebrationHtml, buildIdlePanelHtml, CelebrationHtmlOpts } from './celebrationHtml';
+import {
+  buildCelebrationHtml,
+  buildIdlePanelHtml,
+  CelebrationHtmlOpts,
+  idleOrbitViewFromState,
+} from './celebrationHtml';
 import { EXIT_LEAD_MS } from './durations';
 import { CelebrationShowArgs } from './host';
 import { focusOrbitalView, restorePanelFocus, waitForView } from './panelFocus';
+import type { OrbitStore } from '../orbit/store';
 import { orbitalLog } from '../util/log';
 
 const VIEW_ID = 'orbital.celebrationView';
@@ -15,6 +21,7 @@ export class CelebrationPanelProvider implements vscode.WebviewViewProvider {
   constructor(
     private readonly extensionUri: vscode.Uri,
     private readonly vscodeApi: typeof vscode,
+    private readonly orbitStore?: OrbitStore,
   ) {}
 
   resolveWebviewView(
@@ -28,14 +35,7 @@ export class CelebrationPanelProvider implements vscode.WebviewViewProvider {
       localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, 'media')],
     };
 
-    const cssUri = webviewView.webview.asWebviewUri(
-      vscode.Uri.joinPath(this.extensionUri, 'media', 'webview', 'celebration.css'),
-    );
-
-    webviewView.webview.html = buildIdlePanelHtml(
-      webviewView.webview.cspSource,
-      cssUri.toString(),
-    );
+    this.renderIdle(this.extensionUri);
 
     if (this.pending) {
       const args = this.pending;
@@ -126,16 +126,27 @@ export class CelebrationPanelProvider implements vscode.WebviewViewProvider {
   private async finishCelebration(args: CelebrationShowArgs): Promise<void> {
     if (this.view) {
       await new Promise((r) => setTimeout(r, EXIT_LEAD_MS));
-      const idleCss = this.view.webview.asWebviewUri(
-        vscode.Uri.joinPath(args.extensionUri, 'media', 'webview', 'celebration.css'),
-      );
-      this.view.webview.html = buildIdlePanelHtml(
-        this.view.webview.cspSource,
-        idleCss.toString(),
-      );
+      this.renderIdle(args.extensionUri);
     }
 
     await restorePanelFocus(this.vscodeApi, args.focusSnapshot);
+  }
+
+  private renderIdle(extensionUri: vscode.Uri): void {
+    if (!this.view) {
+      return;
+    }
+    const idleCss = this.view.webview.asWebviewUri(
+      vscode.Uri.joinPath(extensionUri, 'media', 'webview', 'celebration.css'),
+    );
+    const orbit = this.orbitStore
+      ? idleOrbitViewFromState(this.orbitStore.load())
+      : undefined;
+    this.view.webview.html = buildIdlePanelHtml(
+      this.view.webview.cspSource,
+      idleCss.toString(),
+      orbit,
+    );
   }
 
   private clearTimer(): void {
