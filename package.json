@@ -2,7 +2,7 @@
   "name": "orbital",
   "displayName": "Orbital",
   "description": "Alien/UFO theme and celebration companion for Cursor/VS Code",
-  "version": "0.0.17",
+  "version": "0.0.26",
   "publisher": "orbital",
   "engines": {
     "vscode": "^1.85.0"
@@ -35,6 +35,11 @@
         "label": "Orbital — Root Access",
         "uiTheme": "vs-dark",
         "path": "./themes/root-access-color-theme.json"
+      },
+      {
+        "label": "Orbital — Acid Scrapbook",
+        "uiTheme": "vs-dark",
+        "path": "./themes/acid-scrapbook-color-theme.json"
       }
     ],
     "commands": [
@@ -86,7 +91,8 @@
             "mothership",
             "glitch",
             "soft",
-            "root"
+            "root",
+            "acid"
           ],
           "default": "mothership",
           "description": "Active celebration pack and theme family"
@@ -95,6 +101,11 @@
           "type": "boolean",
           "default": true,
           "description": "Enable celebrations on dev wins"
+        },
+        "orbital.orbit.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Track XP, streaks, achievements, and daily missions (Orbital Orbit)"
         },
         "orbital.celebrations.display": {
           "type": "string",
@@ -113,27 +124,57 @@
           "properties": {
             "tests": {
               "type": "string",
-              "enum": ["terminal", "panel", "overlay", "statusbar"]
+              "enum": [
+                "terminal",
+                "panel",
+                "overlay",
+                "statusbar"
+              ]
             },
             "build": {
               "type": "string",
-              "enum": ["terminal", "panel", "overlay", "statusbar"]
+              "enum": [
+                "terminal",
+                "panel",
+                "overlay",
+                "statusbar"
+              ]
             },
             "commit": {
               "type": "string",
-              "enum": ["terminal", "panel", "overlay", "statusbar"]
+              "enum": [
+                "terminal",
+                "panel",
+                "overlay",
+                "statusbar"
+              ]
             },
             "debug": {
               "type": "string",
-              "enum": ["terminal", "panel", "overlay", "statusbar"]
+              "enum": [
+                "terminal",
+                "panel",
+                "overlay",
+                "statusbar"
+              ]
             },
             "save": {
               "type": "string",
-              "enum": ["terminal", "panel", "overlay", "statusbar"]
+              "enum": [
+                "terminal",
+                "panel",
+                "overlay",
+                "statusbar"
+              ]
             },
             "preview": {
               "type": "string",
-              "enum": ["terminal", "panel", "overlay", "statusbar"]
+              "enum": [
+                "terminal",
+                "panel",
+                "overlay",
+                "statusbar"
+              ]
             }
           }
         },
@@ -185,7 +226,8 @@
               "mothership",
               "glitch",
               "soft",
-              "root"
+              "root",
+              "acid"
             ]
           },
           "default": [],
@@ -200,18 +242,43 @@
           ],
           "default": "auto",
           "description": "Reduce celebration motion (auto follows OS)"
+        },
+        "orbital.joy.region": {
+          "type": "string",
+          "default": "auto",
+          "description": "Meme/GIF region bias: auto (from editor language + timezone) or us|uk|in|br|jp|kr|de|fr|es|mx|au|global. Never uses GPS."
+        },
+        "orbital.giphy.sdkKey": {
+          "type": "string",
+          "default": "",
+          "description": "Giphy SDK/API key (full access when upgraded to Production). Create at https://developers.giphy.com/dashboard/ → Create App → choose SDK (recommended) or API → copy key. For higher rate limits click Upgrade to Production. Required for live international GIFs."
+        },
+        "orbital.giphy.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Deprecated alias — use orbital.giphy.sdkKey. Same Giphy dashboard key.",
+          "deprecationMessage": "Use orbital.giphy.sdkKey instead."
+        },
+        "orbital.tenor.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Deprecated — Tenor API shut down June 2026. Use orbital.giphy.sdkKey.",
+          "deprecationMessage": "Use orbital.giphy.sdkKey instead. Tenor API was discontinued."
         }
       }
     }
   },
   "scripts": {
-    "compile": "tsc -p ./",
+    "build:scene": "node scripts/build-scene.mjs",
+    "compile": "npm run build:scene && tsc -p ./",
     "watch": "tsc -watch -p ./",
     "test": "vitest run",
     "posttest": "node scripts/signal-test-pass.mjs",
     "test:watch": "vitest",
     "package": "node scripts/package.mjs",
     "generate:sfx": "node scripts/generate-sfx.mjs",
+    "generate:acid-gifs": "node scripts/generate-acid-gifs.mjs",
+    "generate:bites": "node scripts/expand-bites.mjs",
     "vscode:prepublish": "npm run compile"
   },
   "keywords": [
@@ -227,10 +294,14 @@
   "type": "commonjs",
   "devDependencies": {
     "@types/node": "^26.4.0",
+    "@types/three": "^0.170.0",
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
     "typescript": "^7.0.2",
     "vitest": "^4.1.11"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
   }
 }

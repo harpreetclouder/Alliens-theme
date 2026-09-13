@@ -1,17 +1,31 @@
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { resolveSfxUri } from '../audio/sfxPlayer';
 import { readSettings } from '../config/settings';
+import {
+  bigFollowUpCopy,
+  mediumFollowUpCopy,
+} from '../orbit/copy';
+import { OrbitStore, type OrbitWinResult } from '../orbit/store';
+import {
+  countsForOrbitStreak,
+  localDayKey,
+  toOrbitWinSize,
+} from '../orbit/winMapping';
 import { getPack } from '../packs/registry';
 import { pickCaption } from './captions';
 import { classifyKind, resolveDisplay } from './classifier';
+import { pickJoyGif } from './contentBrain';
+import { ContentLibrary } from './contentLibrary';
 import { CELEBRATION_DURATION_MS } from './durations';
-import { CelebrationHost } from './host';
+import { CelebrationHost, type CelebrationShowArgs } from './host';
 import { capturePanelFocus, PanelReturnFocus } from './panelFocus';
+import { getRegionDef, loadRegionsFile, resolveRegion } from './region';
 import { resolveSurface } from './surface';
 import { CelebrationThrottle } from './throttle';
 import { WinKind } from './types';
 import { pickCelebrationVisual } from './visuals';
-import { orbitalLogCelebrate, orbitalLogSkip } from '../util/log';
+import { orbitalLog, orbitalLogCelebrate, orbitalLogSkip } from '../util/log';
 
 export interface CelebrationMeta {
   fullSuite?: boolean;
@@ -20,32 +34,47 @@ export interface CelebrationMeta {
   streak?: number;
 }
 
+function loadLibrary(extensionUri: vscode.Uri): ContentLibrary {
+  const file = vscode.Uri.joinPath(extensionUri, 'media', 'content', 'bites.json');
+  return ContentLibrary.loadFromFile(file.fsPath);
+}
+
 export class CelebrationEngine {
   private readonly throttle = new CelebrationThrottle();
   private celebrationIndex = 0;
+  private readonly library: ContentLibrary;
+  /** Avoid repeating the same joke for the last N celebrations. */
+  private readonly recentBiteIds: string[] = [];
+  private readonly recentGifIds: string[] = [];
+  private static readonly RECENT_WINDOW = 12;
+  private static readonly GIF_WINDOW = 16;
+  private static readonly FOLLOW_UP_DELAY_MS = 1400;
 
   constructor(
     private readonly ctx: vscode.ExtensionContext,
     private readonly host: CelebrationHost,
-  ) {}
+    private readonly orbitStore: OrbitStore,
+  ) {
+    this.library = loadLibrary(ctx.extensionUri);
+  }
 
   handle(kind: WinKind, meta?: CelebrationMeta): void {
-    this.showCelebration(kind, meta, kind === 'preview');
+    void this.showCelebration(kind, meta, kind === 'preview');
   }
 
   preview(): void {
-    this.showCelebration('preview', { returnFocus: 'none' }, true);
+    void this.showCelebration('preview', { returnFocus: 'none' }, true);
   }
 
   dispose(): void {
     this.host.dispose();
   }
 
-  private showCelebration(
+  private async showCelebration(
     kind: WinKind,
     meta: CelebrationMeta | undefined,
     bypassThrottle: boolean,
-  ): void {
+  ): Promise<void> {
     const settings = readSettings(() => vscode.workspace.getConfiguration('orbital'));
 
     if (!settings.celebrationsEnabled) {
@@ -61,8 +90,14 @@ export class CelebrationEngine {
     }
 
     const mode = resolveDisplay(kind, size, settings.intensity, this.celebrationIndex);
-    const visual = pickCelebrationVisual(settings.pack, mode);
-    const picked = pickCaption(kind, settings.pack);
+    const exclude = new Set(this.recentBiteIds);
+    const picked = pickCaption(kind, settings.pack, Math.random, this.library, exclude);
+    if (picked.biteId) {
+      this.recentBiteIds.push(picked.biteId);
+      while (this.recentBiteIds.length > CelebrationEngine.RECENT_WINDOW) {
+        this.recentBiteIds.shift();
+      }
+    }
     const packDef = getPack(settings.pack);
     const fallbackDisplay = settings.display === 'overlay' ? 'overlay' : 'panel';
     const surface = resolveSurface(
@@ -73,12 +108,65 @@ export class CelebrationEngine {
       meta,
       fallbackDisplay,
     );
+    const visual = pickCelebrationVisual(
+      settings.pack,
+      mode,
+      Math.random,
+      surface === 'panel' || surface === 'overlay',
+    );
+
+    const regionsPath = path.join(this.ctx.extensionUri.fsPath, 'media', 'content', 'regions.json');
+    const regionsData = loadRegionsFile(regionsPath);
+    const language = vscode.env.language || 'en';
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const region = resolveRegion({
+      language,
+      timeZone,
+      override: settings.joyRegion,
+      data: regionsData,
+    });
+    const regionDef = getRegionDef(region, regionsData);
+
+    let gif = visual.gif;
+    let regionId = region;
+    let regionLabel = regionDef.label;
+    let gifSource: 'local' | 'giphy' = 'local';
+    let brainDetail: string | undefined;
+    if (surface === 'overlay' || surface === 'panel') {
+      const brain = await pickJoyGif({
+        pack: settings.pack,
+        kind,
+        language,
+        timeZone,
+        regionOverride: settings.joyRegion,
+        giphySdkKey: settings.giphySdkKey,
+        regionsPath,
+        giphyCacheDir: path.join(this.ctx.globalStorageUri.fsPath, 'giphy-cache'),
+        recentGifIds: this.recentGifIds,
+      });
+      brainDetail = brain.detail;
+      if (brain.gif) {
+        gif = brain.gif;
+        gifSource = brain.source === 'giphy' ? 'giphy' : 'local';
+        this.recentGifIds.push(brain.gif.id);
+        while (this.recentGifIds.length > CelebrationEngine.GIF_WINDOW) {
+          this.recentGifIds.shift();
+        }
+      }
+      regionId = brain.region;
+      regionLabel = getRegionDef(brain.region, regionsData).label;
+    }
+
     const focusSnapshot = capturePanelFocus(meta?.returnFocus);
 
     const reduceMotion = settings.reduceMotion === 'always';
     const dataReduceAuto = settings.reduceMotion === 'auto';
-    const durationMs =
-      mode === 'toast' ? CELEBRATION_DURATION_MS.toast : CELEBRATION_DURATION_MS.overlay;
+    const useCollage = surface === 'overlay' || surface === 'panel';
+    const durationMs = useCollage
+      ? CELEBRATION_DURATION_MS.scene
+      : mode === 'toast'
+        ? CELEBRATION_DURATION_MS.toast
+        : CELEBRATION_DURATION_MS.overlay;
 
     const sfxUri = resolveSfxUri(
       settings.pack,
@@ -87,12 +175,28 @@ export class CelebrationEngine {
       settings.mutedPacks,
     );
 
-    this.host.show({
+    let orbitResult: OrbitWinResult | undefined;
+    if (settings.orbitEnabled) {
+      orbitResult = this.orbitStore.applyWin({
+        dayKey: localDayKey(),
+        size: toOrbitWinSize(kind, size, surface),
+        kind,
+        countsForStreak: countsForOrbitStreak(kind),
+        regionId,
+      });
+      await this.orbitStore.save(orbitResult.state);
+    }
+
+    const streakDays = orbitResult?.state.streakDays ?? meta?.streak;
+    const streakForHost =
+      streakDays !== undefined && streakDays > 1 ? streakDays : undefined;
+
+    const showArgs: CelebrationShowArgs = {
       surface,
       pack: settings.pack,
       mode,
       loop: visual.loop,
-      gif: visual.gif,
+      gif,
       caption: picked.line,
       subline: picked.subline,
       emoji: visual.emojis.hero,
@@ -104,21 +208,104 @@ export class CelebrationEngine {
       extensionUri: this.ctx.extensionUri,
       sfxUri,
       focusSnapshot,
-      streak: meta?.streak,
+      streak: streakForHost,
       statusBarCompanion: Boolean(meta?.terminalNative && kind === 'tests'),
-    });
+      animFlavor: picked.anim,
+      tone: picked.tone,
+      regionId,
+      regionLabel,
+      giphyAttribution: gifSource === 'giphy',
+    };
+
+    this.host.show(showArgs);
+
+    if (orbitResult) {
+      this.scheduleOrbitFollowUps(showArgs, orbitResult);
+    }
 
     const extras = [
       visual.loop.id,
-      visual.gif ? `gif:${visual.gif.id}` : undefined,
+      gif ? `gif:${gif.id}` : undefined,
+      `region:${regionId}`,
+      gifSource === 'giphy' ? 'src:giphy' : 'src:local',
+      picked.source === 'library' ? `bite:${picked.biteId}` : 'pack-line',
+      `anim:${picked.anim}`,
       picked.line,
-      meta?.streak && meta.streak > 1 ? `streak:${meta.streak}` : undefined,
+      streakForHost ? `streak:${streakForHost}` : undefined,
+      orbitResult ? `xp:+${orbitResult.xpGained}` : undefined,
     ]
       .filter(Boolean)
       .join(' · ');
 
     orbitalLogCelebrate(settings.pack, kind, surface, extras);
+    if (surface === 'overlay' || surface === 'panel') {
+      const keyOn = Boolean(settings.giphySdkKey?.trim());
+      orbitalLog(
+        'Joy brain',
+        `key=${keyOn ? 'yes' : 'no'} · ${gifSource}${brainDetail ? ` · ${brainDetail}` : ''}`,
+      );
+    }
 
     this.celebrationIndex++;
+  }
+
+  /**
+   * Follow-ups call host.show only — never applyWin again (avoids XP/streak loops).
+   */
+  private scheduleOrbitFollowUps(
+    base: CelebrationShowArgs,
+    result: OrbitWinResult,
+  ): void {
+    const mediumCopy = mediumFollowUpCopy({
+      leveledUp: result.leveledUp,
+      level: result.state.level,
+      unlocked: result.unlocked,
+    });
+    const bigCopy = bigFollowUpCopy({
+      milestone: result.milestone,
+      missionCompleted: result.missionCompleted,
+    });
+
+    if (!mediumCopy && !bigCopy) {
+      return;
+    }
+
+    const streak =
+      result.state.streakDays > 1 ? result.state.streakDays : undefined;
+
+    setTimeout(() => {
+      if (mediumCopy) {
+        this.host.show({
+          ...base,
+          surface: 'panel',
+          mode: 'overlay',
+          caption: mediumCopy.caption,
+          subline: mediumCopy.subline,
+          streak,
+          statusBarCompanion: false,
+          durationMs: CELEBRATION_DURATION_MS.scene,
+        });
+      }
+      if (bigCopy) {
+        const delay = mediumCopy ? CelebrationEngine.FOLLOW_UP_DELAY_MS : 0;
+        const showBig = () => {
+          this.host.show({
+            ...base,
+            surface: 'overlay',
+            mode: 'overlay',
+            caption: bigCopy.caption,
+            subline: bigCopy.subline,
+            streak,
+            statusBarCompanion: false,
+            durationMs: CELEBRATION_DURATION_MS.scene,
+          });
+        };
+        if (delay > 0) {
+          setTimeout(showBig, delay);
+        } else {
+          showBig();
+        }
+      }
+    }, CelebrationEngine.FOLLOW_UP_DELAY_MS);
   }
 }

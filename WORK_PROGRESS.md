@@ -1,34 +1,21 @@
 # Work Progress — Orbital
 
 ## Status
-v0.0.17 — fix commit trigger (git API wiring + command fallback)
+v0.0.26 — Joy collage + locale brain shipped  
+**Next:** Orbital Orbit Task 5 (day-start check-in)
 
-## Done
-- v0.0.15 layered celebrations (terminal animation, status bar, streaks, surfaces)
-- **v0.0.16 SFX:**
-  - `media/sfx/mothership.wav` — beam uplink sweep
-  - `media/sfx/glitch.wav` — static burst + digital ticks
-  - `media/sfx/soft.wav` — cozy chime
-  - `media/sfx/root.wav` — terminal double-beep
-  - `npm run generate:sfx` to regenerate
-  - `orbital.sound.enabled` default **true**
-- **v0.0.17 commit fix:** robust git `onDidCommit` wiring (retries + `onDidChangeState`) + `git.commit*` command fallback; **Orbital: Preview Commit Celebration**
+## Orbit gamification (in progress)
+- Task 1 done: `src/orbit/types.ts`, `src/orbit/rules.ts`, tests (XP/level/streak helpers)
+- Task 2 done: `src/orbit/store.ts`, `src/__tests__/orbitStore.test.ts` (globalState load/save, applyWin)
+- Task 3 done (review **Approved**): `ensureMission` / `progressMission`, `applyWin` mission bonus +40, `mission-complete` achievement; injectable `random` on `OrbitStore` fixes flaky 80 XP test
+- Task 4 done: CelebrationEngine → OrbitStore (`applyWin` + `await save`); `orbital.orbit.enabled`; follow-ups via `host.show` only (no re-applyWin); streak passed when > 1
 
-## Try it
-1. **Reload window** after install
-2. `npm test` — animated fullscreen in terminal + optional status bar streak
-3. **Commit / build** — rich panel (GIFs) unless `intensity: chill`
-4. Settings:
-   - `orbital.celebrations.intensity`: `chill` | `normal` | `hype`
-   - `orbital.celebrations.surfaces`: per-trigger overrides
-   - `orbital.sound.enabled`: true for SFX
-5. **Preview:** `Orbital: Preview Celebration`
+## Specs / plans
+- Joy collage: `docs/superpowers/specs/2026-09-12-joy-collage-location-brain-design.md`
+- Orbit gamification: `docs/superpowers/specs/2026-09-13-orbital-orbit-gamification-design.md`
+- Plan: `docs/superpowers/plans/2026-09-13-orbital-orbit-gamification.md`
 
-## Follow-ups
-- Manual F5 matrix (onboarding, toast/overlay, triggers, SFX)
-- Richer theme tokens
-
-## Docs
-- Spec: `docs/superpowers/specs/2026-08-29-orbital-design.md`
-- Plan: `docs/superpowers/plans/2026-08-29-orbital-implementation.md`
-- Ledger: `.superpowers/sdd/progress.md`
+## Try joy (current)
+Reload → Preview Celebration  
+Optional Tenor: Settings → `orbital.tenor.apiKey`  
+Region: `orbital.joy.region`
