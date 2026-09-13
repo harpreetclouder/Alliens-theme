@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { CelebrationEngine } from './celebrations/engine';
 import { CelebrationHost } from './celebrations/host';
-import { ContentLibrary } from './celebrations/contentLibrary';
 import { CELEBRATION_PANEL_VIEW_ID, CelebrationPanelProvider } from './celebrations/panelView';
 import { registerCommands } from './commands/registerCommands';
 import { readSettings } from './config/settings';
@@ -25,12 +24,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   const orbitStore = new OrbitStore(context.globalState);
   const engine = new CelebrationEngine(context, host, orbitStore);
   context.subscriptions.push({ dispose: () => engine.dispose() });
-  orbitalLog(
-    'Content library loaded',
-    `${ContentLibrary.loadFromFile(
-      vscode.Uri.joinPath(context.extensionUri, 'media', 'content', 'bites.json').fsPath,
-    ).size} bites`,
-  );
 
   // Commands first — preview must work even during onboarding
   context.subscriptions.push(...registerCommands(context, engine));
