@@ -30,7 +30,7 @@ export const ACHIEVEMENTS: OrbitAchievementDef[] = [
 export function emptyOrbitState(): OrbitState {
   return {
     xp: 0,
-    level: 1,
+    level: levelFromXp(0),
     lastWinDay: '',
     streakDays: 0,
     unlocked: [],

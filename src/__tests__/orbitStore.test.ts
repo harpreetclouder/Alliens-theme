@@ -172,4 +172,27 @@ describe('OrbitStore', () => {
     expect(second.state.xp).toBe(160);
     expect(store.load().xp).toBe(160);
   });
+
+  it('save() persists cache; stale lower-xp snapshot is ignored', async () => {
+    const gs = fakeGlobalState();
+    const store = new OrbitStore(gs, () => 0);
+    const first = store.applyWin({
+      dayKey: day,
+      size: 'big',
+      kind: 'tests',
+      countsForStreak: true,
+    });
+    store.applyWin({
+      dayKey: day,
+      size: 'big',
+      kind: 'tests',
+      countsForStreak: true,
+    });
+    await store.save(first.state); // lagged first snapshot must not clobber cache
+    expect(store.load().xp).toBe(160);
+    expect(gs.snapshot()?.xp).toBe(160);
+
+    await store.save(); // no-arg persists current cache
+    expect(gs.snapshot()?.xp).toBe(160);
+  });
 });

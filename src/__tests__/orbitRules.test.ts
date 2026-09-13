@@ -47,15 +47,16 @@ describe('xpForSize', () => {
 });
 
 describe('emptyOrbitState', () => {
-  it('starts at level 1 with zero progress', () => {
+  it('starts at levelFromXp(0) with zero progress', () => {
     expect(emptyOrbitState()).toEqual({
       xp: 0,
-      level: 1,
+      level: levelFromXp(0),
       lastWinDay: '',
       streakDays: 0,
       unlocked: [],
       mission: null,
     });
+    expect(emptyOrbitState().level).toBe(1);
   });
 });
 

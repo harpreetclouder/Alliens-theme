@@ -1,11 +1,12 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { resolveSfxUri } from '../audio/sfxPlayer';
-import { readSettings } from '../config/settings';
+import { readSettings, type Intensity } from '../config/settings';
 import {
   bigFollowUpCopy,
   mediumFollowUpCopy,
 } from '../orbit/copy';
+import { orbitFollowUpPresentation } from '../orbit/followUp';
 import { OrbitStore, type OrbitWinResult } from '../orbit/store';
 import {
   countsForOrbitStreak,
@@ -189,7 +190,7 @@ export class CelebrationEngine {
         countsForStreak: countsForOrbitStreak(kind),
         regionId,
       });
-      await this.orbitStore.save(orbitResult.state);
+      await this.orbitStore.save();
       this.host.updateOrbitCrumb(
         orbitResult.state.level,
         orbitResult.state.streakDays,
@@ -229,7 +230,7 @@ export class CelebrationEngine {
     this.host.show(showArgs);
 
     if (orbitResult) {
-      this.scheduleOrbitFollowUps(showArgs, orbitResult);
+      this.scheduleOrbitFollowUps(showArgs, orbitResult, settings.intensity);
     }
 
     const extras = [
@@ -260,10 +261,12 @@ export class CelebrationEngine {
 
   /**
    * Follow-ups call host.show only — never applyWin again (avoids XP/streak loops).
+   * Chill intensity uses statusbar only (no panel/overlay visual).
    */
   private scheduleOrbitFollowUps(
     base: CelebrationShowArgs,
     result: OrbitWinResult,
+    intensity: Intensity,
   ): void {
     const mediumCopy = mediumFollowUpCopy({
       leveledUp: result.leveledUp,
@@ -295,29 +298,27 @@ export class CelebrationEngine {
 
     schedule(() => {
       if (mediumCopy) {
+        const pres = orbitFollowUpPresentation(intensity, 'medium');
         this.host.show({
           ...base,
-          surface: 'panel',
-          mode: 'overlay',
+          ...pres,
           caption: mediumCopy.caption,
           subline: mediumCopy.subline,
           streak,
           statusBarCompanion: false,
-          durationMs: CELEBRATION_DURATION_MS.scene,
         });
       }
       if (bigCopy) {
         const delay = mediumCopy ? CelebrationEngine.FOLLOW_UP_DELAY_MS : 0;
         const showBig = () => {
+          const pres = orbitFollowUpPresentation(intensity, 'big');
           this.host.show({
             ...base,
-            surface: 'overlay',
-            mode: 'overlay',
+            ...pres,
             caption: bigCopy.caption,
             subline: bigCopy.subline,
             streak,
             statusBarCompanion: false,
-            durationMs: CELEBRATION_DURATION_MS.scene,
           });
         };
         if (delay > 0) {

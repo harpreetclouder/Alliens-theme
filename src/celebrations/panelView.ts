@@ -3,11 +3,12 @@ import {
   buildCelebrationHtml,
   buildIdlePanelHtml,
   CelebrationHtmlOpts,
-  idleOrbitViewFromState,
 } from './celebrationHtml';
 import { EXIT_LEAD_MS } from './durations';
 import { CelebrationShowArgs } from './host';
 import { focusOrbitalView, restorePanelFocus, waitForView } from './panelFocus';
+import { readSettings } from '../config/settings';
+import { resolveIdleOrbit } from '../orbit/idleHud';
 import type { OrbitStore } from '../orbit/store';
 import { orbitalLog } from '../util/log';
 
@@ -139,9 +140,10 @@ export class CelebrationPanelProvider implements vscode.WebviewViewProvider {
     const idleCss = this.view.webview.asWebviewUri(
       vscode.Uri.joinPath(extensionUri, 'media', 'webview', 'celebration.css'),
     );
-    const orbit = this.orbitStore
-      ? idleOrbitViewFromState(this.orbitStore.load())
-      : undefined;
+    const settings = readSettings(() =>
+      this.vscodeApi.workspace.getConfiguration('orbital'),
+    );
+    const orbit = resolveIdleOrbit(settings.orbitEnabled, this.orbitStore);
     this.view.webview.html = buildIdlePanelHtml(
       this.view.webview.cspSource,
       idleCss.toString(),

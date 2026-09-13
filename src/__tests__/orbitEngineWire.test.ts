@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { CELEBRATION_DURATION_MS } from '../celebrations/durations';
 import {
   achievementsCaption,
   bigFollowUpCopy,
@@ -6,6 +7,7 @@ import {
   mediumFollowUpCopy,
   milestoneCaption,
 } from '../orbit/copy';
+import { orbitFollowUpPresentation } from '../orbit/followUp';
 import {
   countsForOrbitStreak,
   localDayKey,
@@ -59,6 +61,26 @@ describe('orbit copy', () => {
   });
 });
 
+describe('orbitFollowUpPresentation', () => {
+  it('chill uses statusbar toast for medium and big', () => {
+    expect(orbitFollowUpPresentation('chill', 'medium')).toEqual({
+      surface: 'statusbar',
+      mode: 'toast',
+      durationMs: CELEBRATION_DURATION_MS.toast,
+    });
+    expect(orbitFollowUpPresentation('chill', 'big')).toEqual({
+      surface: 'statusbar',
+      mode: 'toast',
+      durationMs: CELEBRATION_DURATION_MS.toast,
+    });
+  });
+
+  it('normal/hype keep panel and overlay visuals', () => {
+    expect(orbitFollowUpPresentation('normal', 'medium').surface).toBe('panel');
+    expect(orbitFollowUpPresentation('hype', 'big').surface).toBe('overlay');
+  });
+});
+
 describe('OrbitStore applyWin + save (engine contract)', () => {
   it('preview path: applyWin with countsForStreak false leaves streakDays unchanged after save', async () => {
     const { OrbitStore } = await import('../orbit/store');
@@ -79,7 +101,7 @@ describe('OrbitStore applyWin + save (engine contract)', () => {
       kind: 'preview',
       countsForStreak: false,
     });
-    await store.save(result.state);
+    await store.save();
     expect(store.load().streakDays).toBe(before.streakDays);
     expect(result.state.streakDays).toBe(0);
   });

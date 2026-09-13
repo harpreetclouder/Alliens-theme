@@ -3,6 +3,9 @@ import {
   buildIdlePanelHtml,
   idleOrbitViewFromState,
 } from '../celebrations/celebrationHtml';
+import { resolveIdleOrbit } from '../orbit/idleHud';
+import { OrbitStore } from '../orbit/store';
+import type { OrbitState } from '../orbit/types';
 
 describe('buildIdlePanelHtml orbit HUD', () => {
   it('renders standing-by idle without orbit', () => {
@@ -46,5 +49,41 @@ describe('idleOrbitViewFromState', () => {
     expect(view.missionLabel).toBe('Green tests once');
     expect(view.missionProgress).toBe(0);
     expect(view.missionTarget).toBe(1);
+  });
+});
+
+describe('resolveIdleOrbit (orbit.enabled gate)', () => {
+  function fakeStore(state: OrbitState): OrbitStore {
+    const gs = {
+      get: <T>(_key: string): T | undefined => state as T,
+      update: async () => undefined,
+    };
+    return new OrbitStore(gs);
+  }
+
+  it('returns undefined when orbit is disabled', () => {
+    const store = fakeStore({
+      xp: 80,
+      level: 2,
+      lastWinDay: '',
+      streakDays: 1,
+      unlocked: [],
+      mission: null,
+    });
+    expect(resolveIdleOrbit(false, store)).toBeUndefined();
+  });
+
+  it('returns HUD view when orbit is enabled', () => {
+    const store = fakeStore({
+      xp: 80,
+      level: 2,
+      lastWinDay: '',
+      streakDays: 1,
+      unlocked: [],
+      mission: null,
+    });
+    const view = resolveIdleOrbit(true, store);
+    expect(view?.level).toBe(2);
+    expect(view?.xp).toBe(80);
   });
 });

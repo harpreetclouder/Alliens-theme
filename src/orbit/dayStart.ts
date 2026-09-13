@@ -58,7 +58,7 @@ export async function dayStartIfNeeded(
     kind: 'checkin',
     countsForStreak: true,
   });
-  await store.save(result.state);
+  await store.save();
   host.updateOrbitCrumb(result.state.level, result.state.streakDays);
 
   const missionId = result.state.mission?.id;

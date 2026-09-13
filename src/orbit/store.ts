@@ -98,10 +98,16 @@ export class OrbitStore {
     return state;
   }
 
-  async save(state: OrbitState): Promise<void> {
-    const next = normalizeState(state);
-    this.cached = next;
-    await this.globalState.update(ORBIT_STATE_KEY, next);
+  /**
+   * Persist in-memory cache. Optional `state` is ignored when older than cache
+   * (lower xp) so a lagged await cannot overwrite a newer applyWin.
+   */
+  async save(state?: OrbitState): Promise<void> {
+    const current = this.cached ?? this.load();
+    if (state !== undefined && state.xp >= current.xp) {
+      this.cached = normalizeState(state);
+    }
+    await this.globalState.update(ORBIT_STATE_KEY, this.cached ?? current);
   }
 
   applyWin(input: ApplyWinInput): OrbitWinResult {
