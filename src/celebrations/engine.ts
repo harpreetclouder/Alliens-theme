@@ -33,6 +33,7 @@ export interface CelebrationMeta {
 export class CelebrationEngine {
   private readonly throttle = new CelebrationThrottle();
   private celebrationIndex = 0;
+  private readonly followUpTimers: ReturnType<typeof setTimeout>[] = [];
   private static readonly FOLLOW_UP_DELAY_MS = 1400;
 
   constructor(
@@ -50,6 +51,10 @@ export class CelebrationEngine {
   }
 
   dispose(): void {
+    for (const timer of this.followUpTimers) {
+      clearTimeout(timer);
+    }
+    this.followUpTimers.length = 0;
     this.host.dispose();
   }
 
@@ -178,7 +183,18 @@ export class CelebrationEngine {
     const streak =
       result.state.streakDays > 1 ? result.state.streakDays : undefined;
 
-    setTimeout(() => {
+    const schedule = (fn: () => void, ms: number) => {
+      const timer = setTimeout(() => {
+        const idx = this.followUpTimers.indexOf(timer);
+        if (idx >= 0) {
+          this.followUpTimers.splice(idx, 1);
+        }
+        fn();
+      }, ms);
+      this.followUpTimers.push(timer);
+    };
+
+    schedule(() => {
       if (mediumCopy) {
         this.host.show({
           ...base,
@@ -206,7 +222,7 @@ export class CelebrationEngine {
           });
         };
         if (delay > 0) {
-          setTimeout(showBig, delay);
+          schedule(showBig, delay);
         } else {
           showBig();
         }

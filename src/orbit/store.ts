@@ -81,21 +81,27 @@ function newAchievements(
 }
 
 export class OrbitStore {
+  private cached: OrbitState | undefined;
+
   constructor(
     private readonly globalState: GlobalStateLike,
     private readonly random: () => number = Math.random,
   ) {}
 
   load(): OrbitState {
-    const raw = this.globalState.get<OrbitState>(ORBIT_STATE_KEY);
-    if (!raw) {
-      return emptyOrbitState();
+    if (this.cached) {
+      return this.cached;
     }
-    return normalizeState(raw);
+    const raw = this.globalState.get<OrbitState>(ORBIT_STATE_KEY);
+    const state = raw ? normalizeState(raw) : emptyOrbitState();
+    this.cached = state;
+    return state;
   }
 
   async save(state: OrbitState): Promise<void> {
-    await this.globalState.update(ORBIT_STATE_KEY, normalizeState(state));
+    const next = normalizeState(state);
+    this.cached = next;
+    await this.globalState.update(ORBIT_STATE_KEY, next);
   }
 
   applyWin(input: ApplyWinInput): OrbitWinResult {
@@ -124,6 +130,8 @@ export class OrbitStore {
       lastWinDay: streak.lastWinDay,
       unlocked: [...withMission.unlocked, ...unlocked],
     });
+
+    this.cached = state;
 
     return {
       state,

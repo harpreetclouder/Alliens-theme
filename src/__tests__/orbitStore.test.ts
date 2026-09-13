@@ -150,4 +150,26 @@ describe('OrbitStore', () => {
     expect(result.state.lastWinDay).toBe(day);
     expect(result.xpGained).toBe(25);
   });
+
+  it('two rapid applyWins accumulate XP without awaiting save between them', () => {
+    const gs = fakeGlobalState();
+    const store = new OrbitStore(gs, () => 0);
+    const first = store.applyWin({
+      dayKey: day,
+      size: 'big',
+      kind: 'tests',
+      countsForStreak: true,
+    });
+    // No await save — overlapping applies must use in-memory cache, not stale globalState.
+    const second = store.applyWin({
+      dayKey: day,
+      size: 'big',
+      kind: 'tests',
+      countsForStreak: true,
+    });
+    expect(first.state.xp).toBe(80);
+    expect(second.xpGained).toBe(80);
+    expect(second.state.xp).toBe(160);
+    expect(store.load().xp).toBe(160);
+  });
 });
