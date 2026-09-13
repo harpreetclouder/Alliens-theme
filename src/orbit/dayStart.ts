@@ -59,13 +59,14 @@ export async function dayStartIfNeeded(
     countsForStreak: true,
   });
   await store.save(result.state);
+  host.updateOrbitCrumb(result.state.level, result.state.streakDays);
 
   const missionId = result.state.mission?.id;
   const missionLabel =
     MISSION_POOL.find((m) => m.id === missionId)?.label ?? 'Daily mission';
 
   if (settings.celebrationsEnabled) {
-    const visual = pickCelebrationVisual(settings.pack, 'toast');
+    const visual = pickCelebrationVisual(settings.pack, 'toast', Math.random, false);
     const packDef = getPack(settings.pack);
     const picked = pickCaption('checkin', settings.pack);
     const streak =

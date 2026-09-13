@@ -5,6 +5,7 @@ import { buildCelebrationHtml, CelebrationHtmlOpts } from './celebrationHtml';
 import { CelebrationPanelProvider } from './panelView';
 import { EXIT_LEAD_MS } from './durations';
 import { GifDef } from './gifs';
+import { gifLocalResourceRoots, resolveGifWebviewUri } from './gifUri';
 import { LoopDef } from './loops';
 import { PanelFocusSnapshot, restorePanelFocus } from './panelFocus';
 import { CelebrationSurface } from './surface';
@@ -33,6 +34,12 @@ export interface CelebrationShowArgs {
   streak?: number;
   /** Brief status-bar streak hint after in-terminal wins. */
   statusBarCompanion?: boolean;
+  animFlavor?: string;
+  tone?: string;
+  regionId?: string;
+  regionLabel?: string;
+  /** Show Powered by GIPHY when live SDK GIF is used (ToS). */
+  giphyAttribution?: boolean;
 }
 
 export class CelebrationHost {
@@ -45,6 +52,15 @@ export class CelebrationHost {
     private readonly panelProvider: CelebrationPanelProvider,
   ) {
     this.statusBar = new StatusBarCelebration(vscodeApi);
+  }
+
+  /** Persistent L{n} · 🔥{streak} when orbit is enabled. */
+  updateOrbitCrumb(level: number, streakDays: number): void {
+    this.statusBar.setOrbitCrumb(level, streakDays);
+  }
+
+  clearOrbitCrumb(): void {
+    this.statusBar.clearOrbitCrumb();
   }
 
   show(args: CelebrationShowArgs): void {
@@ -95,17 +111,17 @@ export class CelebrationHost {
   private showOverlay(args: CelebrationShowArgs): void {
     this.disposeOverlay();
 
-    const { mode, loop, gif, caption, subline, emoji, orbitEmojis, tint, reduceMotion, dataReduceAuto, durationMs, extensionUri, sfxUri } =
+    const { loop, gif, caption, subline, emoji, orbitEmojis, tint, reduceMotion, dataReduceAuto, durationMs, extensionUri, sfxUri } =
       args;
     const vscode = this.vscodeApi;
 
     const panel = vscode.window.createWebviewPanel(
       'orbital.celebration',
       'Orbital',
-      { viewColumn: vscode.ViewColumn.Active, preserveFocus: true },
+      { viewColumn: vscode.ViewColumn.Active, preserveFocus: false },
       {
         enableScripts: true,
-        localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')],
+        localResourceRoots: gifLocalResourceRoots(extensionUri, gif, vscode),
       },
     );
 
@@ -115,13 +131,9 @@ export class CelebrationHost {
 
     const htmlOpts: CelebrationHtmlOpts = {
       cssUri: cssUri.toString(),
-      mode,
+      mode: 'overlay',
       loopClass: loop.cssClass,
-      gifUri: gif
-        ? panel.webview
-            .asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'gifs', ...gif.file.split('/')))
-            .toString()
-        : undefined,
+      gifUri: resolveGifWebviewUri(panel.webview, extensionUri, gif, vscode),
       caption,
       subline,
       emoji,
@@ -133,10 +145,18 @@ export class CelebrationHost {
       exitLeadMs: EXIT_LEAD_MS,
       cspSource: panel.webview.cspSource,
       sfxUri: sfxUri ? panel.webview.asWebviewUri(sfxUri).toString() : undefined,
+      animFlavor: args.animFlavor,
+      tone: args.tone,
+      collage: true,
+      pack: args.pack,
+      surface: 'overlay',
+      regionId: args.regionId,
+      regionLabel: args.regionLabel,
+      giphyAttribution: args.giphyAttribution,
     };
 
     panel.webview.html = buildCelebrationHtml(htmlOpts);
-    panel.reveal(vscode.ViewColumn.Active, true);
+    panel.reveal(vscode.ViewColumn.Active, false);
     orbitalLog('Overlay celebration shown', caption);
 
     this.panel = panel;

@@ -20,6 +20,8 @@ function settings(partial: Partial<OrbitalSettings> = {}): OrbitalSettings {
     soundEnabled: false,
     mutedPacks: [],
     reduceMotion: 'never',
+    joyRegion: 'auto',
+    giphySdkKey: '',
     ...partial,
   };
 }
@@ -49,7 +51,7 @@ describe('dayStartIfNeeded', () => {
   it('rolls mission, awards small XP, whispers once per local day', async () => {
     const ctx = mockContext();
     const gs = {
-      get<T>(_key: string): T | undefined {
+      get<T>(key: string): T | undefined {
         return undefined;
       },
       async update(): Promise<void> {},
@@ -60,6 +62,7 @@ describe('dayStartIfNeeded', () => {
       show: (args: unknown) => {
         shown.push(args);
       },
+      updateOrbitCrumb: vi.fn(),
     } as CelebrationHost;
 
     const day = new Date(2026, 8, 13);
@@ -85,7 +88,7 @@ describe('dayStartIfNeeded', () => {
       get: () => undefined,
       update: async () => {},
     });
-    const host = { show: vi.fn() } as unknown as CelebrationHost;
+    const host = { show: vi.fn(), updateOrbitCrumb: vi.fn() } as unknown as CelebrationHost;
     const result = await dayStartIfNeeded(
       ctx,
       store,

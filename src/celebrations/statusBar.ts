@@ -8,41 +8,64 @@ export interface StatusBarShowArgs {
   durationMs: number;
 }
 
+/** Persistent orbit HUD text: `L{n} · 🔥{streak}`. */
+export function formatOrbitCrumb(level: number, streakDays: number): string {
+  return `L${level} · 🔥${streakDays}`;
+}
+
 export class StatusBarCelebration {
-  private readonly item: vscode.StatusBarItem;
+  private readonly whisperItem: vscode.StatusBarItem;
+  private readonly orbitCrumbItem: vscode.StatusBarItem;
   private hideTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(vscodeApi: typeof vscode) {
-    this.item = vscodeApi.window.createStatusBarItem(
+    this.whisperItem = vscodeApi.window.createStatusBarItem(
       vscodeApi.StatusBarAlignment.Right,
       100,
     );
-    this.item.name = 'Orbital Celebration';
+    this.whisperItem.name = 'Orbital Celebration';
+
+    this.orbitCrumbItem = vscodeApi.window.createStatusBarItem(
+      vscodeApi.StatusBarAlignment.Right,
+      50,
+    );
+    this.orbitCrumbItem.name = 'Orbital Level';
+    this.orbitCrumbItem.tooltip = 'Orbital · level and streak';
+  }
+
+  setOrbitCrumb(level: number, streakDays: number): void {
+    this.orbitCrumbItem.text = formatOrbitCrumb(level, streakDays);
+    this.orbitCrumbItem.show();
+  }
+
+  clearOrbitCrumb(): void {
+    this.orbitCrumbItem.hide();
   }
 
   show(args: StatusBarShowArgs): void {
     const streak =
       args.streak && args.streak > 1 ? ` · 🔥 ${args.streak} today` : '';
-    this.item.text = `${args.emoji} ${args.caption}${streak}`;
-    this.item.tooltip = args.subline
+    this.whisperItem.text = `${args.emoji} ${args.caption}${streak}`;
+    this.whisperItem.tooltip = args.subline
       ? `Orbital · ${args.subline}`
       : 'Orbital celebration';
-    this.item.show();
+    this.whisperItem.show();
 
     if (this.hideTimer !== undefined) {
       clearTimeout(this.hideTimer);
     }
-    this.hideTimer = setTimeout(() => this.hide(), args.durationMs);
+    this.hideTimer = setTimeout(() => this.hideWhisper(), args.durationMs);
   }
 
-  hide(): void {
-    this.item.hide();
+  hideWhisper(): void {
+    this.whisperItem.hide();
   }
 
   dispose(): void {
     if (this.hideTimer !== undefined) {
       clearTimeout(this.hideTimer);
     }
-    this.item.dispose();
+    this.whisperItem.dispose();
+    this.orbitCrumbItem.dispose();
   }
 }
