@@ -35,14 +35,22 @@ describe('resolveSurface', () => {
     ).toBe('terminal');
   });
 
-  it('uses default surfaces for commit/build/debug/save', () => {
+  it('uses default surfaces for commit/build/debug/save/checkin/pack', () => {
     expect(DEFAULT_SURFACES.commit).toBe('panel');
     expect(DEFAULT_SURFACES.save).toBe('statusbar');
+    expect(DEFAULT_SURFACES.checkin).toBe('statusbar');
+    expect(DEFAULT_SURFACES.pack).toBe('statusbar');
     expect(
       resolveSurface('commit', 'small', {}, 'normal', undefined, 'panel'),
     ).toBe('panel');
     expect(
       resolveSurface('save', 'small', {}, 'normal', undefined, 'panel'),
+    ).toBe('statusbar');
+    expect(
+      resolveSurface('checkin', 'small', {}, 'normal', undefined, 'panel'),
+    ).toBe('statusbar');
+    expect(
+      resolveSurface('pack', 'small', {}, 'normal', undefined, 'panel'),
     ).toBe('statusbar');
   });
 

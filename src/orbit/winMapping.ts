@@ -10,17 +10,11 @@ export function localDayKey(now: Date = new Date()): string {
 }
 
 /**
- * Preview never counts. Save counts when the win kind is save.
- * tests / build / commit / debug always count.
+ * Preview never counts. Save / checkin / pack and other real soft wins count.
+ * tests / build / commit / debug / orbit events always count.
  */
 export function countsForOrbitStreak(kind: WinKind): boolean {
-  if (kind === 'preview') {
-    return false;
-  }
-  if (kind === 'save') {
-    return true;
-  }
-  return kind === 'tests' || kind === 'build' || kind === 'commit' || kind === 'debug';
+  return kind !== 'preview';
 }
 
 /**

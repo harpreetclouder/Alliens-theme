@@ -21,6 +21,11 @@ const LINES: Record<PackId, Record<WinKind, readonly string[]>> = {
     debug: ['PROBE ACTIVE · SCANNING', 'DEBUG BEAM · ONLINE', 'SENSORS LOCKED · HUNTING BUGS'],
     save: ['FILE STOWED ✓', 'CARGO SAVED · SECURE', 'DATA PACKED · ALL GOOD'],
     preview: ['PREVIEW ORBIT · LIVE', 'TEST FLIGHT · GO', 'DEMO BEAM · ACTIVE'],
+    checkin: ['MISSION BRIEFING · DAY START', 'ORBIT CHECK-IN ✓', 'CREW ONLINE · NEW DAY'],
+    pack: ['PACK SWITCH · BEAMED', 'NEW SKIN · DOCKED', 'ORBIT THEME · LOCKED'],
+    levelup: ['LEVEL UP · THRUSTERS'],
+    achievement: ['ACHIEVEMENT · LOGGED'],
+    mission: ['MISSION CLEAR · ORBIT'],
   },
   glitch: {
     tests: [
@@ -36,6 +41,11 @@ const LINES: Record<PackId, Record<WinKind, readonly string[]>> = {
     debug: ['SIGNAL LOCK · DEBUG ON', 'FREQ LOCKED · TRACING', 'STATIC LOW · PROBING'],
     save: ['SAVED · NO STATIC', 'FILE TAPED · OK', 'WRITE CLEAR · STORED'],
     preview: ['PREVIEW · TRANSMISSION LIVE', 'TEST PATTERN · ON AIR', 'GLITCH CHECK · LIVE'],
+    checkin: ['DAY START · SIGNAL UP', 'CHECK-IN · NO STATIC', 'MISSION BRIEF · LIVE'],
+    pack: ['PACK SWAP · STAMPED', 'THEME PATCH · LIVE', 'SKIN CLEAR · 200'],
+    levelup: ['LEVEL UP · STAMPED'],
+    achievement: ['ACHIEVEMENT · TAPED'],
+    mission: ['MISSION CLEAR · SENT'],
   },
   soft: {
     tests: [
@@ -51,6 +61,11 @@ const LINES: Record<PackId, Record<WinKind, readonly string[]>> = {
     debug: ['gentle probe · debugging', 'soft scan · on it', 'cozy debug mode'],
     save: ['saved · floating calm', 'file tucked in ✓', 'soft save · all good'],
     preview: ['preview drifting ✓', 'demo orbit · chill', 'test float · live'],
+    checkin: ['soft check-in · new day', 'mission briefing · cozy', 'orbit wake · gentle'],
+    pack: ['pack floated in ✓', 'new skin · soft land', 'theme tucked · cute'],
+    levelup: ['level up · soft glow'],
+    achievement: ['achievement · floated'],
+    mission: ['mission clear · cozy'],
   },
   root: {
     tests: [
@@ -66,6 +81,11 @@ const LINES: Record<PackId, Record<WinKind, readonly string[]>> = {
     debug: ['root shell · debugging', 'gdb vibes · tracing', 'breakpoint · engaged'],
     save: ['chmod 644 · saved', 'file written · root ok', 'saved to disk · gg'],
     preview: ['preview exec · live', 'dry run · pwned', 'demo shell · active'],
+    checkin: ['day start · shell online', 'check-in · root ready', 'mission brief · sudo'],
+    pack: ['pack inject · live', 'theme owned · swap', 'skin chmod · ok'],
+    levelup: ['level up · root'],
+    achievement: ['achievement · owned'],
+    mission: ['mission clear · gg'],
   },
 };
 
@@ -77,6 +97,11 @@ const SUBLINES: Record<PackId, Record<WinKind, readonly string[]>> = {
     debug: ['scanning your code', 'no aliens harmed'],
     save: ['bay doors closed', 'manifest updated'],
     preview: ['demo mode engaged', 'ufo watching proudly'],
+    checkin: ['daily mission rolled', 'crew brief complete'],
+    pack: ['wardrobe updated', 'hull repainted'],
+    levelup: ['rank climbing'],
+    achievement: ['badge secured'],
+    mission: ['objective complete'],
   },
   glitch: {
     tests: ['tape quality: pristine', 'static levels: minimal', 'certified unhinged'],
@@ -85,6 +110,11 @@ const SUBLINES: Record<PackId, Record<WinKind, readonly string[]>> = {
     debug: ['tracking the glitch', 'VHS rewinding'],
     save: ['bits preserved', 'noise filtered'],
     preview: ['test pattern running', 'signal strong'],
+    checkin: ['briefing transmitted', 'tape rolling'],
+    pack: ['channel flipped', 'skin patched'],
+    levelup: ['gain stamped'],
+    achievement: ['trophy faxed'],
+    mission: ['objective clear'],
   },
   soft: {
     tests: ['you earned a soft win', 'the cow is proud', 'floating through life'],
@@ -93,6 +123,11 @@ const SUBLINES: Record<PackId, Record<WinKind, readonly string[]>> = {
     debug: ['softly hunting bugs', 'peach beam active'],
     save: ['dream save complete', 'cozy bytes stored'],
     preview: ['drift mode on', 'warm pixels ahead'],
+    checkin: ['soft briefing ready', 'gentle day open'],
+    pack: ['outfit floated on', 'mood swapped'],
+    levelup: ['soft climb'],
+    achievement: ['cozy badge'],
+    mission: ['daily done'],
   },
   root: {
     tests: ['shell access: granted', 'kernel says gg', 'zero day avoided (today)'],
@@ -101,6 +136,11 @@ const SUBLINES: Record<PackId, Record<WinKind, readonly string[]>> = {
     debug: ['strace your problems away', 'sudo vibes only'],
     save: ['permissions set · vibe ok', 'inode secured'],
     preview: ['simulation running', 'no rm -rf detected'],
+    checkin: ['cron wake · ok', 'briefing sourced'],
+    pack: ['theme chowned', 'skin linked'],
+    levelup: ['xp owned'],
+    achievement: ['badge chmod'],
+    mission: ['objective pwned'],
   },
 };
 

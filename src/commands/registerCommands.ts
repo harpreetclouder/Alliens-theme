@@ -44,6 +44,7 @@ export function registerCommands(
       const packId = await pickPack();
       if (packId) {
         await applyPack(packId);
+        engine.handle('pack');
       }
     }),
     vscode.commands.registerCommand('orbital.previewCelebration', () => {

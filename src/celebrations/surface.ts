@@ -10,6 +10,11 @@ export const DEFAULT_SURFACES: Record<WinKind, CelebrationSurface> = {
   commit: 'panel',
   debug: 'panel',
   save: 'statusbar',
+  checkin: 'statusbar',
+  pack: 'statusbar',
+  levelup: 'panel',
+  achievement: 'panel',
+  mission: 'overlay',
 };
 
 const VALID: CelebrationSurface[] = ['terminal', 'panel', 'overlay', 'statusbar'];

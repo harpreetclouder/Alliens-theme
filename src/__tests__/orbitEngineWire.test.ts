@@ -17,9 +17,11 @@ describe('orbit winMapping', () => {
     expect(localDayKey(new Date(2026, 8, 13))).toBe('2026-09-13');
   });
 
-  it('countsForOrbitStreak: preview false; save/tests/build/commit/debug true', () => {
+  it('countsForOrbitStreak: preview false; real soft wins including checkin/pack true', () => {
     expect(countsForOrbitStreak('preview')).toBe(false);
     expect(countsForOrbitStreak('save')).toBe(true);
+    expect(countsForOrbitStreak('checkin')).toBe(true);
+    expect(countsForOrbitStreak('pack')).toBe(true);
     expect(countsForOrbitStreak('tests')).toBe(true);
     expect(countsForOrbitStreak('build')).toBe(true);
     expect(countsForOrbitStreak('commit')).toBe(true);

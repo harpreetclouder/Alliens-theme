@@ -5,7 +5,7 @@ export function classifyKind(
   kind: WinKind,
   meta: { fullSuite?: boolean } = {},
 ): WinSize {
-  if (kind === 'build') return 'big';
+  if (kind === 'build' || kind === 'mission') return 'big';
   if (kind === 'tests' && meta.fullSuite) return 'big';
   return 'small';
 }

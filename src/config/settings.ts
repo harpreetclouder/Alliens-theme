@@ -13,6 +13,11 @@ export interface SurfaceOverrides {
   debug?: CelebrationSurfaceSetting;
   save?: CelebrationSurfaceSetting;
   preview?: CelebrationSurfaceSetting;
+  checkin?: CelebrationSurfaceSetting;
+  pack?: CelebrationSurfaceSetting;
+  levelup?: CelebrationSurfaceSetting;
+  achievement?: CelebrationSurfaceSetting;
+  mission?: CelebrationSurfaceSetting;
 }
 
 export interface TriggerSettings {
@@ -40,7 +45,19 @@ export interface ConfigLike {
   get<T>(section: string, defaultValue: T): T;
 }
 
-const SURFACE_KEYS = ['tests', 'build', 'commit', 'debug', 'save', 'preview'] as const;
+const SURFACE_KEYS = [
+  'tests',
+  'build',
+  'commit',
+  'debug',
+  'save',
+  'preview',
+  'checkin',
+  'pack',
+  'levelup',
+  'achievement',
+  'mission',
+] as const;
 const VALID_SURFACES = new Set<CelebrationSurfaceSetting>([
   'terminal',
   'panel',

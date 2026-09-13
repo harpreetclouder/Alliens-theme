@@ -2,13 +2,11 @@
 
 ## Status
 v0.0.26 — Joy collage + locale brain shipped  
-**Next:** Orbital Orbit Task 5 (day-start check-in)
+**Next:** Orbital Orbit Task 6 (panel idle HUD)
 
 ## Orbit gamification (in progress)
-- Task 1 done: `src/orbit/types.ts`, `src/orbit/rules.ts`, tests (XP/level/streak helpers)
-- Task 2 done: `src/orbit/store.ts`, `src/__tests__/orbitStore.test.ts` (globalState load/save, applyWin)
-- Task 3 done (review **Approved**): `ensureMission` / `progressMission`, `applyWin` mission bonus +40, `mission-complete` achievement; injectable `random` on `OrbitStore` fixes flaky 80 XP test
-- Task 4 done: CelebrationEngine → OrbitStore (`applyWin` + `await save`); `orbital.orbit.enabled`; follow-ups via `host.show` only (no re-applyWin); streak passed when > 1
+- Task 1–4 done (rules, store, missions, engine wire)
+- Task 5 done: day-start check-in (`orbital.orbit.checkInDay`) + pack-switch small win; WinKind +`checkin|pack|levelup|achievement|mission`
 
 ## Specs / plans
 - Joy collage: `docs/superpowers/specs/2026-09-12-joy-collage-location-brain-design.md`
