@@ -1,0 +1,527 @@
+{
+  "regions": {
+    "global": {
+      "label": "Global",
+      "localGifBias": [
+        "acid/",
+        "soft/",
+        "mothership/"
+      ],
+      "queries": {
+        "tests": [
+          "coding celebration",
+          "victory dance funny",
+          "thumbs up geek"
+        ],
+        "commit": [
+          "ship it funny",
+          "done celebration",
+          "high five"
+        ],
+        "build": [
+          "success celebration",
+          "party parrot",
+          "nailed it"
+        ],
+        "debug": [
+          "relieved funny",
+          "phew celebration",
+          "fixed it"
+        ],
+        "save": [
+          "nice job",
+          "small win funny"
+        ],
+        "preview": [
+          "celebration funny",
+          "happy dance",
+          "yay geek"
+        ]
+      },
+      "giphyLang": "en"
+    },
+    "us": {
+      "label": "United States",
+      "localGifBias": [
+        "mothership/",
+        "glitch/",
+        "acid/"
+      ],
+      "queries": {
+        "tests": [
+          "coding win",
+          "celebration geek",
+          "mic drop funny"
+        ],
+        "commit": [
+          "ship it",
+          "deploy celebration",
+          "lets gooo"
+        ],
+        "build": [
+          "nailed it",
+          "success kid",
+          "party time"
+        ],
+        "debug": [
+          "fixed it funny",
+          "relieved",
+          "phew"
+        ],
+        "save": [
+          "nice",
+          "small win"
+        ],
+        "preview": [
+          "happy dance",
+          "celebration",
+          "awesome"
+        ]
+      },
+      "giphyLang": "en"
+    },
+    "uk": {
+      "label": "United Kingdom",
+      "localGifBias": [
+        "soft/",
+        "mothership/",
+        "acid/"
+      ],
+      "queries": {
+        "tests": [
+          "brilliant celebration",
+          "well done funny",
+          "coding win"
+        ],
+        "commit": [
+          "job done",
+          "ship it",
+          "cheers celebration"
+        ],
+        "build": [
+          "success",
+          "smashing",
+          "celebration"
+        ],
+        "debug": [
+          "sorted",
+          "relieved funny",
+          "fixed it"
+        ],
+        "save": [
+          "lovely",
+          "nice one"
+        ],
+        "preview": [
+          "celebration",
+          "happy dance",
+          "cheer"
+        ]
+      },
+      "giphyLang": "en"
+    },
+    "in": {
+      "label": "India",
+      "localGifBias": [
+        "acid/",
+        "soft/",
+        "mothership/"
+      ],
+      "queries": {
+        "tests": [
+          "celebration dance india",
+          "thumbs up funny",
+          "coding success"
+        ],
+        "commit": [
+          "ship it",
+          "done boss funny",
+          "celebration"
+        ],
+        "build": [
+          "success celebration",
+          "party",
+          "jeet gaya funny"
+        ],
+        "debug": [
+          "fixed it",
+          "relieved",
+          "problem solved funny"
+        ],
+        "save": [
+          "good job",
+          "nice funny"
+        ],
+        "preview": [
+          "celebration",
+          "happy dance",
+          "yay"
+        ]
+      },
+      "giphyLang": "en"
+    },
+    "br": {
+      "label": "Brazil",
+      "localGifBias": [
+        "acid/",
+        "soft/",
+        "glitch/"
+      ],
+      "queries": {
+        "tests": [
+          "comemoração",
+          "dança feliz",
+          "sucesso engraçado"
+        ],
+        "commit": [
+          "obrigado festa",
+          "sucesso",
+          "comemoração"
+        ],
+        "build": [
+          "sucesso",
+          "festa",
+          "valeu"
+        ],
+        "debug": [
+          "aliviado",
+          "resolvido",
+          "phew"
+        ],
+        "save": [
+          "legal",
+          "bom trabalho"
+        ],
+        "preview": [
+          "comemoração",
+          "dança",
+          "feliz"
+        ]
+      },
+      "giphyLang": "pt"
+    },
+    "jp": {
+      "label": "Japan",
+      "localGifBias": [
+        "soft/",
+        "acid/",
+        "mothership/"
+      ],
+      "queries": {
+        "tests": [
+          "お祝い",
+          "ガンバール",
+          "成功 かわいい"
+        ],
+        "commit": [
+          "やった",
+          "完了 お祝い",
+          "すごい"
+        ],
+        "build": [
+          "成功",
+          "おめでとう",
+          "お祝い"
+        ],
+        "debug": [
+          "安心",
+          "直った",
+          "よかった"
+        ],
+        "save": [
+          "いいね",
+          "よし"
+        ],
+        "preview": [
+          "お祝い",
+          "ハッピー",
+          "やったね"
+        ]
+      },
+      "giphyLang": "ja"
+    },
+    "kr": {
+      "label": "Korea",
+      "localGifBias": [
+        "soft/",
+        "acid/",
+        "glitch/"
+      ],
+      "queries": {
+        "tests": [
+          "축하",
+          "성공 ㅋㅋ",
+          "코딩 축하"
+        ],
+        "commit": [
+          "완료 축하",
+          "성공",
+          "파티"
+        ],
+        "build": [
+          "성공",
+          "축하해",
+          "좋아"
+        ],
+        "debug": [
+          "해결",
+          "휴",
+          "안도"
+        ],
+        "save": [
+          "굿",
+          "잘했어"
+        ],
+        "preview": [
+          "축하",
+          "신남",
+          "댄스"
+        ]
+      },
+      "giphyLang": "ko"
+    },
+    "de": {
+      "label": "Germany",
+      "localGifBias": [
+        "root/",
+        "mothership/",
+        "soft/"
+      ],
+      "queries": {
+        "tests": [
+          "feier",
+          "erfolg lustig",
+          "geschafft"
+        ],
+        "commit": [
+          "geschafft",
+          "feier",
+          "super"
+        ],
+        "build": [
+          "erfolg",
+          "party",
+          "toll"
+        ],
+        "debug": [
+          "erledigt",
+          "erleichtert",
+          "repariert"
+        ],
+        "save": [
+          "gut",
+          "nice"
+        ],
+        "preview": [
+          "feier",
+          "tanzen",
+          "juhu"
+        ]
+      },
+      "giphyLang": "de"
+    },
+    "fr": {
+      "label": "France",
+      "localGifBias": [
+        "soft/",
+        "acid/",
+        "mothership/"
+      ],
+      "queries": {
+        "tests": [
+          "célébration",
+          "bravo drôle",
+          "succès"
+        ],
+        "commit": [
+          "terminé",
+          "bravo",
+          "fête"
+        ],
+        "build": [
+          "succès",
+          "fête",
+          "génial"
+        ],
+        "debug": [
+          "soulagé",
+          "réparé",
+          "ouf"
+        ],
+        "save": [
+          "bien",
+          "nice"
+        ],
+        "preview": [
+          "célébration",
+          "danse",
+          "youpi"
+        ]
+      },
+      "giphyLang": "fr"
+    },
+    "es": {
+      "label": "Spain",
+      "localGifBias": [
+        "acid/",
+        "soft/",
+        "glitch/"
+      ],
+      "queries": {
+        "tests": [
+          "celebración",
+          "éxito gracioso",
+          "baile feliz"
+        ],
+        "commit": [
+          "listo",
+          "celebrar",
+          "olé"
+        ],
+        "build": [
+          "éxito",
+          "fiesta",
+          "genial"
+        ],
+        "debug": [
+          "alivio",
+          "arreglado",
+          "uff"
+        ],
+        "save": [
+          "bien",
+          "good job"
+        ],
+        "preview": [
+          "celebración",
+          "baile",
+          "yay"
+        ]
+      },
+      "giphyLang": "es"
+    },
+    "mx": {
+      "label": "Mexico",
+      "localGifBias": [
+        "acid/",
+        "mothership/",
+        "soft/"
+      ],
+      "queries": {
+        "tests": [
+          "celebración",
+          "éxito",
+          "baile feliz"
+        ],
+        "commit": [
+          "listo",
+          "órale",
+          "fiesta"
+        ],
+        "build": [
+          "éxito",
+          "fiesta",
+          "genial"
+        ],
+        "debug": [
+          "alivio",
+          "ya quedó",
+          "uff"
+        ],
+        "save": [
+          "bien",
+          "nice"
+        ],
+        "preview": [
+          "celebración",
+          "baile",
+          "yay"
+        ]
+      },
+      "giphyLang": "es"
+    },
+    "au": {
+      "label": "Australia",
+      "localGifBias": [
+        "mothership/",
+        "soft/",
+        "acid/"
+      ],
+      "queries": {
+        "tests": [
+          "celebration funny",
+          "legend",
+          "coding win"
+        ],
+        "commit": [
+          "ship it",
+          "done",
+          "ripper"
+        ],
+        "build": [
+          "success",
+          "party",
+          "beauty"
+        ],
+        "debug": [
+          "fixed it",
+          "relieved",
+          "sorted"
+        ],
+        "save": [
+          "nice one",
+          "good on ya"
+        ],
+        "preview": [
+          "celebration",
+          "happy dance",
+          "cheers"
+        ]
+      },
+      "giphyLang": "en"
+    }
+  },
+  "languageToRegion": {
+    "en-IN": "in",
+    "hi": "in",
+    "hi-IN": "in",
+    "en-GB": "uk",
+    "en-AU": "au",
+    "en-US": "us",
+    "en-CA": "us",
+    "pt-BR": "br",
+    "pt": "br",
+    "ja": "jp",
+    "ja-JP": "jp",
+    "ko": "kr",
+    "ko-KR": "kr",
+    "de": "de",
+    "de-DE": "de",
+    "fr": "fr",
+    "fr-FR": "fr",
+    "es-ES": "es",
+    "es-MX": "mx",
+    "es-AR": "mx",
+    "es": "es"
+  },
+  "timezoneToRegion": {
+    "Asia/Kolkata": "in",
+    "Asia/Calcutta": "in",
+    "Europe/London": "uk",
+    "Europe/Dublin": "uk",
+    "America/Sao_Paulo": "br",
+    "America/Fortaleza": "br",
+    "Asia/Tokyo": "jp",
+    "Asia/Seoul": "kr",
+    "Europe/Berlin": "de",
+    "Europe/Paris": "fr",
+    "Europe/Madrid": "es",
+    "America/Mexico_City": "mx",
+    "Australia/Sydney": "au",
+    "Australia/Melbourne": "au",
+    "America/New_York": "us",
+    "America/Chicago": "us",
+    "America/Denver": "us",
+    "America/Los_Angeles": "us"
+  }
+}

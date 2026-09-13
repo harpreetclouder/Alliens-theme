@@ -10,7 +10,7 @@ export interface StatusBarShowArgs {
 
 /** Persistent orbit HUD text: `L{n} · 🔥{streak}`. */
 export function formatOrbitCrumb(level: number, streakDays: number): string {
-  return `L${level} · 🔥${streakDays}`;
+  return `$(rocket) L${level} · 🔥${streakDays}`;
 }
 
 export class StatusBarCelebration {
@@ -27,10 +27,11 @@ export class StatusBarCelebration {
 
     this.orbitCrumbItem = vscodeApi.window.createStatusBarItem(
       vscodeApi.StatusBarAlignment.Right,
-      50,
+      1000,
     );
     this.orbitCrumbItem.name = 'Orbital Level';
-    this.orbitCrumbItem.tooltip = 'Orbital · level and streak';
+    this.orbitCrumbItem.tooltip = 'Orbital · level and streak (click to open panel)';
+    this.orbitCrumbItem.command = 'orbital.openPanel';
   }
 
   setOrbitCrumb(level: number, streakDays: number): void {

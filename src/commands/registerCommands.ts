@@ -9,6 +9,7 @@ export const PACK_THEME_LABELS: Record<PackId, string> = {
   glitch: 'Orbital — Glitch Transmission',
   soft: 'Orbital — Soft Abduction',
   root: 'Orbital — Root Access',
+  acid: 'Orbital — Acid Scrapbook',
 };
 
 export async function pickPack(): Promise<PackId | undefined> {
@@ -48,11 +49,7 @@ export function registerCommands(
       }
     }),
     vscode.commands.registerCommand('orbital.previewCelebration', () => {
-      orbitalLog('Preview command invoked', 'terminal fullscreen');
-      const script = vscode.Uri.joinPath(context.extensionUri, 'scripts', 'terminal-celebration.mjs');
-      const term = vscode.window.activeTerminal ?? vscode.window.createTerminal('Orbital');
-      term.show(true);
-      term.sendText(`node "${script.fsPath}"`, true);
+      orbitalLog('Preview command invoked', 'cinematic overlay 2050');
       engine.preview();
     }),
     vscode.commands.registerCommand('orbital.signalTestPass', () => {

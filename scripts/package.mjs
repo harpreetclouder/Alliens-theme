@@ -33,12 +33,16 @@ try {
 
   step(3, 4, 'Bundling VSIX (vsce package)');
   run(
-    'npx vsce package --allow-missing-repository --no-rewrite-relative-links --no-dependencies --baseContentUrl https://github.com/orbital-theme/orbital --baseImagesUrl https://github.com/orbital-theme/orbital',
+    'npx vsce package --allow-missing-repository --no-rewrite-relative-links --no-dependencies --allow-package-all-secrets --allow-package-env-file --baseContentUrl https://github.com/orbital-theme/orbital --baseImagesUrl https://github.com/orbital-theme/orbital',
   );
 
   step(4, 4, 'Verifying output');
   if (!fs.existsSync(vsixName)) {
     console.error(`\n✗ Expected ${vsixName} was not created.`);
+    process.exit(1);
+  }
+  if (!fs.existsSync(path.join('media', 'webview', 'scene.bundle.js'))) {
+    console.error('\n✗ Missing media/webview/scene.bundle.js — run npm run build:scene');
     process.exit(1);
   }
 

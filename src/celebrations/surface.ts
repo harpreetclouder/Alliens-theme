@@ -5,7 +5,7 @@ export type CelebrationSurface = 'terminal' | 'panel' | 'overlay' | 'statusbar';
 
 export const DEFAULT_SURFACES: Record<WinKind, CelebrationSurface> = {
   tests: 'terminal',
-  preview: 'terminal',
+  preview: 'overlay',
   build: 'panel',
   commit: 'panel',
   debug: 'panel',
@@ -31,8 +31,12 @@ export function resolveSurface(
   meta: { terminalNative?: boolean } | undefined,
   fallbackDisplay: 'panel' | 'overlay',
 ): CelebrationSurface {
-  if (meta?.terminalNative || kind === 'tests' || kind === 'preview') {
+  if (meta?.terminalNative || kind === 'tests') {
     return 'terminal';
+  }
+
+  if (kind === 'preview') {
+    return 'overlay';
   }
 
   if (intensity === 'chill') {

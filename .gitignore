@@ -5,3 +5,5 @@ node_modules/
 out/
 .orbital/
 .vscode-test/
+.tmp-tenor-test/
+.tmp-giphy-test/

@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 /**
  * Fullscreen in-terminal celebration (same terminal as npm test).
- * Animated ASCII + progress bar; alternate screen preserves test output.
+ * Continuous ease-in-out arc (~20–25fps); alternate screen preserves test output.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 
 const DURATION_MS = 5000;
-const FRAME_MS = 100;
+const FRAME_MS = 40; // ~25fps
 
 const PACKS = {
   mothership: {
     label: 'MOTHERSHIP OS',
     tint: [28, 255, 154],
+    accent2: [125, 255, 212],
     lines: [
       'TASK ✓ BEAMED UP',
       'ALL SYSTEMS GREEN · SHIP IT',
@@ -25,6 +26,7 @@ const PACKS = {
   glitch: {
     label: 'GLITCH TRANSMISSION',
     tint: [184, 255, 64],
+    accent2: [255, 159, 28],
     lines: ['TESTS ✓ YEETED', 'SIGNAL CLEAR · NO STATIC', 'ALL GREEN · SHIP IT'],
     subs: ['tape quality: pristine', 'certified unhinged'],
     emojis: ['👾', '📺', '⚡', '💾'],
@@ -32,6 +34,7 @@ const PACKS = {
   soft: {
     label: 'SOFT ABDUCTION',
     tint: [244, 162, 97],
+    accent2: [255, 214, 170],
     lines: ['tests passed · cozy ✓', 'all green · soft landing', 'nice work · orbit calm'],
     subs: ['you earned a soft win', 'the cow is proud'],
     emojis: ['🛸', '🐄', '☁️', '✨'],
@@ -39,9 +42,23 @@ const PACKS = {
   root: {
     label: 'ROOT ACCESS',
     tint: [51, 255, 102],
+    accent2: [180, 255, 200],
     lines: ['tests pwned · exit 0', 'all tests · root access granted', 'suite owned · 0xOK'],
     subs: ['shell access: granted', 'kernel says gg'],
     emojis: ['💻', '🖥️', '🔓', '⚙️'],
+  },
+  acid: {
+    label: 'ACID SCRAPBOOK',
+    tint: [214, 255, 60],
+    accent2: [255, 45, 149],
+    lines: [
+      'TESTS ✓ STICKERED',
+      'ALL GREEN · COLLAGE COMPLETE',
+      'SUITE PINNED · SHIP IT',
+      'PASS · MOOD BOARD APPROVED',
+    ],
+    subs: ['scrapbook says: iconic', 'pinned to the mood board', 'chaos: curated'],
+    emojis: ['📒', '✂️', '📌', '✨'],
   },
 };
 
@@ -59,6 +76,14 @@ function pick(arr) {
 
 function rgb(r, g, b) {
   return `\x1b[38;2;${r};${g};${b}m`;
+}
+
+function easeInOut(t) {
+  return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
 }
 
 function readPackId() {
@@ -93,43 +118,51 @@ function line(char = '─') {
   return char.repeat(cols() - 4);
 }
 
-function progressBar(progress, width) {
-  const filled = Math.max(0, Math.min(width, Math.round(progress * width)));
-  return `[${'█'.repeat(filled)}${'░'.repeat(width - filled)}]`;
+function progressRibbon(progress, width, accent, accent2) {
+  const filled = Math.max(0, Math.min(width, Math.round(easeInOut(progress) * width)));
+  const head = filled > 0 ? accent2 + '█' + accent : '';
+  const body = '█'.repeat(Math.max(0, filled - 1));
+  const empty = '░'.repeat(width - filled);
+  return `[${accent}${body}${head}${DIM}${empty}${RESET}${accent}]`;
 }
 
-function ufoLine(progress) {
+function driftX(progress, amp) {
+  return Math.round(Math.sin(easeInOut(progress) * Math.PI * 2) * amp);
+}
+
+function ufoLine(progress, hero) {
   const w = cols();
-  const body = '(>◡<)>';
-  const beam = progress > 0.55 ? '  ' + '▼'.repeat(3) : '';
-  const maxPos = Math.max(0, w - body.length - beam.length - 6);
-  const pos = Math.floor(progress * maxPos);
-  return ' '.repeat(4 + pos) + body + beam;
+  const body = hero + '  ';
+  const trail = progress > 0.35 ? '· · ·' : '';
+  const maxPos = Math.max(0, w - body.length - trail.length - 8);
+  const pos = Math.floor(easeInOut(Math.min(1, progress * 1.15)) * maxPos);
+  return ' '.repeat(4 + pos) + body + trail;
 }
 
-function orbitRow(emojis, frame) {
-  const slots = ['  ', '  ', '  ', '  '];
-  const positions = [
-    frame % 4,
-    (frame + 1) % 4,
-    (frame + 2) % 4,
-    (frame + 3) % 4,
-  ];
-  emojis.forEach((e, i) => {
-    slots[positions[i]] = e + ' ';
+function orbitRow(emojis, progress) {
+  const amp = 3;
+  const phase = easeInOut(progress) * Math.PI * 2;
+  const parts = emojis.map((e, i) => {
+    const pad = Math.max(0, Math.round(Math.sin(phase + i * 1.2) * amp) + amp);
+    return ' '.repeat(pad) + e;
   });
-  return '  ' + slots.join('');
+  return '  ' + parts.join('  ');
+}
+
+function captionReveal(caption, progress) {
+  const t = easeInOut(Math.max(0, Math.min(1, (progress - 0.12) / 0.35)));
+  const n = Math.floor(t * caption.length);
+  return caption.slice(0, n) + (t < 1 && n < caption.length ? '▌' : '');
 }
 
 function buildFrame(pack, packId, state) {
-  const { progress, frame, caption, sub, hero, streak } = state;
+  const { progress, caption, sub, hero, streak } = state;
   const [r, g, b] = pack.tint;
+  const [r2, g2, b2] = pack.accent2 || pack.tint;
   const accent = rgb(r, g, b);
+  const accent2 = rgb(r2, g2, b2);
   const barW = cols() - 16;
-  const streakLine =
-    streak > 1
-      ? `${accent}${BOLD}  🔥 ${streak} wins today${RESET}`
-      : '';
+  const opacityHold = Math.min(1, Math.max(0, (progress - 0.08) / 0.2));
 
   const content = [];
   content.push('');
@@ -138,38 +171,46 @@ function buildFrame(pack, packId, state) {
   content.push(`${accent}${line('─')}${RESET}`);
   content.push('');
 
-  if (progress > 0.08) {
-    content.push(ufoLine(Math.min(1, progress * 1.4)));
+  if (progress > 0.05) {
+    content.push(ufoLine(progress, hero));
     content.push('');
   }
 
-  if (progress > 0.22) {
-    content.push(`  ${hero}  ${accent}${BOLD}${caption}${RESET}`);
+  if (progress > 0.12) {
+    const revealed = captionReveal(caption, progress);
+    content.push(`  ${hero}  ${accent}${BOLD}${revealed}${RESET}`);
     content.push('');
   }
 
-  if (progress > 0.38 && sub) {
-    content.push(`${DIM}  ${sub}${RESET}`);
+  if (progress > 0.4 && sub) {
+    const subT = easeInOut(Math.min(1, (progress - 0.4) / 0.25));
+    const dimSub = subT > 0.2 ? `${DIM}  ${sub}${RESET}` : '';
+    if (dimSub) content.push(dimSub);
     content.push('');
   }
 
-  if (progress > 0.5) {
-    content.push(orbitRow(pack.emojis.slice(0, 4), frame));
+  if (progress > 0.28) {
+    content.push(orbitRow(pack.emojis.slice(0, 4), progress));
     content.push('');
   }
 
-  if (streakLine && progress > 0.62) {
-    content.push(streakLine);
+  if (streak > 1 && progress > 0.55) {
+    content.push(`${accent2}${BOLD}  🔥 ${streak} wins today${RESET}`);
     content.push('');
   }
 
-  const pct = `${Math.min(100, Math.round(progress * 100))}%`;
-  content.push(`${DIM}  ${progressBar(progress, barW)} ${pct}${RESET}`);
-  content.push(`${DIM}  integrated terminal · ${packId} pack${RESET}`);
+  const pct = `${Math.min(100, Math.round(easeInOut(progress) * 100))}%`;
+  content.push(
+    `${DIM}  ${progressRibbon(progress, barW, accent, accent2)} ${pct}${RESET}`,
+  );
+  content.push(`${DIM}  continuous arc · ${packId} pack${RESET}`);
   content.push(`${accent}${line('═')}${RESET}`);
   content.push('');
 
-  const pad = Math.max(0, Math.floor(rows() / 2) - Math.floor(content.length / 2));
+  const basePad = Math.max(0, Math.floor(rows() / 2) - Math.floor(content.length / 2));
+  const camera = Math.round(lerp(2, 0, easeInOut(Math.min(1, progress * 1.2))));
+  const pad = Math.max(0, basePad - camera + driftX(progress, 0));
+  void opacityHold;
   return '\n'.repeat(pad) + content.join('\n');
 }
 
@@ -199,7 +240,6 @@ async function celebrate(options = {}) {
     const progress = i / frames;
     const frame = buildFrame(pack, packId, {
       progress,
-      frame: i,
       caption,
       sub,
       hero,

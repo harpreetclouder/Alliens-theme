@@ -2,12 +2,12 @@ import { describe, it, expect } from 'vitest';
 import { resolveSurface, DEFAULT_SURFACES } from '../celebrations/surface';
 
 describe('resolveSurface', () => {
-  it('defaults tests and preview to terminal', () => {
+  it('defaults tests to terminal and preview to cinematic overlay', () => {
     expect(resolveSurface('tests', 'small', {}, 'normal', undefined, 'panel')).toBe(
       'terminal',
     );
     expect(resolveSurface('preview', 'small', {}, 'normal', undefined, 'panel')).toBe(
-      'terminal',
+      'overlay',
     );
   });
 

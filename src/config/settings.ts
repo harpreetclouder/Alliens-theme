@@ -39,6 +39,13 @@ export interface OrbitalSettings {
   soundEnabled: boolean;
   mutedPacks: PackId[];
   reduceMotion: ReduceMotion;
+  /** auto | region id — locale meme bias */
+  joyRegion: string;
+  /**
+   * Giphy SDK/API key from https://developers.giphy.com/dashboard/
+   * Create an app → SDK (or API) key. Upgrade to Production for full rate limits.
+   */
+  giphySdkKey: string;
 }
 
 export interface ConfigLike {
@@ -88,6 +95,8 @@ const DEFAULTS: OrbitalSettings = {
   soundEnabled: true,
   mutedPacks: [],
   reduceMotion: 'auto',
+  joyRegion: 'auto',
+  giphySdkKey: '',
 };
 
 export function readSettings(getConfig: () => ConfigLike): OrbitalSettings {
@@ -132,5 +141,12 @@ export function readSettings(getConfig: () => ConfigLike): OrbitalSettings {
     soundEnabled: c.get('sound.enabled', DEFAULTS.soundEnabled),
     mutedPacks: muted.filter(isPackId),
     reduceMotion,
+    joyRegion: c.get('joy.region', DEFAULTS.joyRegion) || 'auto',
+    // Prefer SDK key; fall back to legacy apiKey / tenor for older settings
+    giphySdkKey:
+      c.get('giphy.sdkKey', '') ||
+      c.get('giphy.apiKey', DEFAULTS.giphySdkKey) ||
+      c.get('tenor.apiKey', '') ||
+      '',
   };
 }

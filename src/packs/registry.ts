@@ -29,6 +29,13 @@ export const PACKS: Record<PackId, PackDefinition> = {
     sfxFile: 'root.wav',
     tint: '#33ff66',
   },
+  acid: {
+    id: 'acid',
+    label: 'Acid Scrapbook',
+    themePath: './themes/acid-scrapbook-color-theme.json',
+    sfxFile: 'acid.wav',
+    tint: '#d6ff3c',
+  },
 };
 
 export function isPackId(value: string): value is PackId {

@@ -6,6 +6,7 @@ export const PACK_EMOJI: Record<PackId, string> = {
   glitch: '👾',
   soft: '🛸',
   root: '💻',
+  acid: '📒',
 };
 
 export const PACK_EMOJI_POOL: Record<PackId, readonly string[]> = {
@@ -13,6 +14,7 @@ export const PACK_EMOJI_POOL: Record<PackId, readonly string[]> = {
   glitch: ['👾', '📺', '⚡', '💾', '🎮', '🌀', '📼', '🔊'],
   soft: ['🛸', '🐄', '☁️', '✨', '🌙', '💫', '🌸', '🫧'],
   root: ['💻', '🖥️', '🔓', '⚙️', '🐛', '🧬', '⌨️', '🛡️'],
+  acid: ['📒', '✂️', '📌', '✨', '🧃', '💥', '🌟', '📎'],
 };
 
 export interface PickedEmojis {

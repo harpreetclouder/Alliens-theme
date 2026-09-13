@@ -26,6 +26,10 @@ export const LOOPS: LoopDef[] = [
   { id: 'root-sudo', kind: 'pack', pack: 'root', cssClass: 'loop-root-sudo' },
   { id: 'root-shell', kind: 'pack', pack: 'root', cssClass: 'loop-root-shell' },
   { id: 'root-ascii', kind: 'pack', pack: 'root', cssClass: 'loop-root-ascii' },
+  // acid pack (3) — continuous drift, not stamp pops
+  { id: 'acid-peel', kind: 'pack', pack: 'acid', cssClass: 'loop-acid-peel' },
+  { id: 'acid-pin', kind: 'pack', pack: 'acid', cssClass: 'loop-acid-pin' },
+  { id: 'acid-collage', kind: 'pack', pack: 'acid', cssClass: 'loop-acid-collage' },
   // library (12)
   { id: 'lib-wink', kind: 'library', cssClass: 'loop-lib-wink' },
   { id: 'lib-liftoff', kind: 'library', cssClass: 'loop-lib-liftoff' },

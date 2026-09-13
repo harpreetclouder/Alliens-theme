@@ -6,6 +6,7 @@ import {
 } from './celebrationHtml';
 import { EXIT_LEAD_MS } from './durations';
 import { CelebrationShowArgs } from './host';
+import { gifLocalResourceRoots, resolveGifWebviewUri } from './gifUri';
 import { focusOrbitalView, restorePanelFocus, waitForView } from './panelFocus';
 import { readSettings } from '../config/settings';
 import { resolveIdleOrbit } from '../orbit/idleHud';
@@ -77,6 +78,11 @@ export class CelebrationPanelProvider implements vscode.WebviewViewProvider {
     try {
       this.clearTimer();
 
+      view.webview.options = {
+        enableScripts: true,
+        localResourceRoots: gifLocalResourceRoots(args.extensionUri, args.gif, this.vscodeApi),
+      };
+
       const cssUri = view.webview.asWebviewUri(
         vscode.Uri.joinPath(args.extensionUri, 'media', 'webview', 'celebration.css'),
       );
@@ -85,13 +91,7 @@ export class CelebrationPanelProvider implements vscode.WebviewViewProvider {
         cssUri: cssUri.toString(),
         mode: 'panel',
         loopClass: args.loop.cssClass,
-        gifUri: args.gif
-          ? view.webview
-              .asWebviewUri(
-                vscode.Uri.joinPath(args.extensionUri, 'media', 'gifs', ...args.gif.file.split('/')),
-              )
-              .toString()
-          : undefined,
+        gifUri: resolveGifWebviewUri(view.webview, args.extensionUri, args.gif, this.vscodeApi),
         caption: args.caption,
         subline: args.subline,
         emoji: args.emoji,
@@ -105,6 +105,14 @@ export class CelebrationPanelProvider implements vscode.WebviewViewProvider {
         sfxUri: args.sfxUri
           ? view.webview.asWebviewUri(args.sfxUri).toString()
           : undefined,
+        animFlavor: args.animFlavor,
+        tone: args.tone,
+        collage: true,
+        pack: args.pack,
+        surface: 'panel',
+        regionId: args.regionId,
+        regionLabel: args.regionLabel,
+        giphyAttribution: args.giphyAttribution,
       };
 
       view.webview.html = buildCelebrationHtml(htmlOpts);

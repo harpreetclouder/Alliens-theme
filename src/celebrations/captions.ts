@@ -1,11 +1,17 @@
 import { PackId } from '../packs/types';
+import { AnimFlavor, ContentBite, ContentLibrary } from './contentLibrary';
 import { WinKind } from './types';
 
 export interface PickedCaption {
   line: string;
   subline?: string;
+  tone?: string;
+  anim: AnimFlavor;
+  source: 'pack' | 'library';
+  biteId?: string;
 }
 
+/** Classic pack lines — always available as fallback / mix-in. */
 const LINES: Record<PackId, Record<WinKind, readonly string[]>> = {
   mothership: {
     tests: [
@@ -87,6 +93,26 @@ const LINES: Record<PackId, Record<WinKind, readonly string[]>> = {
     achievement: ['achievement · owned'],
     mission: ['mission clear · gg'],
   },
+  acid: {
+    tests: [
+      'TESTS ✓ STICKERED',
+      'ALL GREEN · COLLAGE COMPLETE',
+      'SUITE PINNED · SHIP IT',
+      'PASS · MOOD BOARD APPROVED',
+      'GREEN LIGHT · CHAOS CURATED',
+      'TESTS PASSED · PEEL & SHIP',
+    ],
+    build: ['BUILD ✓ STICKERED', 'COMPILE · COLLAGE LOCK', 'BUILD PINNED · LIVE'],
+    commit: ['COMMIT · PEEL & SHIP', 'PUSH PINNED · ICONIC', 'COMMIT STICKERED ✓'],
+    debug: ['DEBUG · PIN THE BUG', 'PROBE · SCRAPBOOK MODE', 'TRACE · STICKER TRAIL'],
+    save: ['SAVED · PINNED', 'FILE STICKERED ✓', 'WRITE · COLLAGE SAFE'],
+    preview: ['PREVIEW · MOOD BOARD LIVE', 'DEMO · ACID ARC', 'TEST STICKER · ON'],
+    checkin: ['DAY START · PINNED', 'CHECK-IN · COLLAGE OPEN', 'MISSION BRIEF · STICKERED'],
+    pack: ['PACK SWAP · PEEL', 'NEW SKIN · PINNED', 'THEME · MOOD LOCK'],
+    levelup: ['LEVEL UP · STICKERED'],
+    achievement: ['ACHIEVEMENT · PINNED'],
+    mission: ['MISSION CLEAR · ICONIC'],
+  },
 };
 
 const SUBLINES: Record<PackId, Record<WinKind, readonly string[]>> = {
@@ -142,21 +168,69 @@ const SUBLINES: Record<PackId, Record<WinKind, readonly string[]>> = {
     achievement: ['badge chmod'],
     mission: ['objective pwned'],
   },
+  acid: {
+    tests: ['scrapbook says: iconic', 'pinned to the mood board', 'chaos: curated', 'lime check ✓'],
+    build: ['collage locked', 'sticker seal applied'],
+    commit: ['peel complete', 'board updated'],
+    debug: ['following the pin trail', 'magenta pulse active'],
+    save: ['clipped to the page', 'paper safe'],
+    preview: ['continuous arc running', 'acid vibes online'],
+    checkin: ['page opened', 'briefing pinned'],
+    pack: ['cover swapped', 'palette peeled'],
+    levelup: ['scrapbook leveled'],
+    achievement: ['sticker earned'],
+    mission: ['board cleared'],
+  },
 };
 
+const LIBRARY_WEIGHT = 0.94;
+
+function pickPackCaption(
+  kind: WinKind,
+  pack: PackId,
+  random: () => number,
+  library: ContentLibrary,
+): PickedCaption {
+  const lines = LINES[pack][kind];
+  const line = lines[Math.floor(random() * lines.length)] ?? lines[0]!;
+  const subs = SUBLINES[pack][kind];
+  const subline =
+    subs && subs.length > 0 ? subs[Math.floor(random() * subs.length)] : undefined;
+  return {
+    line,
+    subline,
+    anim: library.pickAnim(undefined, random),
+    source: 'pack',
+  };
+}
+
+function fromBite(bite: ContentBite, library: ContentLibrary, random: () => number): PickedCaption {
+  return {
+    line: bite.line,
+    subline: bite.subline,
+    tone: bite.tone,
+    anim: library.pickAnim(bite.anim, random),
+    source: 'library',
+    biteId: bite.id,
+  };
+}
+
+/**
+ * Mixes pack captions with the agent-extensible joke/satire library.
+ * Prefers library bites; pass excludeIds to avoid recent repeats.
+ */
 export function pickCaption(
   kind: WinKind,
   pack: PackId,
   random: () => number = Math.random,
+  library: ContentLibrary = ContentLibrary.empty(),
+  excludeIds: ReadonlySet<string> = new Set(),
 ): PickedCaption {
-  const lines = LINES[pack][kind];
-  const line = lines[Math.floor(random() * lines.length)] ?? lines[0]!;
-
-  const subs = SUBLINES[pack][kind];
-  const subline =
-    subs && subs.length > 0 ? subs[Math.floor(random() * subs.length)] : undefined;
-
-  return { line, subline };
+  const bite = library.pickBite(kind, pack, random, excludeIds);
+  if (bite && random() < LIBRARY_WEIGHT) {
+    return fromBite(bite, library, random);
+  }
+  return pickPackCaption(kind, pack, random, library);
 }
 
 /** @deprecated use pickCaption for rotating lines */

@@ -152,11 +152,23 @@ function root() {
   ]);
 }
 
+/** Paper flutter + soft peel click */
+function acid() {
+  return concat([
+    noiseBurst(0.05, 0.18),
+    sweep(420, 780, 0.28, 0.22),
+    silence(0.04),
+    sine(990, 0.12, 0.2, 0.005, 0.08),
+    sine(1320, 0.18, 0.12, 0.01, 0.12),
+  ]);
+}
+
 const PACKS = {
   mothership: mothership,
   glitch: glitch,
   soft: soft,
   root: root,
+  acid: acid,
 };
 
 fs.mkdirSync(OUT_DIR, { recursive: true });

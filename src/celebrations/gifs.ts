@@ -3,8 +3,12 @@ import { PackId } from '../packs/types';
 export interface GifDef {
   id: string;
   pack: PackId;
-  /** Path relative to `media/gifs/` */
+  /** Path relative to `media/gifs/` (empty when remote/cache-only) */
   file: string;
+  /** Absolute filesystem path for cached Giphy downloads */
+  absoluteFsPath?: string;
+  /** Remote HTTPS URL when cache miss / download failed */
+  remoteUrl?: string;
 }
 
 export const GIFS: GifDef[] = [
@@ -20,6 +24,9 @@ export const GIFS: GifDef[] = [
   { id: 'root-matrix-rain', pack: 'root', file: 'root/matrix-rain.gif' },
   { id: 'root-hacker-pulse', pack: 'root', file: 'root/hacker-pulse.gif' },
   { id: 'root-shell-access', pack: 'root', file: 'root/shell-access.gif' },
+  { id: 'acid-sticker-orbit', pack: 'acid', file: 'acid/sticker-orbit.gif' },
+  { id: 'acid-pin-drift', pack: 'acid', file: 'acid/pin-drift.gif' },
+  { id: 'acid-collage-pulse', pack: 'acid', file: 'acid/collage-pulse.gif' },
 ];
 
 export function pickGif(

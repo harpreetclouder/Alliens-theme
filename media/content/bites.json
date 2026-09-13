@@ -1,0 +1,3647 @@
+{
+  "version": 2,
+  "note": "Agent-extensible. Inspired by programmer humor (e.g. github.com/shrutikapoor08/devjoke). Run node scripts/expand-bites.mjs to regenerate core set; append custom bites anytime.",
+  "sourceIdeas": "https://github.com/shrutikapoor08/devjoke",
+  "anims": [
+    "glitch-text",
+    "typewriter",
+    "bounce-in",
+    "stamp-spin",
+    "slide-up",
+    "confetti",
+    "pulse-zoom",
+    "float-soft"
+  ],
+  "bites": [
+    {
+      "id": "tests-imposter",
+      "kinds": [
+        "*",
+        "tests",
+        "preview"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "TESTS PASSED · IMPOSTER SYNDROME DELAYED",
+      "subline": "the bugs are just on lunch break"
+    },
+    {
+      "id": "tests-ci-jealous",
+      "kinds": [
+        "*",
+        "tests"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "typewriter",
+      "line": "CI WOULD BE JEALOUS",
+      "subline": "green checks taste better at 2am"
+    },
+    {
+      "id": "tests-copilot-stole",
+      "kinds": [
+        "*",
+        "tests",
+        "preview"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "YOU + AGENT = GREEN",
+      "subline": "teamwork makes the stack work"
+    },
+    {
+      "id": "tests-flaky-retired",
+      "kinds": [
+        "*",
+        "tests"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "FLAKY TESTS: LEFT ON READ",
+      "subline": "reliability arc unlocked"
+    },
+    {
+      "id": "commit-blame-future",
+      "kinds": [
+        "*",
+        "commit"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "FUTURE YOU OWES PRESENT YOU COFFEE",
+      "subline": "git blame will remember this kindness"
+    },
+    {
+      "id": "commit-meeting-avoided",
+      "kinds": [
+        "*",
+        "commit"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "COMMIT > STANDUP RANT",
+      "subline": "shipped feelings as code"
+    },
+    {
+      "id": "commit-force-not",
+      "kinds": [
+        "*",
+        "commit"
+      ],
+      "packs": [
+        "root",
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "--force WAS TEMPTING",
+      "subline": "you chose peace. legendary."
+    },
+    {
+      "id": "build-compiler-therapy",
+      "kinds": [
+        "*",
+        "build"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "COMPILER FINISHED THERAPY",
+      "subline": "zero errors, mild personality"
+    },
+    {
+      "id": "build-bundle-diet",
+      "kinds": [
+        "*",
+        "build"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "typewriter",
+      "line": "BUNDLE ON A DIET · STILL CHUNKY",
+      "subline": "but it compiled, king"
+    },
+    {
+      "id": "debug-rubber-duck",
+      "kinds": [
+        "*",
+        "debug"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "wholesome",
+      "anim": "float-soft",
+      "line": "RUBBER DUCK CLOCKED OUT",
+      "subline": "you solved it without the squeak"
+    },
+    {
+      "id": "debug-console-log",
+      "kinds": [
+        "*",
+        "debug"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "console.log FOREVER IN OUR HEARTS",
+      "subline": "debugger who? (we know who)"
+    },
+    {
+      "id": "save-ctrl-s-religion",
+      "kinds": [
+        "*",
+        "save"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "CTRL+S · A TINY RELIGION",
+      "subline": "disk thanked you personally"
+    },
+    {
+      "id": "preview-demo-gods",
+      "kinds": [
+        "*",
+        "preview"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "confetti",
+      "line": "DEMO MODE · MAIN CHARACTER ENERGY",
+      "subline": "the vibe check passed itself"
+    },
+    {
+      "id": "acid-pinterest-board",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "acid"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "PINNED TO THE CHAOS BOARD",
+      "subline": "Pinterest could never ship this PR"
+    },
+    {
+      "id": "acid-moodboard-ci",
+      "kinds": [
+        "*",
+        "tests",
+        "build"
+      ],
+      "packs": [
+        "acid"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "MOODBOARD APPROVED BY CI",
+      "subline": "lime check · magenta swagger"
+    },
+    {
+      "id": "mothership-hr",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "mothership"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "HR ON THE MOTHERSHIP SAYS GG",
+      "subline": "abduction optional · shipping mandatory"
+    },
+    {
+      "id": "glitch-fax",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "glitch"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "FAXED TO PRODUCTION",
+      "subline": "tape hiss: aesthetic only"
+    },
+    {
+      "id": "soft-cow-union",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "soft"
+      ],
+      "tone": "wholesome",
+      "anim": "float-soft",
+      "line": "THE COW UNION APPROVES",
+      "subline": "gentle win · no overtime for moos"
+    },
+    {
+      "id": "root-sudo-nap",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "root"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "sudo nap · ACCESS DENIED",
+      "subline": "stay up and enjoy the green"
+    },
+    {
+      "id": "any-ship-it-tax",
+      "kinds": [
+        "tests",
+        "build",
+        "commit",
+        "preview"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "SHIP IT TAX: PAID IN FULL",
+      "subline": "dopamine invoice attached"
+    },
+    {
+      "id": "any-stack-overflow",
+      "kinds": [
+        "*",
+        "debug",
+        "tests"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "STACK OVERFLOW WHO?",
+      "subline": "you were the answer all along"
+    },
+    {
+      "id": "any-prd-ignored",
+      "kinds": [
+        "*",
+        "commit",
+        "build"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "slide-up",
+      "line": "PRD SAID MAYBE · YOU SAID SHIP",
+      "subline": "product will invent the requirement later"
+    },
+    {
+      "id": "any-agile-points",
+      "kinds": [
+        "*",
+        "commit",
+        "tests"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "STORY POINTS: vibes",
+      "subline": "scrum master left the chat"
+    },
+    {
+      "id": "any-2050-energy",
+      "kinds": [
+        "preview",
+        "tests",
+        "build"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "pulse-zoom",
+      "line": "2050 CALLED · WANTS THIS ENERGY",
+      "subline": "legacy IDEs could never"
+    },
+    {
+      "id": "dj-0-there-are-only-10-types-of-people",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "THERE ARE ONLY 10 TYPES OF PEOPLE",
+      "subline": "those who get binary jokes · and those who don’t"
+    },
+    {
+      "id": "dj-1-a-sql-query-walks-into-a-bar",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "A SQL QUERY WALKS INTO A BAR",
+      "subline": "sees two tables · “can I JOIN you?”"
+    },
+    {
+      "id": "dj-2-false",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "!FALSE",
+      "subline": "it’s funny because it’s true"
+    },
+    {
+      "id": "dj-3-semicolons-the-silent-killers",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "SEMICOLONS · THE SILENT KILLERS",
+      "subline": "until they’re missing"
+    },
+    {
+      "id": "dj-4-it-works-on-my-machine",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "slide-up",
+      "line": "IT WORKS ON MY MACHINE",
+      "subline": "ship the machine"
+    },
+    {
+      "id": "dj-5-99-little-bugs-in-the-code",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "99 LITTLE BUGS IN THE CODE",
+      "subline": "take one down · 127 bugs in the code"
+    },
+    {
+      "id": "dj-6-recursive-function-to-explain-recursion",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "RECURSIVE FUNCTION TO EXPLAIN RECURSION",
+      "subline": "see: recursive function to explain recursion"
+    },
+    {
+      "id": "dj-7-hardware-the-part-you-kick",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "HARDWARE: THE PART YOU KICK",
+      "subline": "software: the part you yell at"
+    },
+    {
+      "id": "dj-8-i-would-tell-you-a-udp-joke",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "I WOULD TELL YOU A UDP JOKE",
+      "subline": "you might not get it"
+    },
+    {
+      "id": "dj-9-tcp-joke-received",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "TCP JOKE RECEIVED",
+      "subline": "ACK · thanks for laughing"
+    },
+    {
+      "id": "dj-10-git-commit-m-fix",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "bounce-in",
+      "line": "GIT COMMIT -M “FIX”",
+      "subline": "future archaeologists will hate you"
+    },
+    {
+      "id": "dj-11-git-push-force",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "GIT PUSH --FORCE",
+      "subline": "with great power comes great outage"
+    },
+    {
+      "id": "dj-12-merge-conflict-in-the-heart",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "MERGE CONFLICT IN THE HEART",
+      "subline": "accept theirs · regret yours"
+    },
+    {
+      "id": "dj-13-stack-overflow-copy-paste-pray",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "STACK OVERFLOW COPY · PASTE · PRAY",
+      "subline": "ancient ritual · still works"
+    },
+    {
+      "id": "dj-14-documentation-is-like-sex",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "DOCUMENTATION IS LIKE SEX",
+      "subline": "when it’s good it’s very good · when it’s bad…"
+    },
+    {
+      "id": "dj-15-css-is-awesome",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "CSS IS AWESOME",
+      "subline": "the box is bigger than the overflow"
+    },
+    {
+      "id": "dj-16-horizontal-centering-solved",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "HORIZONTAL CENTERING SOLVED",
+      "subline": "for now · until mobile"
+    },
+    {
+      "id": "dj-17-async-await-my-coffee",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "ASYNC AWAIT MY COFFEE",
+      "subline": "promise pending…"
+    },
+    {
+      "id": "dj-18-null-pointer-exception",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "NULL POINTER EXCEPTION",
+      "subline": "object’s feelings: undefined"
+    },
+    {
+      "id": "dj-19-undefined-is-not-a-function",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "UNDEFINED IS NOT A FUNCTION",
+      "subline": "but neither am I before coffee"
+    },
+    {
+      "id": "dj-20-404-joke-not-found",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "404: JOKE NOT FOUND",
+      "subline": "try /humor again"
+    },
+    {
+      "id": "dj-21-500-internal-server-sass",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "500: INTERNAL SERVER SASS",
+      "subline": "the backend is judging you"
+    },
+    {
+      "id": "dj-22-cors-said-no",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "CORS SAID NO",
+      "subline": "the browser is a helicopter parent"
+    },
+    {
+      "id": "dj-23-npm-install-the-problems",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "float-soft",
+      "line": "NPM INSTALL THE PROBLEMS",
+      "subline": "node_modules: larger than your hopes"
+    },
+    {
+      "id": "dj-24-left-pad-incident-ptsd",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "LEFT PAD INCIDENT PTSD",
+      "subline": "never forget · always pin"
+    },
+    {
+      "id": "dj-25-yarn-why-not",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "YARN WHY NOT",
+      "subline": "package managers: collect them all"
+    },
+    {
+      "id": "dj-26-docker-it-works-in-the-container",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "bounce-in",
+      "line": "DOCKER: IT WORKS IN THE CONTAINER",
+      "subline": "production is not a container · yet"
+    },
+    {
+      "id": "dj-27-kubernetes-yaml-hell",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "KUBERNETES: YAML HELL",
+      "subline": "indent or die"
+    },
+    {
+      "id": "dj-28-microservices-now-you-have-12-problems",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "slide-up",
+      "line": "MICROSERVICES: NOW YOU HAVE 12 PROBLEMS",
+      "subline": "distributed chaos as a service"
+    },
+    {
+      "id": "dj-29-monolith-said-hold-my-beer",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "MONOLITH SAID HOLD MY BEER",
+      "subline": "and still shipped faster"
+    },
+    {
+      "id": "dj-30-agile-we-move-fast",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "pulse-zoom",
+      "line": "AGILE: WE MOVE FAST",
+      "subline": "and break the sprint board"
+    },
+    {
+      "id": "dj-31-story-points-fibonacci-of-lies",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "float-soft",
+      "line": "STORY POINTS: FIBONACCI OF LIES",
+      "subline": "estimate: 5 · reality: ∞"
+    },
+    {
+      "id": "dj-32-standup-could-ve-been-an-email",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "STANDUP COULD’VE BEEN AN EMAIL",
+      "subline": "and the email could’ve been silence"
+    },
+    {
+      "id": "dj-33-jira-ticket-in-progress",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "JIRA TICKET IN PROGRESS",
+      "subline": "since the Mesozoic"
+    },
+    {
+      "id": "dj-34-code-review-lgtm",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "bounce-in",
+      "line": "CODE REVIEW: LGTM",
+      "subline": "looks good to merge · I skimmed"
+    },
+    {
+      "id": "dj-35-nit-rename-variable",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "NIT: RENAME VARIABLE",
+      "subline": "the eternal bikeshed"
+    },
+    {
+      "id": "dj-36-approved-with-comments",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "slide-up",
+      "line": "APPROVED WITH COMMENTS",
+      "subline": "none of which you’ll address"
+    },
+    {
+      "id": "dj-37-hotfix-on-friday",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "HOTFIX ON FRIDAY",
+      "subline": "bold · cursed · iconic"
+    },
+    {
+      "id": "dj-38-deploy-on-friday",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "DEPLOY ON FRIDAY",
+      "subline": "see you Monday · maybe"
+    },
+    {
+      "id": "dj-39-rollback-is-a-feature",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "ROLLBACK IS A FEATURE",
+      "subline": "shipped confidence · returned humility"
+    },
+    {
+      "id": "dj-40-feature-flag-off",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "FEATURE FLAG: OFF",
+      "subline": "we were never here"
+    },
+    {
+      "id": "dj-41-a-b-test-your-sanity",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "A/B TEST YOUR SANITY",
+      "subline": "variant B is sleep"
+    },
+    {
+      "id": "dj-42-tech-debt-interest-rate-29-9-apr",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "bounce-in",
+      "line": "TECH DEBT INTEREST RATE: 29.9% APR",
+      "subline": "minimum payment: one TODO"
+    },
+    {
+      "id": "dj-43-todo-fix-this",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "TODO: FIX THIS",
+      "subline": "committed in 2019"
+    },
+    {
+      "id": "dj-44-fixme-everything",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "FIXME: EVERYTHING",
+      "subline": "accurate ticket title"
+    },
+    {
+      "id": "dj-45-hack-don-t-touch",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "HACK: DON’T TOUCH",
+      "subline": "so of course you will"
+    },
+    {
+      "id": "dj-46-legacy-code-fear-the-ancients",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "LEGACY CODE: FEAR THE ANCIENTS",
+      "subline": "comments in a dead language"
+    },
+    {
+      "id": "dj-47-refactor-rewrite",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "float-soft",
+      "line": "REFACTOR = REWRITE",
+      "subline": "manager doesn’t need to know"
+    },
+    {
+      "id": "dj-48-clean-code-dirty-deadline",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "CLEAN CODE · DIRTY DEADLINE",
+      "subline": "principles vs calendar"
+    },
+    {
+      "id": "dj-49-dry-until-you-cry",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "DRY UNTIL YOU CRY",
+      "subline": "then copy-paste with dignity"
+    },
+    {
+      "id": "dj-50-yagni-until-you-needed-it",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "YAGNI UNTIL YOU NEEDED IT",
+      "subline": "yesterday"
+    },
+    {
+      "id": "dj-51-premature-optimization",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "PREMATURE OPTIMIZATION",
+      "subline": "root of all evil · and all PRs"
+    },
+    {
+      "id": "dj-52-cache-invalidation",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "CACHE INVALIDATION",
+      "subline": "still one of the hard problems"
+    },
+    {
+      "id": "dj-53-off-by-one-errors",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "OFF-BY-ONE ERRORS",
+      "subline": "in my jokes · and my loops"
+    },
+    {
+      "id": "dj-54-infinite-loop-of-denial",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "INFINITE LOOP OF DENIAL",
+      "subline": "while (bugs) { ignore(); }"
+    },
+    {
+      "id": "dj-55-race-condition-sometimes-funny",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "RACE CONDITION: SOMETIMES FUNNY",
+      "subline": "heisenbug entered the chat"
+    },
+    {
+      "id": "dj-56-heisenbug-observed",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "HEISENBUG OBSERVED",
+      "subline": "behavior changed · science!"
+    },
+    {
+      "id": "dj-57-segfault-core-dumped",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "SEGFAULT: CORE DUMPED",
+      "subline": "personality too"
+    },
+    {
+      "id": "dj-58-permission-denied",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "PERMISSION DENIED",
+      "subline": "sudo make me a sandwich"
+    },
+    {
+      "id": "dj-59-disk-full-of-memes",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "DISK FULL OF MEMES",
+      "subline": "not of backups"
+    },
+    {
+      "id": "dj-60-backup-failed-silently",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "BACKUP FAILED SILENTLY",
+      "subline": "like my last relationship"
+    },
+    {
+      "id": "dj-61-prod-is-the-new-staging",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "PROD IS THE NEW STAGING",
+      "subline": "YOLO devops"
+    },
+    {
+      "id": "dj-62-staging-lied-to-us",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "STAGING LIED TO US",
+      "subline": "again"
+    },
+    {
+      "id": "dj-63-localhost-trusted-friend",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "LOCALHOST: TRUSTED FRIEND",
+      "subline": "0.0.0.0: chaos"
+    },
+    {
+      "id": "dj-64-ping-8-8-8-8",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "PING 8.8.8.8",
+      "subline": "at least Google likes me"
+    },
+    {
+      "id": "dj-65-wifi-down-productivity-up",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "wholesome",
+      "anim": "typewriter",
+      "line": "WIFI DOWN · PRODUCTIVITY UP",
+      "subline": "forced focus mode"
+    },
+    {
+      "id": "dj-66-rubber-duck-debugging-works",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "RUBBER DUCK DEBUGGING WORKS",
+      "subline": "the duck union demands raises"
+    },
+    {
+      "id": "dj-67-print-statement-debugging",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "PRINT STATEMENT DEBUGGING",
+      "subline": "old gods · still worshipped"
+    },
+    {
+      "id": "dj-68-breakpoint-never-hit",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "BREAKPOINT NEVER HIT",
+      "subline": "just like my sleep schedule"
+    },
+    {
+      "id": "dj-69-stepping-over-the-bug",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "STEPPING OVER THE BUG",
+      "subline": "literally"
+    },
+    {
+      "id": "dj-70-flaky-test-passed",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "pulse-zoom",
+      "line": "FLAKY TEST PASSED",
+      "subline": "don’t ask how"
+    },
+    {
+      "id": "dj-71-flaky-test-failed",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "FLAKY TEST FAILED",
+      "subline": "blame the moon phase"
+    },
+    {
+      "id": "dj-72-coverage-100-logic-12",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "COVERAGE 100% · LOGIC 12%",
+      "subline": "metrics are a lifestyle"
+    },
+    {
+      "id": "dj-73-unit-tests-the-good-kind-of-red",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "typewriter",
+      "line": "UNIT TESTS: THE GOOD KIND OF RED",
+      "subline": "until green · then ship"
+    },
+    {
+      "id": "dj-74-e2e-test-end-to-emotional-damage",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "E2E TEST: END TO EMOTIONAL DAMAGE",
+      "subline": "puppeteer of my tears"
+    },
+    {
+      "id": "dj-75-snapshot-updated",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "SNAPSHOT UPDATED",
+      "subline": "tests green · app wrong · ship it"
+    },
+    {
+      "id": "dj-76-mocked-the-world",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "MOCKED THE WORLD",
+      "subline": "and still failed assertions"
+    },
+    {
+      "id": "dj-77-assert-true-true",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "ASSERT TRUE === TRUE",
+      "subline": "peak enterprise"
+    },
+    {
+      "id": "dj-78-type-error-anywhere",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "TYPE ERROR: ANYWHERE",
+      "subline": "TypeScript tried · you used any"
+    },
+    {
+      "id": "dj-79-as-any-as-you-want",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "float-soft",
+      "line": "AS ANY AS YOU WANT",
+      "subline": "type safety optional · vibes required"
+    },
+    {
+      "id": "dj-80-strict-null-checks",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "STRICT NULL CHECKS",
+      "subline": "my heart: also nullable"
+    },
+    {
+      "id": "dj-81-optional-chaining-saved-me",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "wholesome",
+      "anim": "typewriter",
+      "line": "OPTIONAL CHAINING SAVED ME",
+      "subline": "obj?.hope?.exists"
+    },
+    {
+      "id": "dj-82-spread-operator-everywhere",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "SPREAD OPERATOR EVERYWHERE",
+      "subline": "...chaos"
+    },
+    {
+      "id": "dj-83-destructured-my-life",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "DESTRUCTURED MY LIFE",
+      "subline": "const { sleep } = weekend"
+    },
+    {
+      "id": "dj-84-closure-over-my-problems",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "CLOSURE OVER MY PROBLEMS",
+      "subline": "still in scope"
+    },
+    {
+      "id": "dj-85-this-is-undefined",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "THIS IS UNDEFINED",
+      "subline": "classic JS plot twist"
+    },
+    {
+      "id": "dj-86-prototype-pollution-in-my-soul",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "PROTOTYPE POLLUTION IN MY SOUL",
+      "subline": "don’t extend Object"
+    },
+    {
+      "id": "dj-87-event-loop-still-spinning",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "EVENT LOOP: STILL SPINNING",
+      "subline": "macrotask: cry"
+    },
+    {
+      "id": "dj-88-promise-race-against-deadline",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "PROMISE.RACE AGAINST DEADLINE",
+      "subline": "deadline always wins"
+    },
+    {
+      "id": "dj-89-unhandled-rejection",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "UNHANDLED REJECTION",
+      "subline": "of my weekend plans"
+    },
+    {
+      "id": "dj-90-memory-leak-of-ambition",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "MEMORY LEAK OF AMBITION",
+      "subline": "GC won’t save you"
+    },
+    {
+      "id": "dj-91-oom-out-of-motivation",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "OOM: OUT OF MOTIVATION",
+      "subline": "restart the process (you)"
+    },
+    {
+      "id": "dj-92-cpu-at-100-thinking",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "CPU AT 100% THINKING",
+      "subline": "about snacks"
+    },
+    {
+      "id": "dj-93-gpu-for-training",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "GPU FOR TRAINING",
+      "subline": "my patience"
+    },
+    {
+      "id": "dj-94-llm-wrote-this-joke",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "pulse-zoom",
+      "line": "LLM WROTE THIS JOKE",
+      "subline": "human approved · barely"
+    },
+    {
+      "id": "dj-95-prompt-engineering-my-life",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "PROMPT ENGINEERING MY LIFE",
+      "subline": "system: be funny · user: ship"
+    },
+    {
+      "id": "dj-96-agent-fixed-it",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "AGENT FIXED IT",
+      "subline": "human claimed credit"
+    },
+    {
+      "id": "dj-97-pair-programming-with-copilot",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "PAIR PROGRAMMING WITH COPILOT",
+      "subline": "third wheel: Stack Overflow"
+    },
+    {
+      "id": "dj-98-ai-hallucinated-a-fix",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "bounce-in",
+      "line": "AI HALLUCINATED A FIX",
+      "subline": "tests: somehow green"
+    },
+    {
+      "id": "dj-99-chatgpt-said-lgtm",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "CHATGPT SAID LGTM",
+      "subline": "ship behind legal’s back"
+    },
+    {
+      "id": "dj-100-token-limit-reached",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "TOKEN LIMIT REACHED",
+      "subline": "just like my patience"
+    },
+    {
+      "id": "dj-101-context-window-full-of-trauma",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "CONTEXT WINDOW FULL OF TRAUMA",
+      "subline": "summarize and continue"
+    },
+    {
+      "id": "dj-102-fine-tuned-on-coffee",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "pulse-zoom",
+      "line": "FINE-TUNED ON COFFEE",
+      "subline": "inference: ship"
+    },
+    {
+      "id": "dj-103-embeddings-of-my-regret",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "EMBEDDINGS OF MY REGRET",
+      "subline": "cosine similarity: high"
+    },
+    {
+      "id": "dj-104-vector-db-of-bad-ideas",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "VECTOR DB OF BAD IDEAS",
+      "subline": "nearest neighbor: this PR"
+    },
+    {
+      "id": "dj-105-rag-on-my-commit-messages",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "typewriter",
+      "line": "RAG ON MY COMMIT MESSAGES",
+      "subline": "retrieved: “wip”"
+    },
+    {
+      "id": "dj-106-zero-shot-deployment",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "ZERO-SHOT DEPLOYMENT",
+      "subline": "few-shot rollback"
+    },
+    {
+      "id": "dj-107-multi-agent-chaos",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "MULTI-AGENT CHAOS",
+      "subline": "orchestration optional"
+    },
+    {
+      "id": "dj-108-human-in-the-loop",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "HUMAN IN THE LOOP",
+      "subline": "loop: coffee → code → cry"
+    },
+    {
+      "id": "dj-109-evals-passed",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "confetti",
+      "line": "EVALS PASSED",
+      "subline": "vibes: immaculate"
+    },
+    {
+      "id": "dj-110-benchmarks-don-t-lie",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "pulse-zoom",
+      "line": "BENCHMARKS DON’T LIE",
+      "subline": "unless you cherry-pick"
+    },
+    {
+      "id": "dj-111-latency-is-a-feature",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "LATENCY IS A FEATURE",
+      "subline": "spinner goes brrr"
+    },
+    {
+      "id": "dj-112-p99-of-my-mood",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "P99 OF MY MOOD",
+      "subline": "spiky"
+    },
+    {
+      "id": "dj-113-observability-we-see-everything",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "typewriter",
+      "line": "OBSERVABILITY: WE SEE EVERYTHING",
+      "subline": "except the bug"
+    },
+    {
+      "id": "dj-114-alert-fatigue-achieved",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "ALERT FATIGUE ACHIEVED",
+      "subline": "pager: muted forever"
+    },
+    {
+      "id": "dj-115-on-call-at-3am",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "ON-CALL AT 3AM",
+      "subline": "the real cloud bill"
+    },
+    {
+      "id": "dj-116-incident-sev-1",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "INCIDENT SEV-1",
+      "subline": "severity: pizza"
+    },
+    {
+      "id": "dj-117-postmortem-action-items",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "POSTMORTEM: ACTION ITEMS",
+      "subline": "forgotten by next sprint"
+    },
+    {
+      "id": "dj-118-blameless-culture",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "BLAMELESS CULTURE",
+      "subline": "except git blame"
+    },
+    {
+      "id": "dj-119-sre-hope-is-not-a-strategy",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "SRE: HOPE IS NOT A STRATEGY",
+      "subline": "but it is a vibe"
+    },
+    {
+      "id": "dj-120-slo-99-9-sarcasm",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "SLO: 99.9% SARCASM",
+      "subline": "error budget: spent on memes"
+    },
+    {
+      "id": "dj-121-chaos-monkey-visited",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "CHAOS MONKEY VISITED",
+      "subline": "resilience: emotional"
+    },
+    {
+      "id": "dj-122-idempotent-tears",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "IDEMPOTENT TEARS",
+      "subline": "safe to retry"
+    },
+    {
+      "id": "dj-123-eventual-consistency",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "EVENTUAL CONSISTENCY",
+      "subline": "of my life goals"
+    },
+    {
+      "id": "dj-124-cap-theorem-at-lunch",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "CAP THEOREM AT LUNCH",
+      "subline": "pick two: burger fries nap"
+    },
+    {
+      "id": "dj-125-acid-transactions",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "ACID TRANSACTIONS",
+      "subline": "not the scrapbook pack · calm down"
+    },
+    {
+      "id": "dj-126-base-basically-available",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "BASE: BASICALLY AVAILABLE",
+      "subline": "soft state · eventual jokes"
+    },
+    {
+      "id": "dj-127-graphql-overfetch-my-issues",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "GRAPHQL: OVERFETCH MY ISSUES",
+      "subline": "underfetch my sleep"
+    },
+    {
+      "id": "dj-128-rest-in-peace-crud",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "REST IN PEACE CRUD",
+      "subline": "POST /grief"
+    },
+    {
+      "id": "dj-129-websocket-still-open",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "WEBSOCKET STILL OPEN",
+      "subline": "like my emotional availability"
+    },
+    {
+      "id": "dj-130-sse-server-sent-existentialism",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "SSE: SERVER SENT EXISTENTIALISM",
+      "subline": "stream of consciousness"
+    },
+    {
+      "id": "dj-131-grpc-buffers-of-pain",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "GRPC: BUFFERS OF PAIN",
+      "subline": "protobuf my feelings"
+    },
+    {
+      "id": "dj-132-thundering-herd-of-prs",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "THUNDERING HERD OF PRs",
+      "subline": "reviewer down"
+    },
+    {
+      "id": "dj-133-bikeshedding-the-button-color",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "BIKESHEDDING THE BUTTON COLOR",
+      "subline": "architecture can wait"
+    },
+    {
+      "id": "dj-134-yak-shaving-champion",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "YAK SHAVING CHAMPION",
+      "subline": "started with a typo"
+    },
+    {
+      "id": "dj-135-xy-problem-solved",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "XY PROBLEM SOLVED",
+      "subline": "asked wrong · fixed worse"
+    },
+    {
+      "id": "dj-136-premature-abstraction",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "PREMATURE ABSTRACTION",
+      "subline": "factory of factories"
+    },
+    {
+      "id": "dj-137-design-pattern-bingo",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "DESIGN PATTERN BINGO",
+      "subline": "singleton of regret"
+    },
+    {
+      "id": "dj-138-mvc-model-view-confusion",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "MVC: MODEL VIEW CONFUSION",
+      "subline": "controller of chaos"
+    },
+    {
+      "id": "dj-139-mvvm-more-vibes-very-meaning",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "MVVM: MORE VIBES VERY MEANING",
+      "subline": "bindings everywhere"
+    },
+    {
+      "id": "dj-140-clean-architecture",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "slide-up",
+      "line": "CLEAN ARCHITECTURE",
+      "subline": "folders: 47 · features: 2"
+    },
+    {
+      "id": "dj-141-hexagonal-but-make-it-fashion",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "HEXAGONAL · BUT MAKE IT FASHION",
+      "subline": "ports and adapters and tears"
+    },
+    {
+      "id": "dj-142-ddd-domain-driven-denial",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "pulse-zoom",
+      "line": "DDD: DOMAIN DRIVEN DENIAL",
+      "subline": "ubiquitous language: “idk”"
+    },
+    {
+      "id": "dj-143-tdd-tears-driven-development",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "TDD: TEARS DRIVEN DEVELOPMENT",
+      "subline": "red green refactor cry"
+    },
+    {
+      "id": "dj-144-bdd-behavior-driven-drama",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "BDD: BEHAVIOR DRIVEN DRAMA",
+      "subline": "given when then argue"
+    },
+    {
+      "id": "dj-145-ci-green-prod-down",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "typewriter",
+      "line": "CI GREEN · PROD DOWN",
+      "subline": "classic plot twist"
+    },
+    {
+      "id": "dj-146-cd-continuous-doom",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "CD: CONTINUOUS DOOM",
+      "subline": "pipeline go brrr"
+    },
+    {
+      "id": "dj-147-artifact-uploaded",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "ARTIFACT UPLOADED",
+      "subline": "confidence: still broken"
+    },
+    {
+      "id": "dj-148-cache-hit-on-dopamine",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "CACHE HIT ON DOPAMINE",
+      "subline": "miss on sleep"
+    },
+    {
+      "id": "dj-149-cdn-of-coping-mechanisms",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "CDN OF COPING MECHANISMS",
+      "subline": "edge: fine · origin: not"
+    },
+    {
+      "id": "dj-150-ssl-cert-expired",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "SSL CERT EXPIRED",
+      "subline": "like my warranty on sanity"
+    },
+    {
+      "id": "dj-151-dns-propagated-my-problems",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "DNS PROPAGATED MY PROBLEMS",
+      "subline": "globally"
+    },
+    {
+      "id": "dj-152-load-balancer-of-emotions",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "LOAD BALANCER OF EMOTIONS",
+      "subline": "round-robin breakdown"
+    },
+    {
+      "id": "dj-153-autoscaling-my-anxiety",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "AUTOSCALING MY ANXIETY",
+      "subline": "min=1 max=∞"
+    },
+    {
+      "id": "dj-154-spot-instance-of-motivation",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "SPOT INSTANCE OF MOTIVATION",
+      "subline": "may be interrupted"
+    },
+    {
+      "id": "dj-155-cold-start-of-my-brain",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "COLD START OF MY BRAIN",
+      "subline": "lambda me to coffee"
+    },
+    {
+      "id": "dj-156-warm-pool-of-excuses",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "WARM POOL OF EXCUSES",
+      "subline": "ready for standup"
+    },
+    {
+      "id": "dj-157-serverless-but-not-careless",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "SERVERLESS BUT NOT CARELESS",
+      "subline": "or so we claim"
+    },
+    {
+      "id": "dj-158-iaas-paas-saas-chaos",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "IAAS PAAS SAAS CHAOS",
+      "subline": "as a service"
+    },
+    {
+      "id": "dj-159-multi-cloud-cope",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "float-soft",
+      "line": "MULTI-CLOUD COPE",
+      "subline": "vendor lock-in: emotional"
+    },
+    {
+      "id": "dj-160-vendor-lock-in-my-heart",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "VENDOR LOCK-IN MY HEART",
+      "subline": "exit clause: none"
+    },
+    {
+      "id": "dj-161-open-source-free-as-in-lunch",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "typewriter",
+      "line": "OPEN SOURCE: FREE AS IN LUNCH",
+      "subline": "maintainer unpaid · forever"
+    },
+    {
+      "id": "dj-162-issue-1-hello-world",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "ISSUE #1: HELLO WORLD",
+      "subline": "still open"
+    },
+    {
+      "id": "dj-163-pr-welcome",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "PR WELCOME",
+      "subline": "reviews: never"
+    },
+    {
+      "id": "dj-164-license-mit-my-problems",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "LICENSE: MIT MY PROBLEMS",
+      "subline": "as is · no warranty"
+    },
+    {
+      "id": "dj-165-semver-major-bump",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "SEMVER MAJOR BUMP",
+      "subline": "because feelings"
+    },
+    {
+      "id": "dj-166-breaking-change-everything",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "pulse-zoom",
+      "line": "BREAKING CHANGE: EVERYTHING",
+      "subline": "changelog: “improvements”"
+    },
+    {
+      "id": "dj-167-changelog-md-lied",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "CHANGELOG.MD LIED",
+      "subline": "and that’s okay"
+    },
+    {
+      "id": "dj-168-readme-badge-farm",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "README BADGE FARM",
+      "subline": "build: passing · truth: unclear"
+    },
+    {
+      "id": "dj-169-lighthouse-100",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "LIGHTHOUSE 100",
+      "subline": "on a blank page"
+    },
+    {
+      "id": "dj-170-bundle-size-yes",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "bounce-in",
+      "line": "BUNDLE SIZE: YES",
+      "subline": "users: on 3G · crying"
+    },
+    {
+      "id": "dj-171-tree-shaking-my-hope",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "TREE SHAKING MY HOPE",
+      "subline": "still shipped lodash"
+    },
+    {
+      "id": "dj-172-lazy-load-my-ambitions",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "LAZY LOAD MY AMBITIONS",
+      "subline": "code-split the dreams"
+    },
+    {
+      "id": "dj-173-hydration-mismatch",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "HYDRATION MISMATCH",
+      "subline": "react and I both confused"
+    },
+    {
+      "id": "dj-174-useeffect-infinite-loop",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "USEEFFECT INFINITE LOOP",
+      "subline": "dependency array: [pain]"
+    },
+    {
+      "id": "dj-175-key-index-energy",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "KEY={INDEX} ENERGY",
+      "subline": "list reordered · chaos"
+    },
+    {
+      "id": "dj-176-prop-drilling-to-the-core",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "PROP DRILLING TO THE CORE",
+      "subline": "context would be nice"
+    },
+    {
+      "id": "dj-177-redux-for-a-toggle",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "typewriter",
+      "line": "REDUX FOR A TOGGLE",
+      "subline": "enterprise ready"
+    },
+    {
+      "id": "dj-178-state-management-hell",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "STATE MANAGEMENT HELL",
+      "subline": "zustand saved me · maybe"
+    },
+    {
+      "id": "dj-179-ssr-ssr-ssr",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "SSR SSR SSR",
+      "subline": "server says hello · client says who?"
+    },
+    {
+      "id": "dj-180-isr-incremental-stress-regeneration",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "ISR: INCREMENTAL STRESS REGENERATION",
+      "subline": "revalidate: always"
+    },
+    {
+      "id": "dj-181-edge-runtime-edge-case",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "EDGE RUNTIME EDGE CASE",
+      "subline": "works until it doesn’t"
+    },
+    {
+      "id": "dj-182-tailwind-class-soup",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "TAILWIND: CLASS SOUP",
+      "subline": "beautiful soup"
+    },
+    {
+      "id": "dj-183-important-wins-again",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "!IMPORTANT WINS AGAIN",
+      "subline": "specificity wars"
+    },
+    {
+      "id": "dj-184-z-index-9999",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "Z-INDEX: 9999",
+      "subline": "still under the modal"
+    },
+    {
+      "id": "dj-185-dark-mode-fixed",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "DARK MODE FIXED",
+      "subline": "light mode: abandoned"
+    },
+    {
+      "id": "dj-186-a11y-after-launch",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "bounce-in",
+      "line": "A11Y: AFTER LAUNCH",
+      "subline": "famous last words"
+    },
+    {
+      "id": "dj-187-aria-label-button",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "ARIA LABEL: “BUTTON”",
+      "subline": "peak accessibility"
+    },
+    {
+      "id": "dj-188-keyboard-trap",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "KEYBOARD TRAP",
+      "subline": "tab tab tab help"
+    },
+    {
+      "id": "dj-189-focus-outline-removed",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "FOCUS OUTLINE REMOVED",
+      "subline": "designer smiled · users lost"
+    },
+    {
+      "id": "dj-190-pixel-perfect-logic-broken",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "PIXEL PERFECT · LOGIC BROKEN",
+      "subline": "figma doesn’t run tests"
+    },
+    {
+      "id": "dj-191-design-system-12-buttons",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "float-soft",
+      "line": "DESIGN SYSTEM: 12 BUTTONS",
+      "subline": "all slightly different"
+    },
+    {
+      "id": "dj-192-spacing-8px-grid",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "SPACING: 8PX GRID",
+      "subline": "except when 7"
+    },
+    {
+      "id": "dj-193-figma-handoff",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "FIGMA HANDOFF",
+      "subline": "dev: which frame is real?"
+    },
+    {
+      "id": "dj-194-lorem-ipsum-shipped",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "LOREM IPSUM SHIPPED",
+      "subline": "content team: …"
+    },
+    {
+      "id": "dj-195-copy-tbd",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "COPY TBD",
+      "subline": "for 14 sprints"
+    },
+    {
+      "id": "dj-196-legal-review-pending",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "LEGAL REVIEW PENDING",
+      "subline": "since forever"
+    },
+    {
+      "id": "dj-197-security-we-ll-add-auth-later",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "confetti",
+      "line": "SECURITY: WE’LL ADD AUTH LATER",
+      "subline": "later = never"
+    },
+    {
+      "id": "dj-198-owasp-top-10-bingo",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "OWASP TOP 10 BINGO",
+      "subline": "SQL injection free space"
+    },
+    {
+      "id": "dj-199-xss-in-my-commit-msg",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "XSS IN MY COMMIT MSG",
+      "subline": "alert(“hi”) "
+    },
+    {
+      "id": "dj-200-csrf-token-of-appreciation",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "CSRF TOKEN OF APPRECIATION",
+      "subline": "validate before trust"
+    },
+    {
+      "id": "dj-201-rotate-your-secrets",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "ROTATE YOUR SECRETS",
+      "subline": "and your sleep schedule"
+    },
+    {
+      "id": "dj-202-env-committed",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "bounce-in",
+      "line": ".ENV COMMITTED",
+      "subline": "classic speedrun"
+    },
+    {
+      "id": "dj-203-api-key-in-the-frontend",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "API KEY IN THE FRONTEND",
+      "subline": "bold strategy"
+    },
+    {
+      "id": "dj-204-rate-limit-exceeded",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "RATE LIMIT EXCEEDED",
+      "subline": "touch grass"
+    },
+    {
+      "id": "dj-205-quota-0",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "QUOTA: 0",
+      "subline": "cloud said no"
+    },
+    {
+      "id": "dj-206-billing-alert",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "BILLING ALERT",
+      "subline": "the real pagerduty"
+    },
+    {
+      "id": "dj-207-cost-optimization-sprint",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "float-soft",
+      "line": "COST OPTIMIZATION SPRINT",
+      "subline": "delete everything"
+    },
+    {
+      "id": "dj-208-free-tier-ended",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "FREE TIER ENDED",
+      "subline": "so did my smile"
+    },
+    {
+      "id": "dj-209-enterprise-plan-energy",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "typewriter",
+      "line": "ENTERPRISE PLAN ENERGY",
+      "subline": "features: grayed out"
+    },
+    {
+      "id": "dj-210-sso-sorry-sign-on",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "SSO: SORRY SIGN-ON",
+      "subline": "redirect loop of doom"
+    },
+    {
+      "id": "dj-211-oauth-dance-complete",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "OAUTH DANCE COMPLETE",
+      "subline": "token: expired already"
+    },
+    {
+      "id": "dj-212-jwt-in-localstorage",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "slide-up",
+      "line": "JWT IN LOCALSTORAGE",
+      "subline": "security team: screaming"
+    },
+    {
+      "id": "dj-213-session-cookie-of-doubt",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "SESSION COOKIE OF DOUBT",
+      "subline": "HttpOnly · hopefully"
+    },
+    {
+      "id": "dj-214-2fa-too-many-factors",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "2FA: TOO MANY FACTORS",
+      "subline": "of annoyance"
+    },
+    {
+      "id": "dj-215-password-password123",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "float-soft",
+      "line": "PASSWORD: PASSWORD123",
+      "subline": "audit finding #1"
+    },
+    {
+      "id": "dj-216-password-manager-said-no",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "PASSWORD MANAGER SAID NO",
+      "subline": "reuse is a lifestyle"
+    },
+    {
+      "id": "dj-217-captcha-proves-i-m-human",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "CAPTCHA PROVES I’M HUMAN",
+      "subline": "barely"
+    },
+    {
+      "id": "dj-218-bots-write-better-tests",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "bounce-in",
+      "line": "BOTS WRITE BETTER TESTS",
+      "subline": "uncomfortable truth"
+    },
+    {
+      "id": "dj-219-scrum-master-left-the-chat",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "SCRUM MASTER LEFT THE CHAT",
+      "subline": "velocity: vibes"
+    },
+    {
+      "id": "dj-220-velocity-up-quality-down",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "slide-up",
+      "line": "VELOCITY UP · QUALITY DOWN",
+      "subline": "charts don’t cry"
+    },
+    {
+      "id": "dj-221-burndown-chart-on-fire",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "BURNDOWN CHART ON FIRE",
+      "subline": "literally the metaphor"
+    },
+    {
+      "id": "dj-222-sprint-goal-survive",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "wholesome",
+      "anim": "pulse-zoom",
+      "line": "SPRINT GOAL: SURVIVE",
+      "subline": "accepted"
+    },
+    {
+      "id": "dj-223-retro-what-went-well",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "RETRO: WHAT WENT WELL",
+      "subline": "the snacks"
+    },
+    {
+      "id": "dj-224-action-item-be-better",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "glitch-text",
+      "line": "ACTION ITEM: BE BETTER",
+      "subline": "measurable · somehow"
+    },
+    {
+      "id": "dj-225-okrs-objectively-killing-realism",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "OKRS: OBJECTIVELY KILLING REALISM",
+      "subline": "key result: ship jokes"
+    },
+    {
+      "id": "dj-226-north-star-metric-memes",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "bounce-in",
+      "line": "NORTH STAR METRIC: MEMES",
+      "subline": "alignment achieved"
+    },
+    {
+      "id": "dj-227-stakeholder-alignment",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "stamp-spin",
+      "line": "STAKEHOLDER ALIGNMENT",
+      "subline": "herding cats · in Jira"
+    },
+    {
+      "id": "dj-228-scope-creep-entered-the-dungeon",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "SCOPE CREEP ENTERED THE DUNGEON",
+      "subline": "party wiped"
+    },
+    {
+      "id": "dj-229-mvp-minimum-viable-panic",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "confetti",
+      "line": "MVP: MINIMUM VIABLE PANIC",
+      "subline": "shipped"
+    },
+    {
+      "id": "dj-230-v1-is-a-lifestyle",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "pulse-zoom",
+      "line": "V1 IS A LIFESTYLE",
+      "subline": "v2 is a myth"
+    },
+    {
+      "id": "dj-231-rewrite-in-rust",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "float-soft",
+      "line": "REWRITE IN RUST",
+      "subline": "rewrite in regret"
+    },
+    {
+      "id": "dj-232-electron-app-only-400mb",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "ELECTRON APP: ONLY 400MB",
+      "subline": "hello world"
+    },
+    {
+      "id": "dj-233-native-when",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "NATIVE WHEN?",
+      "subline": "soon™"
+    },
+    {
+      "id": "dj-234-cross-platform-cross-to-bear",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "CROSS-PLATFORM: CROSS TO BEAR",
+      "subline": "bugs on every OS"
+    },
+    {
+      "id": "dj-235-windows-path-escapes",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "WINDOWS PATH\\\\ESCAPES",
+      "subline": "unix users: laughing"
+    },
+    {
+      "id": "dj-236-crlf-vs-lf-war",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "CRLF VS LF WAR",
+      "subline": "editorconfig: peacemaker"
+    },
+    {
+      "id": "dj-237-tabs-vs-spaces",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "confetti",
+      "line": "TABS VS SPACES",
+      "subline": "civilization ended here"
+    },
+    {
+      "id": "dj-238-prettier-saved-the-marriage",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "wholesome",
+      "anim": "pulse-zoom",
+      "line": "PRETTIER SAVED THE MARRIAGE",
+      "subline": "format on save · forever"
+    },
+    {
+      "id": "dj-239-eslint-fix-my-life",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "float-soft",
+      "line": "ESLINT --FIX MY LIFE",
+      "subline": "auto-fix the trauma"
+    },
+    {
+      "id": "dj-240-husky-pre-commit",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "HUSKY PRE-COMMIT",
+      "subline": "dog went brrr"
+    },
+    {
+      "id": "dj-241-ci-failed-on-a-typo",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "typewriter",
+      "line": "CI FAILED ON A TYPO",
+      "subline": "character development"
+    },
+    {
+      "id": "dj-242-green-build-ship",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "bounce-in",
+      "line": "GREEN BUILD = SHIP",
+      "subline": "philosophy of champions"
+    },
+    {
+      "id": "dj-243-all-tests-green",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "stamp-spin",
+      "line": "ALL TESTS GREEN",
+      "subline": "imposter syndrome: buffering"
+    },
+    {
+      "id": "dj-244-you-fixed-it",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "wholesome",
+      "anim": "slide-up",
+      "line": "YOU FIXED IT",
+      "subline": "the universe noticed"
+    },
+    {
+      "id": "dj-245-shipped-and-proud",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "confetti",
+      "line": "SHIPPED AND PROUD",
+      "subline": "changelog: chaos curated"
+    },
+    {
+      "id": "dj-246-orbital-approves-this-pr",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "pulse-zoom",
+      "line": "ORBITAL APPROVES THIS PR",
+      "subline": "mothership has spoken"
+    },
+    {
+      "id": "dj-247-2050-called-wants-this-diff",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "float-soft",
+      "line": "2050 CALLED · WANTS THIS DIFF",
+      "subline": "legacy IDEs could never"
+    },
+    {
+      "id": "dj-248-dopamine-deployed",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "glitch-text",
+      "line": "DOPAMINE DEPLOYED",
+      "subline": "next hit: in 45s (throttle)"
+    },
+    {
+      "id": "dj-249-celebration-throttled",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "satire",
+      "anim": "typewriter",
+      "line": "CELEBRATION THROTTLED",
+      "subline": "even joy has rate limits"
+    },
+    {
+      "id": "dj-250-random-joke-loaded",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "bounce-in",
+      "line": "RANDOM JOKE LOADED",
+      "subline": "entropy: chef’s kiss"
+    },
+    {
+      "id": "dj-251-another-one",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "hype",
+      "anim": "stamp-spin",
+      "line": "ANOTHER ONE",
+      "subline": "dj khaled of green checks"
+    },
+    {
+      "id": "dj-252-no-repeats-on-our-watch",
+      "kinds": [
+        "*"
+      ],
+      "packs": [
+        "*"
+      ],
+      "tone": "joke",
+      "anim": "slide-up",
+      "line": "NO REPEATS ON OUR WATCH",
+      "subline": "recent-seen buffer online"
+    }
+  ]
+}

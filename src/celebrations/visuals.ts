@@ -10,15 +10,16 @@ export interface CelebrationVisual {
   gif?: GifDef;
 }
 
-/** Overlay leans GIF; toast keeps CSS loops + emoji orbit. */
+/** Overlay leans GIF; cinematic surfaces (panel/overlay) also lean GIF; toast keeps CSS loops. */
 export function pickCelebrationVisual(
   pack: PackId,
   mode: 'toast' | 'overlay',
   random: () => number = Math.random,
+  cinematic = false,
 ): CelebrationVisual {
   const emojis = pickEmojis(pack, random);
   const loop = pickLoop(pack, random);
-  const useGif = mode === 'overlay' && random() < 0.72;
+  const useGif = (mode === 'overlay' || cinematic) && random() < 0.72;
   const gif = useGif ? pickGif(pack, random) : undefined;
   return { emojis, loop, gif };
 }

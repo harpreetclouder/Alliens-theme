@@ -34,13 +34,27 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   );
 
   const settings = readSettings(() => vscode.workspace.getConfiguration('orbital'));
-  if (settings.orbitEnabled) {
-    const orbit = orbitStore.load();
-    host.updateOrbitCrumb(orbit.level, orbit.streakDays);
-  } else {
-    host.clearOrbitCrumb();
-  }
+  const refreshOrbitCrumb = (): void => {
+    const s = readSettings(() => vscode.workspace.getConfiguration('orbital'));
+    if (s.orbitEnabled) {
+      const orbit = orbitStore.load();
+      host.updateOrbitCrumb(orbit.level, orbit.streakDays);
+      orbitalLog('Orbit crumb', `L${orbit.level} · streak ${orbit.streakDays}`);
+    } else {
+      host.clearOrbitCrumb();
+      orbitalLog('Orbit crumb', 'hidden (orbit.enabled=false)');
+    }
+  };
+  refreshOrbitCrumb();
   maybeDayStart(context, orbitStore, host, settings);
+
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration('orbital.orbit.enabled')) {
+        refreshOrbitCrumb();
+      }
+    }),
+  );
 
   // Commands first — preview must work even during onboarding
   context.subscriptions.push(...registerCommands(context, engine));

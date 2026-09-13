@@ -1,4 +1,4 @@
-export type PackId = 'mothership' | 'glitch' | 'soft' | 'root';
+export type PackId = 'mothership' | 'glitch' | 'soft' | 'root' | 'acid';
 
 export interface PackDefinition {
   id: PackId;

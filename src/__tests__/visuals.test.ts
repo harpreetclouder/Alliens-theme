@@ -26,28 +26,25 @@ describe('pickGif', () => {
     expect(gif?.file.startsWith('soft/')).toBe(true);
   });
 
-  it('has three gifs per pack', () => {
-    for (const pack of ['mothership', 'glitch', 'soft', 'root'] as const) {
+  it('has three gifs per pack including acid', () => {
+    for (const pack of ['mothership', 'glitch', 'soft', 'root', 'acid'] as const) {
       expect(GIFS.filter((g) => g.pack === pack).length).toBe(3);
     }
   });
 });
 
 describe('pickCelebrationVisual', () => {
-  it('can include gif on overlay', () => {
-    let foundGif = false;
-    for (let i = 0; i < 40; i++) {
-      const visual = pickCelebrationVisual('mothership', 'overlay');
-      if (visual.gif) {
-        foundGif = true;
-        expect(visual.gif.pack).toBe('mothership');
-        break;
-      }
-    }
-    expect(foundGif).toBe(true);
+  it('always includes gif on overlay when pack has gifs', () => {
+    const visual = pickCelebrationVisual('mothership', 'overlay', () => 0);
+    expect(visual.gif?.pack).toBe('mothership');
   });
 
-  it('skips gif on toast mode', () => {
+  it('includes gif when cinematic flag is set for panel', () => {
+    const visual = pickCelebrationVisual('acid', 'toast', () => 0, true);
+    expect(visual.gif?.pack).toBe('acid');
+  });
+
+  it('skips gif on toast mode without cinematic', () => {
     for (let i = 0; i < 20; i++) {
       const visual = pickCelebrationVisual('root', 'toast');
       expect(visual.gif).toBeUndefined();
