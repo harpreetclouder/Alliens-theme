@@ -9,6 +9,8 @@ export type { OrbitState } from './types';
 
 export const STREAK_MILESTONES = [3, 7, 14, 30] as const;
 
+export const MISSION_COMPLETE_BONUS = 40;
+
 export const MISSION_POOL: OrbitMissionDef[] = [
   { id: 'commit-1', label: 'Ship 1 commit', target: 1, kind: 'commit' },
   { id: 'tests-1', label: 'Green tests once', target: 1, kind: 'tests' },
@@ -57,6 +59,65 @@ function dayDiffDays(fromDay: string, toDay: string): number {
     return new Date(y, m - 1, d).getTime();
   };
   return Math.round((parse(toDay) - parse(fromDay)) / 86_400_000);
+}
+
+export function ensureMission(
+  state: OrbitState,
+  dayKey: string,
+  random: () => number,
+): OrbitState {
+  if (state.mission?.day === dayKey) {
+    return state;
+  }
+  const index =
+    Math.floor(random() * MISSION_POOL.length) % MISSION_POOL.length;
+  const def = MISSION_POOL[index];
+  return {
+    ...state,
+    mission: {
+      id: def.id,
+      day: dayKey,
+      progress: 0,
+      target: def.target,
+      completed: false,
+    },
+  };
+}
+
+export function progressMission(
+  state: OrbitState,
+  kind: string,
+  xpGained: number,
+): { state: OrbitState; completed: boolean } {
+  const mission = state.mission;
+  if (!mission || mission.completed) {
+    return { state, completed: false };
+  }
+
+  const def = MISSION_POOL.find((m) => m.id === mission.id);
+  if (!def) {
+    return { state, completed: false };
+  }
+
+  let progress = mission.progress;
+  if (def.kind === 'xp') {
+    progress += xpGained;
+  } else if (def.kind === kind) {
+    progress += 1;
+  }
+
+  const completed = progress >= mission.target;
+  return {
+    state: {
+      ...state,
+      mission: {
+        ...mission,
+        progress,
+        completed,
+      },
+    },
+    completed,
+  };
 }
 
 export function nextStreak(

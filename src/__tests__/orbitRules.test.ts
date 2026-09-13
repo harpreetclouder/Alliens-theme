@@ -3,8 +3,10 @@ import {
   ACHIEVEMENTS,
   MISSION_POOL,
   emptyOrbitState,
+  ensureMission,
   levelFromXp,
   nextStreak,
+  progressMission,
   xpForSize,
 } from '../orbit/rules';
 import type { OrbitState } from '../orbit/types';
@@ -96,6 +98,76 @@ describe('nextStreak', () => {
       lastWinDay: '2026-09-13',
       milestone: 7,
     });
+  });
+});
+
+describe('ensureMission', () => {
+  const day = '2026-09-13';
+
+  it('rolls a mission when none exists', () => {
+    const state = emptyOrbitState();
+    const next = ensureMission(state, day, () => 0);
+    expect(next.mission).toEqual({
+      id: 'commit-1',
+      day,
+      progress: 0,
+      target: 1,
+      completed: false,
+    });
+  });
+
+  it('keeps the same mission on the same day', () => {
+    const state = ensureMission(emptyOrbitState(), day, () => 0);
+    const again = ensureMission(state, day, () => 0.99);
+    expect(again.mission).toEqual(state.mission);
+  });
+
+  it('rolls a new mission when the day changes', () => {
+    const state = ensureMission(emptyOrbitState(), day, () => 0);
+    const nextDay = ensureMission(state, '2026-09-14', () => 0.99);
+    expect(nextDay.mission?.day).toBe('2026-09-14');
+    expect(nextDay.mission?.id).toBe('xp-50');
+  });
+});
+
+describe('progressMission', () => {
+  const day = '2026-09-13';
+
+  function withMission(id: string, progress = 0): OrbitState {
+    const def = MISSION_POOL.find((m) => m.id === id)!;
+    return {
+      ...emptyOrbitState(),
+      mission: {
+        id: def.id,
+        day,
+        progress,
+        target: def.target,
+        completed: false,
+      },
+    };
+  }
+
+  it('completes commit-1 on a commit win', () => {
+    const { state, completed } = progressMission(withMission('commit-1'), 'commit', 25);
+    expect(completed).toBe(true);
+    expect(state.mission?.progress).toBe(1);
+    expect(state.mission?.completed).toBe(true);
+  });
+
+  it('does not progress commit-1 on tests win', () => {
+    const { state, completed } = progressMission(withMission('commit-1'), 'tests', 80);
+    expect(completed).toBe(false);
+    expect(state.mission?.progress).toBe(0);
+  });
+
+  it('accumulates XP toward xp-50', () => {
+    let state = withMission('xp-50');
+    let result = progressMission(state, 'commit', 25);
+    expect(result.completed).toBe(false);
+    expect(result.state.mission?.progress).toBe(25);
+    result = progressMission(result.state, 'tests', 80);
+    expect(result.completed).toBe(true);
+    expect(result.state.mission?.progress).toBe(105);
   });
 });
 

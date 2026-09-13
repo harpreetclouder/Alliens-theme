@@ -1,7 +1,10 @@
 import {
+  MISSION_COMPLETE_BONUS,
   emptyOrbitState,
+  ensureMission,
   levelFromXp,
   nextStreak,
+  progressMission,
   xpForSize,
 } from './rules';
 import type { OrbitState, StreakUpdate } from './types';
@@ -44,6 +47,7 @@ function newAchievements(
   state: OrbitState,
   input: ApplyWinInput,
   streak: StreakUpdate,
+  missionCompleted: boolean,
 ): string[] {
   const already = new Set(state.unlocked);
   const ids: string[] = [];
@@ -69,6 +73,9 @@ function newAchievements(
   if (input.regionId && input.regionId !== 'global') {
     tryAdd('region-scout');
   }
+  if (missionCompleted) {
+    tryAdd('mission-complete');
+  }
 
   return ids;
 }
@@ -90,20 +97,29 @@ export class OrbitStore {
 
   applyWin(input: ApplyWinInput): OrbitWinResult {
     const current = this.load();
-    const xpGained = xpForSize(input.size);
-    const previousLevel = levelFromXp(current.xp);
-    const xp = current.xp + xpGained;
+    const withMission = ensureMission(current, input.dayKey, Math.random);
+    const baseXp = xpForSize(input.size);
+    const missionStep = progressMission(withMission, input.kind, baseXp);
+    const missionCompleted = missionStep.completed;
+    const xpGained = baseXp + (missionCompleted ? MISSION_COMPLETE_BONUS : 0);
+    const previousLevel = levelFromXp(withMission.xp);
+    const xp = withMission.xp + xpGained;
     const level = levelFromXp(xp);
-    const streak = nextStreak(current, input.dayKey, input.countsForStreak);
-    const unlocked = newAchievements(current, input, streak);
+    const streak = nextStreak(withMission, input.dayKey, input.countsForStreak);
+    const unlocked = newAchievements(
+      withMission,
+      input,
+      streak,
+      missionCompleted,
+    );
 
     const state: OrbitState = normalizeState({
-      ...current,
+      ...missionStep.state,
       xp,
       level,
       streakDays: streak.streakDays,
       lastWinDay: streak.lastWinDay,
-      unlocked: [...current.unlocked, ...unlocked],
+      unlocked: [...withMission.unlocked, ...unlocked],
     });
 
     return {
@@ -113,7 +129,7 @@ export class OrbitStore {
       previousLevel,
       milestone: streak.milestone,
       unlocked,
-      missionCompleted: false,
+      missionCompleted,
     };
   }
 }

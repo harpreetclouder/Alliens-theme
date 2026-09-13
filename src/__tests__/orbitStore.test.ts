@@ -95,6 +95,35 @@ describe('OrbitStore', () => {
     expect(result.milestone).toBeUndefined();
   });
 
+  it('applyWin: commit win completes commit-1 mission with bonus XP and achievement', () => {
+    const gs = fakeGlobalState({
+      xp: 0,
+      level: 1,
+      lastWinDay: '',
+      streakDays: 0,
+      unlocked: [],
+      mission: {
+        id: 'commit-1',
+        day,
+        progress: 0,
+        target: 1,
+        completed: false,
+      },
+    });
+    const store = new OrbitStore(gs);
+    const result = store.applyWin({
+      dayKey: day,
+      size: 'medium',
+      kind: 'commit',
+      countsForStreak: true,
+    });
+    expect(result.missionCompleted).toBe(true);
+    expect(result.xpGained).toBe(65);
+    expect(result.state.mission?.completed).toBe(true);
+    expect(result.state.unlocked).toContain('mission-complete');
+    expect(result.state.xp).toBe(65);
+  });
+
   it('applyWin: second win same day does not double streak days', () => {
     const gs = fakeGlobalState({
       xp: 80,
@@ -102,7 +131,13 @@ describe('OrbitStore', () => {
       lastWinDay: day,
       streakDays: 1,
       unlocked: ['first-liftoff', 'green-suite'],
-      mission: null,
+      mission: {
+        id: 'tests-1',
+        day,
+        progress: 0,
+        target: 1,
+        completed: false,
+      },
     });
     const store = new OrbitStore(gs);
     const result = store.applyWin({
