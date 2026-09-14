@@ -1,0 +1,16 @@
+{
+  "id": "long-session",
+  "description": "45m+ active session + safe idle → intermission eligible; never while typing",
+  "timeline": [
+    { "atMs": 0, "signal": "session_start" },
+    {
+      "atMs": 2700000,
+      "signal": "long_session",
+      "patch": { "sessionActiveMs": 2700000, "idleMs": 5000, "typing": false }
+    }
+  ],
+  "expect": {
+    "outcome": "intermission",
+    "allowedIncludes": ["intermission"]
+  }
+}

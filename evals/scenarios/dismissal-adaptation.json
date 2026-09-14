@@ -1,0 +1,19 @@
+{
+  "id": "dismissal-adaptation",
+  "description": "Three immediate dismissals suppress discretionary intermissions",
+  "timeline": [
+    { "atMs": 0, "signal": "session_start" },
+    { "atMs": 1000, "signal": "dismiss" },
+    { "atMs": 2000, "signal": "dismiss" },
+    { "atMs": 3000, "signal": "dismiss" },
+    {
+      "atMs": 4000,
+      "signal": "long_session",
+      "patch": { "sessionActiveMs": 2700000, "idleMs": 5000, "typing": false }
+    }
+  ],
+  "expect": {
+    "forbiddenIncludes": ["intermission", "comeback"],
+    "outcome": "none"
+  }
+}

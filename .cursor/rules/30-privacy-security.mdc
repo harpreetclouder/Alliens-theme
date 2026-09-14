@@ -1,0 +1,14 @@
+---
+description: Privacy and security — no secrets, no raw source/terminal persistence, safe webviews
+alwaysApply: true
+---
+
+# Privacy & security
+
+**Reject** designs that send terminal command text, file contents, or raw source to remote servers by default.
+
+- No secrets in git (API keys, tokens, `.env`, private keys)
+- No raw terminal-history persistence; no raw source-code collection
+- Network use must be explicit, optional, and user-configured (e.g. Giphy key)
+- Webviews: validate messages, CSP, avoid unsafe HTML concatenation of untrusted data
+- Invoke `orbital-privacy-reviewer` when touching terminal/editor/FS/storage/network/webview/keys/MCP

@@ -118,9 +118,10 @@ export class CelebrationHost {
     const panel = vscode.window.createWebviewPanel(
       'orbital.celebration',
       'Orbital',
-      { viewColumn: vscode.ViewColumn.Active, preserveFocus: false },
+      { viewColumn: vscode.ViewColumn.Active, preserveFocus: true },
       {
         enableScripts: true,
+        retainContextWhenHidden: false,
         localResourceRoots: gifLocalResourceRoots(extensionUri, gif, vscode),
       },
     );
@@ -156,7 +157,9 @@ export class CelebrationHost {
     };
 
     panel.webview.html = buildCelebrationHtml(htmlOpts);
-    panel.reveal(vscode.ViewColumn.Active, false);
+    // Keep editor/terminal focused — don't yank user into an "Orbital" tab.
+    panel.reveal(vscode.ViewColumn.Active, true);
+    void restorePanelFocus(this.vscodeApi, args.focusSnapshot);
     orbitalLog('Overlay celebration shown', caption);
 
     this.panel = panel;

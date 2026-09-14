@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "node .cursor/hooks/risky-command-guard.mjs",
+        "failClosed": true
+      }
+    ],
+    "stop": [
+      {
+        "command": "node .cursor/hooks/stop-quality-check.mjs",
+        "loop_limit": 1
+      }
+    ]
+  }
+}

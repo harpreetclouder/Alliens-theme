@@ -139,17 +139,31 @@ export class CelebrationEngine {
     let gifSource: 'local' | 'giphy' = 'local';
     let brainDetail: string | undefined;
     if (surface === 'overlay' || surface === 'panel') {
-      const brain = await pickJoyGif({
-        pack: settings.pack,
-        kind,
-        language,
-        timeZone,
-        regionOverride: settings.joyRegion,
-        giphySdkKey: settings.giphySdkKey,
-        regionsPath,
-        giphyCacheDir: path.join(this.ctx.globalStorageUri.fsPath, 'giphy-cache'),
-        recentGifIds: this.recentGifIds,
-      });
+      const brain = await Promise.race([
+        pickJoyGif({
+          pack: settings.pack,
+          kind,
+          language,
+          timeZone,
+          regionOverride: settings.joyRegion,
+          giphySdkKey: settings.giphySdkKey,
+          regionsPath,
+          giphyCacheDir: path.join(this.ctx.globalStorageUri.fsPath, 'giphy-cache'),
+          recentGifIds: this.recentGifIds,
+        }),
+        new Promise<Awaited<ReturnType<typeof pickJoyGif>>>((resolve) => {
+          setTimeout(
+            () =>
+              resolve({
+                gif: visual.gif,
+                region,
+                source: 'local-pack',
+                detail: 'giphy budget exceeded → local',
+              }),
+            1200,
+          );
+        }),
+      ]);
       brainDetail = brain.detail;
       if (brain.gif) {
         gif = brain.gif;

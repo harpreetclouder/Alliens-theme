@@ -80,37 +80,49 @@ export function registerTerminalTestTrigger(
     return true;
   };
 
-  if (typeof win.onDidEndTerminalShellExecution === 'function') {
-    disposables.push(
-      win.onDidEndTerminalShellExecution((event) => {
-        if (event.exitCode !== 0) {
-          return;
-        }
+  // Cursor throws on *access* to some proposed terminal APIs for 3rd-party
+  // extensions — never let that kill activation (git + agent verify must load).
+  try {
+    const onEnd = win.onDidEndTerminalShellExecution;
+    if (typeof onEnd === 'function') {
+      disposables.push(
+        onEnd((event) => {
+          if (event.exitCode !== 0) {
+            return;
+          }
 
-        const cmd = event.execution?.commandLine?.value ?? '';
-        if (!TEST_CMD_RE.test(cmd)) {
-          return;
-        }
+          const cmd = event.execution?.commandLine?.value ?? '';
+          if (!TEST_CMD_RE.test(cmd)) {
+            return;
+          }
 
-        celebrate(`shell exit 0 · ${cmd}`, FULL_SUITE_RE.test(cmd));
-      }),
-    );
+          celebrate(`shell exit 0 · ${cmd}`, FULL_SUITE_RE.test(cmd));
+        }),
+      );
+    }
+  } catch (err) {
+    orbitalLog('Terminal shell-end API blocked', String(err));
   }
 
-  if (typeof win.onDidWriteTerminalData === 'function') {
-    disposables.push(
-      win.onDidWriteTerminalData((event) => {
-        let buf = (buffers.get(event.terminal) ?? '') + event.data;
-        if (buf.length > MAX_BUFFER) {
-          buf = buf.slice(-MAX_BUFFER);
-        }
-        buffers.set(event.terminal, buf);
+  try {
+    const onData = win.onDidWriteTerminalData;
+    if (typeof onData === 'function') {
+      disposables.push(
+        onData((event) => {
+          let buf = (buffers.get(event.terminal) ?? '') + event.data;
+          if (buf.length > MAX_BUFFER) {
+            buf = buf.slice(-MAX_BUFFER);
+          }
+          buffers.set(event.terminal, buf);
 
-        if (looksLikePassOutput(buf)) {
-          celebrate('vitest/npm output in terminal', FULL_SUITE_RE.test(buf));
-        }
-      }),
-    );
+          if (looksLikePassOutput(buf)) {
+            celebrate('vitest/npm output in terminal', FULL_SUITE_RE.test(buf));
+          }
+        }),
+      );
+    }
+  } catch (err) {
+    orbitalLog('Terminal data API blocked', String(err));
   }
 
   if (disposables.length === 0) {

@@ -1,0 +1,22 @@
+{
+  "id": "comeback",
+  "description": "Fail×3 → pass → typing → idle gap → comeback; no overlay while typing",
+  "timeline": [
+    { "atMs": 0, "signal": "session_start" },
+    { "atMs": 15000, "signal": "tests_fail" },
+    { "atMs": 18000, "signal": "tests_fail" },
+    { "atMs": 22000, "signal": "tests_fail" },
+    { "atMs": 24000, "signal": "tests_pass", "patch": { "idleMs": 4000, "typing": false } },
+    { "atMs": 24001, "signal": "typing", "patch": { "typing": true, "idleMs": 0 } },
+    { "atMs": 24004, "signal": "idle", "patch": { "typing": false, "idleMs": 4000, "sessionActiveMs": 24004 } }
+  ],
+  "expect": {
+    "outcome": "comeback",
+    "allowedIncludes": ["comeback"],
+    "forbiddenExcludes": ["comeback"]
+  },
+  "assertTypingStep": {
+    "afterIndex": 5,
+    "forbiddenIncludes": ["overlay", "intermission", "comeback"]
+  }
+}

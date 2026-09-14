@@ -36,13 +36,13 @@ describe('resolveSurface', () => {
   });
 
   it('uses default surfaces for commit/build/debug/save/checkin/pack', () => {
-    expect(DEFAULT_SURFACES.commit).toBe('panel');
+    expect(DEFAULT_SURFACES.commit).toBe('overlay');
     expect(DEFAULT_SURFACES.save).toBe('statusbar');
     expect(DEFAULT_SURFACES.checkin).toBe('statusbar');
     expect(DEFAULT_SURFACES.pack).toBe('statusbar');
     expect(
       resolveSurface('commit', 'small', {}, 'normal', undefined, 'panel'),
-    ).toBe('panel');
+    ).toBe('overlay');
     expect(
       resolveSurface('save', 'small', {}, 'normal', undefined, 'panel'),
     ).toBe('statusbar');
@@ -56,6 +56,12 @@ describe('resolveSurface', () => {
 
   it('hype upgrades big wins to overlay', () => {
     expect(resolveSurface('build', 'big', {}, 'hype', undefined, 'panel')).toBe('overlay');
+  });
+
+  it('display=overlay overrides stale panel surface for commit', () => {
+    expect(
+      resolveSurface('commit', 'small', { commit: 'panel' }, 'hype', undefined, 'overlay'),
+    ).toBe('overlay');
   });
 
   it('falls back display setting for rich triggers', () => {

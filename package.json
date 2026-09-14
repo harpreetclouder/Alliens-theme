@@ -2,7 +2,7 @@
   "name": "orbital",
   "displayName": "Orbital",
   "description": "Alien/UFO theme and celebration companion for Cursor/VS Code",
-  "version": "0.0.30",
+  "version": "0.0.33",
   "publisher": "orbital",
   "engines": {
     "vscode": "^1.85.0"
@@ -285,6 +285,10 @@
     "test:watch": "vitest",
     "package": "node scripts/package.mjs",
     "verify:agent": "node scripts/verify-agent.mjs",
+    "verify:commit-detect": "node scripts/verify-commit-detect.mjs",
+    "verify:commit-live": "node scripts/verify-commit-live.mjs",
+    "verify:release": "node scripts/verify-release.mjs",
+    "eval": "npm run compile && node scripts/eval.mjs",
     "generate:sfx": "node scripts/generate-sfx.mjs",
     "generate:acid-gifs": "node scripts/generate-acid-gifs.mjs",
     "generate:bites": "node scripts/expand-bites.mjs",

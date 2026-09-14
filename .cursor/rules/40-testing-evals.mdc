@@ -1,0 +1,14 @@
+---
+description: Testing and evals — evidence before done; deterministic scenarios
+globs: "{src/**/*.ts,evals/**/*,scripts/verify*.mjs,scripts/eval*}"
+alwaysApply: false
+---
+
+# Testing & evals
+
+- Do not claim done without evidence (command output)
+- Deterministic clocks/random in brain and decision tests
+- Unit tests for decision/throttle/classifier/surface logic
+- `npm run eval` for scenario timelines (allowed vs forbidden decisions)
+- Release path: `npm run package` (includes hard commit-detect) then after Reload `ORBITAL_LIVE=1 npm run verify:release` when git/celebrations/packaging changed
+- Substantial features: always run `orbital-verifier` in a separate context

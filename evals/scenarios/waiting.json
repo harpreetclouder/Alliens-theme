@@ -1,0 +1,16 @@
+{
+  "id": "waiting",
+  "description": "Long wait idle without win — no forced overlay",
+  "timeline": [
+    { "atMs": 0, "signal": "session_start" },
+    {
+      "atMs": 120000,
+      "signal": "idle",
+      "patch": { "idleMs": 60000, "sessionActiveMs": 120000 }
+    }
+  ],
+  "expect": {
+    "outcome": ["none", "comeback"],
+    "forbiddenIncludes": []
+  }
+}

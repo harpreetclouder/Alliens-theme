@@ -71,3 +71,4 @@ Keep Orbital celebrations **funny, encouraging, and region-aware** without neon 
 - Repeat the same 3 GIFs without no-repeat logic
 - Pull remote GIFs without cache + CSP-safe local file when possible
 - Add NSFW or harassment humor
+- Generate factual trivia at **runtime** via LLM — use offline schema + human review (`docs/specs/content-schema.md`)

@@ -1,0 +1,15 @@
+---
+description: Orbital product philosophy — finite, flow-safe, privacy-first experiences
+alwaysApply: true
+---
+
+# Product principles
+
+Primary: **right experience + right moment + right duration + right personality.**
+
+- Finite experiences only — clear duration, immediate skip, easy return to code
+- Never infinite scroll, endless feeds, or engagement-maximizing dark patterns
+- Do not interrupt while the user is actively typing or in a forbidden context
+- Local-first; no raw source or raw terminal history collected/persisted
+- Existing celebrations/themes must not regress without an explicit migration plan
+- Prefer the smallest change that preserves developer flow

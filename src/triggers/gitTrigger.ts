@@ -1,9 +1,15 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { CelebrationEngine } from '../celebrations/engine';
 import { OrbitalSettings } from '../config/settings';
 import { orbitalLog } from '../util/log';
+import {
+  COMMIT_DETECTED_REL,
+  type CommitDetectedFile,
+} from '../verification/agentIpc';
 import { isCommitOperationKind } from './gitCommitDetect';
-import { readLatestCommitShaFromReflog } from './gitReflog';
+import { readLatestCommitShaFromReflog, resolveHeadReflogPath } from './gitReflog';
 
 export { isCommitOperationKind } from './gitCommitDetect';
 
@@ -37,24 +43,44 @@ interface GitExtension {
 
 const RETRY_MS = [500, 2000, 5000];
 const DEDUPE_MS = 4000;
+const REFLOG_POLL_MS = 500;
 
 /**
  * Wire SCM commit celebrations:
- * 1) onDidCommit — classic VS Code (often silent on Cursor)
- * 2) onDidRunOperation — only if exposed (usually internal-only)
- * 3) state.onDidChange + reflog `commit:` line — Cursor-reliable path
- * Dedupe by HEAD sha so dual listeners don't double-fire.
+ * 1) Workspace-folder reflog watch/poll (fastest on Cursor — no git API lag)
+ * 2) onDidCommit / onDidRunOperation when exposed
+ * 3) state.onDidChange + reflog confirm
  */
 export function registerGitTrigger(
   engine: CelebrationEngine,
   getSettings: () => OrbitalSettings,
+  extensionVersion = '?',
 ): vscode.Disposable[] {
   const disposables: vscode.Disposable[] = [];
   const wiredRoots = new Set<string>();
+  const wiredReflogRoots = new Set<string>();
   let apiListenersAttached = false;
   let enablementListenerAttached = false;
   let lastCelebratedSha = '';
   let lastCelebratedAt = 0;
+
+  const writeDetected = (sha: string, source: string): void => {
+    const folder = vscode.workspace.workspaceFolders?.[0];
+    if (!folder) {
+      return;
+    }
+    const payload: CommitDetectedFile = {
+      at: Date.now(),
+      sha,
+      source,
+      version: extensionVersion,
+    };
+    const uri = vscode.Uri.joinPath(folder.uri, COMMIT_DETECTED_REL);
+    void vscode.workspace.fs.writeFile(
+      uri,
+      Buffer.from(JSON.stringify(payload, null, 2), 'utf8'),
+    );
+  };
 
   const celebrateCommit = (source: string, sha?: string): void => {
     const settings = getSettings();
@@ -76,7 +102,43 @@ export function registerGitTrigger(
     lastCelebratedSha = sha || lastCelebratedSha;
     lastCelebratedAt = now;
     orbitalLog('Commit win detected', source);
+    if (sha) {
+      writeDetected(sha, source);
+    }
     engine.handle('commit');
+  };
+
+  const wireReflogFastPath = (repoFsPath: string, key: string): void => {
+    if (wiredReflogRoots.has(repoFsPath)) {
+      return;
+    }
+    const reflogPath = resolveHeadReflogPath(repoFsPath);
+    if (!reflogPath) {
+      orbitalLog('Reflog path missing', key);
+      return;
+    }
+    wiredReflogRoots.add(repoFsPath);
+
+    let lastReflogSha = readLatestCommitShaFromReflog(repoFsPath);
+    const checkReflog = (source: string): void => {
+      const sha = readLatestCommitShaFromReflog(repoFsPath);
+      if (!sha || sha === lastReflogSha) {
+        return;
+      }
+      lastReflogSha = sha;
+      celebrateCommit(`${source} · ${key}`, sha);
+    };
+
+    try {
+      const watcher = fs.watch(reflogPath, () => checkReflog('reflog.watch'));
+      disposables.push({ dispose: () => watcher.close() });
+    } catch (err) {
+      orbitalLog('Reflog watch failed', `${key} · ${String(err)}`);
+    }
+
+    const poll = setInterval(() => checkReflog('reflog.poll'), REFLOG_POLL_MS);
+    disposables.push({ dispose: () => clearInterval(poll) });
+    orbitalLog('Reflog fast path', `${key} · poll=${REFLOG_POLL_MS}ms · ${reflogPath}`);
   };
 
   const wireRepo = (repo: GitRepository): void => {
@@ -88,6 +150,8 @@ export function registerGitTrigger(
 
     let hooks = 0;
     let lastHeadSha = repo.state.HEAD?.commit;
+    const repoPath = repo.rootUri.fsPath;
+    wireReflogFastPath(repoPath, key);
 
     if (typeof repo.onDidRunOperation === 'function') {
       disposables.push(
@@ -115,8 +179,6 @@ export function registerGitTrigger(
       hooks += 1;
     }
 
-    // Cursor often never fires onDidCommit for SCM commits. Public API also
-    // hides onDidRunOperation. Confirm via reflog so pull/checkout don't fire.
     if (typeof repo.state.onDidChange === 'function') {
       disposables.push(
         repo.state.onDidChange(() => {
@@ -127,9 +189,11 @@ export function registerGitTrigger(
           }
           lastHeadSha = sha;
 
-          const repoPath = repo.rootUri.fsPath;
           const reflogSha = readLatestCommitShaFromReflog(repoPath);
-          if (reflogSha && (reflogSha === sha || sha.startsWith(reflogSha) || reflogSha.startsWith(sha))) {
+          if (
+            reflogSha &&
+            (reflogSha === sha || sha.startsWith(reflogSha) || reflogSha.startsWith(sha))
+          ) {
             celebrateCommit(`state.onDidChange+reflog · ${key}`, sha);
             return;
           }
@@ -142,18 +206,22 @@ export function registerGitTrigger(
       hooks += 1;
     }
 
-    if (hooks === 0) {
-      orbitalLog(
-        'Git repo has no commit events',
-        `${key} — Cursor git API may differ; use Orbital: Verify Celebrations`,
-      );
-    } else {
-      orbitalLog(
-        'Git repo wired',
-        `${key} · hooks=${hooks} · onDidCommit=${typeof repo.onDidCommit === 'function'} · state.onDidChange=${typeof repo.state.onDidChange === 'function'} · onDidRunOperation=${typeof repo.onDidRunOperation === 'function'}`,
-      );
+    orbitalLog(
+      'Git repo wired',
+      `${key} · apiHooks=${hooks} · onDidCommit=${typeof repo.onDidCommit === 'function'} · state.onDidChange=${typeof repo.state.onDidChange === 'function'}`,
+    );
+  };
+
+  const wireWorkspaceFolders = (): void => {
+    for (const folder of vscode.workspace.workspaceFolders ?? []) {
+      wireReflogFastPath(folder.uri.fsPath, `workspace:${folder.name}`);
     }
   };
+
+  wireWorkspaceFolders();
+  disposables.push(
+    vscode.workspace.onDidChangeWorkspaceFolders(() => wireWorkspaceFolders()),
+  );
 
   const wireAllRepos = (api: GitAPI): void => {
     for (const repo of api.repositories) {
@@ -183,7 +251,7 @@ export function registerGitTrigger(
 
   const tryWireGitApi = (git: GitExtension): void => {
     if (!git.enabled) {
-      orbitalLog('Git extension disabled', 'commit trigger waiting');
+      orbitalLog('Git extension disabled', 'reflog fast path still active');
       return;
     }
     try {
@@ -191,7 +259,7 @@ export function registerGitTrigger(
       attachApiListeners(api);
       orbitalLog(
         'Git commit listener active',
-        `${api.repositories.length} repo(s) · onDidCommit+state/reflog`,
+        `${api.repositories.length} repo(s) · reflog+api`,
       );
     } catch (err) {
       orbitalLog('Git API unavailable', String(err));
@@ -200,7 +268,7 @@ export function registerGitTrigger(
 
   const gitExt = vscode.extensions.getExtension<GitExtension>('vscode.git');
   if (!gitExt) {
-    orbitalLog('Git extension not found', 'commit celebrations unavailable');
+    orbitalLog('Git extension not found', 'using workspace reflog only');
     return disposables;
   }
 

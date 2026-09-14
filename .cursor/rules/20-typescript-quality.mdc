@@ -1,0 +1,13 @@
+---
+description: TypeScript quality for Orbital — strict, small APIs, no accidental any
+globs: "{src,scripts,evals}/**/*.{ts,mts,mjs}"
+alwaysApply: false
+---
+
+# TypeScript quality
+
+- Respect `strict: true`; avoid `any` unless unavoidable and localized
+- Prefer small modules and clear public APIs over giant files
+- Surface errors with actionable messages; do not swallow silently
+- Pure functions for decision/throttle/classifier/brain logic so Vitest can cover them
+- Dependency-inject clock/random/storage in new core code

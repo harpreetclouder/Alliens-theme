@@ -1,0 +1,13 @@
+{
+  "id": "quiet-mode",
+  "description": "Quiet mode blocks celebrations and intermissions",
+  "preferences": { "quietMode": true },
+  "timeline": [
+    { "atMs": 0, "signal": "quiet_on" },
+    { "atMs": 1000, "signal": "tests_pass", "patch": { "idleMs": 5000, "typing": false } }
+  ],
+  "expect": {
+    "outcome": "none",
+    "forbiddenIncludes": ["celebration", "overlay", "intermission", "comeback"]
+  }
+}

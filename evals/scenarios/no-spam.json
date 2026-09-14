@@ -1,0 +1,21 @@
+{
+  "id": "no-spam",
+  "description": "Intermission cooldown forbids back-to-back intermissions",
+  "timeline": [
+    { "atMs": 0, "signal": "session_start" },
+    {
+      "atMs": 1000,
+      "signal": "long_session",
+      "patch": {
+        "sessionActiveMs": 2700000,
+        "idleMs": 5000,
+        "typing": false,
+        "lastIntermissionAtMs": 500
+      }
+    }
+  ],
+  "expect": {
+    "forbiddenIncludes": ["intermission"],
+    "outcome": "none"
+  }
+}

@@ -33,7 +33,7 @@ function httpsGetJson(url: string): Promise<{ statusCode: number; body: unknown 
       });
     });
     req.on('error', reject);
-    req.setTimeout(8000, () => {
+    req.setTimeout(2000, () => {
       req.destroy(new Error('Giphy timeout'));
     });
   });
@@ -148,14 +148,14 @@ export async function fetchGiphyGif(opts: {
   const safe = id.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 64) || 'gif';
   const dest = path.join(opts.cacheDir, `${safe}.gif`);
 
-  try {
-    if (!fs.existsSync(dest)) {
-      await httpsDownload(gifUrl, dest);
-    }
+  // Prefer cached file; otherwise stream from CDN immediately (don't block celebration).
+  if (fs.existsSync(dest)) {
     return { id: `giphy:${id}`, url: gifUrl, fsPath: dest };
-  } catch {
-    return { id: `giphy:${id}`, url: gifUrl };
   }
+  void httpsDownload(gifUrl, dest).catch(() => {
+    /* best-effort cache */
+  });
+  return { id: `giphy:${id}`, url: gifUrl };
 }
 
 export function isHttpUrl(value: string): boolean {

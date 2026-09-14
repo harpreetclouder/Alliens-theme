@@ -1,0 +1,13 @@
+---
+description: Extension performance — event-driven, light deps, lazy experiences
+globs: src/**/*.ts
+alwaysApply: false
+---
+
+# Extension performance
+
+- Prefer official event APIs over aggressive polling (poll only as fallback with clear intervals)
+- Avoid heavyweight dependencies; keep VSIX lean
+- Lazy-load experience assets where practical
+- Dispose watchers/timers; no work on every keystroke without debounce/budget
+- Giphy/network must time-budget so celebrations are not blocked for long

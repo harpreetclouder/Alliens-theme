@@ -1,0 +1,14 @@
+---
+description: Orbital architecture — core/platform separation and signal→decision flow
+globs: src/**/*.ts
+alwaysApply: false
+---
+
+# Architecture
+
+- Keep **Orbital Core** (`src/brain/`, pure celebrations helpers) free of `vscode` imports
+- Platform code (`extension.ts`, triggers, host, webviews) adapts IDE events → normalized signals
+- Prefer: **signal → outcome candidates → interruption policy → decision** over logic in event handlers
+- New experiences register via an experience contract (see skill `orbital-experience`); do not bypass brain/policy hard constraints
+- Dispose all subscriptions; no leaked timers/watchers
+- Cross-cutting changes (signals, persistence, network, scheduling): consult `orbital-architect` before large edits

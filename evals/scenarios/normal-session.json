@@ -1,0 +1,12 @@
+{
+  "id": "normal-session",
+  "description": "Quiet coding session — no spam intermissions",
+  "timeline": [
+    { "atMs": 0, "signal": "session_start" },
+    { "atMs": 60000, "signal": "idle", "patch": { "idleMs": 5000, "sessionActiveMs": 60000 } }
+  ],
+  "expect": {
+    "outcome": ["none", "comeback"],
+    "forbiddenIncludes": []
+  }
+}

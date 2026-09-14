@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Orbital — friendly package script with clear steps and install hint.
+ * Orbital — build & package with hard verification gates.
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -25,18 +25,22 @@ console.log('\n🛸 Orbital — build & package');
 console.log(`   version ${pkg.version}`);
 
 try {
-  step(1, 4, 'Compiling TypeScript (npm run compile)');
+  step(1, 5, 'Compiling TypeScript (npm run compile)');
   run('npm run compile');
 
-  step(2, 4, 'Running tests (npm test)');
+  step(2, 5, 'Unit tests (npm test)');
   run('npm test', { env: { ...process.env, ORBITAL_SKIP_SIGNAL: '1' } });
 
-  step(3, 4, 'Bundling VSIX (vsce package)');
+  step(3, 5, 'Orbital Brain evals + hard commit-detect');
+  run('node scripts/eval.mjs');
+  run('node scripts/verify-commit-detect.mjs');
+
+  step(4, 5, 'Bundling VSIX (vsce package)');
   run(
     'npx vsce package --allow-missing-repository --no-rewrite-relative-links --no-dependencies --allow-package-all-secrets --allow-package-env-file --baseContentUrl https://github.com/orbital-theme/orbital --baseImagesUrl https://github.com/orbital-theme/orbital',
   );
 
-  step(4, 4, 'Verifying output');
+  step(5, 5, 'Verifying output');
   if (!fs.existsSync(vsixName)) {
     console.error(`\n✗ Expected ${vsixName} was not created.`);
     process.exit(1);
@@ -59,9 +63,9 @@ try {
 
   console.log('\n  Install in Cursor:');
   console.log(`  "${cursorCli}" --install-extension "${abs}" --force`);
-  console.log('\n  If `cursor` is not on PATH, add the line above (full path on macOS).');
   console.log('\n  Then: Developer → Reload Window');
-  console.log('  Then: npm run verify:agent   # agent/terminal celebration trail\n');
+  console.log('  Then: ORBITAL_LIVE=1 npm run verify:release');
+  console.log('        (agent visuals + real allow-empty commit detect)\n');
 } catch (err) {
   console.error('\n✗ Package failed — see errors above.');
   if (err?.status) {

@@ -33,8 +33,13 @@ export function registerTestTrigger(
       orbitalLog('Task test passed', `${name} → celebration`);
       engine.handle('tests', { fullSuite });
     }),
-    ...registerTerminalTestTrigger(engine, getSettings),
   ];
+
+  try {
+    disposables.push(...registerTerminalTestTrigger(engine, getSettings));
+  } catch (err) {
+    orbitalLog('Terminal test trigger skipped', String(err));
+  }
 
   // vscode.tests exposes createTestController only — no global results listener in the public API.
   disposables.push(...tryRegisterTestsApiListener(engine, getSettings));
