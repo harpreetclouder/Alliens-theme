@@ -6,14 +6,14 @@ export type CelebrationSurface = 'terminal' | 'panel' | 'overlay' | 'statusbar';
 export const DEFAULT_SURFACES: Record<WinKind, CelebrationSurface> = {
   tests: 'terminal',
   preview: 'overlay',
-  build: 'panel',
-  commit: 'panel',
-  debug: 'panel',
+  build: 'overlay',
+  commit: 'overlay',
+  debug: 'overlay',
   save: 'statusbar',
   checkin: 'statusbar',
   pack: 'statusbar',
-  levelup: 'panel',
-  achievement: 'panel',
+  levelup: 'overlay',
+  achievement: 'overlay',
   mission: 'overlay',
 };
 
@@ -45,10 +45,14 @@ export function resolveSurface(
 
   const override = surfaces[kind];
   if (override && isSurface(override)) {
+    // Global display=overlay wins over a stale "panel" override (avoids Orbital tab steal).
+    if (override === 'panel' && fallbackDisplay === 'overlay') {
+      return 'overlay';
+    }
     return override;
   }
 
-  if (intensity === 'hype' && size === 'big') {
+  if (intensity === 'hype' && (size === 'big' || kind === 'commit')) {
     return 'overlay';
   }
 
@@ -59,5 +63,5 @@ export function resolveSurface(
   if (base === 'statusbar') {
     return 'statusbar';
   }
-  return fallbackDisplay === 'overlay' ? 'overlay' : 'panel';
+  return fallbackDisplay === 'overlay' ? 'overlay' : base === 'overlay' ? 'overlay' : 'panel';
 }
