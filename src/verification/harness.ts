@@ -48,12 +48,31 @@ function checkGitWire(): VerifyScenarioResult {
     return { id: 'git-wire', ok: false, detail: 'vscode.git not active yet' };
   }
   try {
-    const api = (gitExt.exports as { getAPI(v: number): { repositories: unknown[] } }).getAPI(1);
+    const api = (
+      gitExt.exports as {
+        getAPI(v: number): {
+          repositories: Array<{
+            onDidCommit?: unknown;
+            onDidRunOperation?: unknown;
+            state?: { onDidChange?: unknown };
+          }>;
+        };
+      }
+    ).getAPI(1);
     const n = api.repositories?.length ?? 0;
+    if (n === 0) {
+      return { id: 'git-wire', ok: false, detail: 'no git repos open in this window' };
+    }
+    const repo = api.repositories[0];
+    const caps = [
+      typeof repo.onDidCommit === 'function' ? 'onDidCommit' : null,
+      typeof repo.onDidRunOperation === 'function' ? 'onDidRunOperation' : null,
+      typeof repo.state?.onDidChange === 'function' ? 'state.onDidChange' : null,
+    ].filter(Boolean);
     return {
       id: 'git-wire',
-      ok: n > 0,
-      detail: n > 0 ? `${n} repo(s) open` : 'no git repos open in this window',
+      ok: caps.length > 0,
+      detail: `${n} repo(s) · caps: ${caps.join('+') || 'none'}`,
     };
   } catch (err) {
     return { id: 'git-wire', ok: false, detail: String(err) };

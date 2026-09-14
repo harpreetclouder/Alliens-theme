@@ -3,8 +3,10 @@ import { CelebrationEngine } from '../celebrations/engine';
 import { OrbitalSettings } from '../config/settings';
 import { orbitalLog } from '../util/log';
 import { isCommitOperationKind } from './gitCommitDetect';
+import { readLatestCommitShaFromReflog } from './gitReflog';
 
 export { isCommitOperationKind } from './gitCommitDetect';
+
 interface GitOperationEvent {
   readonly operation?: { readonly kind?: string };
   readonly error?: unknown;
@@ -13,7 +15,7 @@ interface GitOperationEvent {
 interface GitRepository {
   readonly rootUri: vscode.Uri;
   readonly state: {
-    readonly HEAD?: { readonly commit?: string };
+    readonly HEAD?: { readonly commit?: string; readonly name?: string };
     readonly onDidChange?: vscode.Event<void>;
   };
   readonly onDidCommit?: vscode.Event<void>;
@@ -37,10 +39,11 @@ const RETRY_MS = [500, 2000, 5000];
 const DEDUPE_MS = 4000;
 
 /**
- * Wire SCM commit celebrations with Cursor-friendly fallbacks:
- * 1) onDidRunOperation (Commit) — most reliable on Cursor
- * 2) onDidCommit — classic VS Code
- * Dedupe by HEAD sha within a short window so dual listeners don't double-fire.
+ * Wire SCM commit celebrations:
+ * 1) onDidCommit — classic VS Code (often silent on Cursor)
+ * 2) onDidRunOperation — only if exposed (usually internal-only)
+ * 3) state.onDidChange + reflog `commit:` line — Cursor-reliable path
+ * Dedupe by HEAD sha so dual listeners don't double-fire.
  */
 export function registerGitTrigger(
   engine: CelebrationEngine,
@@ -84,6 +87,7 @@ export function registerGitTrigger(
     wiredRoots.add(key);
 
     let hooks = 0;
+    let lastHeadSha = repo.state.HEAD?.commit;
 
     if (typeof repo.onDidRunOperation === 'function') {
       disposables.push(
@@ -111,13 +115,43 @@ export function registerGitTrigger(
       hooks += 1;
     }
 
+    // Cursor often never fires onDidCommit for SCM commits. Public API also
+    // hides onDidRunOperation. Confirm via reflog so pull/checkout don't fire.
+    if (typeof repo.state.onDidChange === 'function') {
+      disposables.push(
+        repo.state.onDidChange(() => {
+          const sha = repo.state.HEAD?.commit;
+          if (!sha || sha === lastHeadSha) {
+            lastHeadSha = sha;
+            return;
+          }
+          lastHeadSha = sha;
+
+          const repoPath = repo.rootUri.fsPath;
+          const reflogSha = readLatestCommitShaFromReflog(repoPath);
+          if (reflogSha && (reflogSha === sha || sha.startsWith(reflogSha) || reflogSha.startsWith(sha))) {
+            celebrateCommit(`state.onDidChange+reflog · ${key}`, sha);
+            return;
+          }
+          orbitalLog(
+            'HEAD change ignored',
+            `${sha.slice(0, 7)} · not a commit reflog entry (pull/checkout/etc.)`,
+          );
+        }),
+      );
+      hooks += 1;
+    }
+
     if (hooks === 0) {
       orbitalLog(
         'Git repo has no commit events',
         `${key} — Cursor git API may differ; use Orbital: Verify Celebrations`,
       );
     } else {
-      orbitalLog('Git repo wired', `${key} · hooks=${hooks}`);
+      orbitalLog(
+        'Git repo wired',
+        `${key} · hooks=${hooks} · onDidCommit=${typeof repo.onDidCommit === 'function'} · state.onDidChange=${typeof repo.state.onDidChange === 'function'} · onDidRunOperation=${typeof repo.onDidRunOperation === 'function'}`,
+      );
     }
   };
 
@@ -157,7 +191,7 @@ export function registerGitTrigger(
       attachApiListeners(api);
       orbitalLog(
         'Git commit listener active',
-        `${api.repositories.length} repo(s) · onDidRunOperation+onDidCommit`,
+        `${api.repositories.length} repo(s) · onDidCommit+state/reflog`,
       );
     } catch (err) {
       orbitalLog('Git API unavailable', String(err));

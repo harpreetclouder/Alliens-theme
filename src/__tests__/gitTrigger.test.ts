@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { isCommitOperationKind } from '../triggers/gitCommitDetect';
+import {
+  isCommitOperationKind,
+  parseCommitShaFromReflogLine,
+} from '../triggers/gitCommitDetect';
 import { formatVerifySummary, type VerifyScenarioResult } from '../verification/summary';
 
 describe('isCommitOperationKind', () => {
@@ -14,6 +17,42 @@ describe('isCommitOperationKind', () => {
     expect(isCommitOperationKind('Push')).toBe(false);
     expect(isCommitOperationKind('Pull')).toBe(false);
     expect(isCommitOperationKind(undefined)).toBe(false);
+  });
+});
+
+describe('parseCommitShaFromReflogLine', () => {
+  const sha = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+  const old = 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
+
+  it('accepts commit and amend lines', () => {
+    expect(
+      parseCommitShaFromReflogLine(
+        `${old} ${sha} Ada <a@b.c> 1 +0000\tcommit: ship it`,
+      ),
+    ).toBe(sha);
+    expect(
+      parseCommitShaFromReflogLine(
+        `${old} ${sha} Ada <a@b.c> 1 +0000\tcommit (amend): fix typo`,
+      ),
+    ).toBe(sha);
+  });
+
+  it('rejects checkout/pull/reset', () => {
+    expect(
+      parseCommitShaFromReflogLine(
+        `${old} ${sha} Ada <a@b.c> 1 +0000\tcheckout: moving from main to dev`,
+      ),
+    ).toBeUndefined();
+    expect(
+      parseCommitShaFromReflogLine(
+        `${old} ${sha} Ada <a@b.c> 1 +0000\tpull: Fast-forward`,
+      ),
+    ).toBeUndefined();
+    expect(
+      parseCommitShaFromReflogLine(
+        `${old} ${sha} Ada <a@b.c> 1 +0000\treset: moving to HEAD~1`,
+      ),
+    ).toBeUndefined();
   });
 });
 

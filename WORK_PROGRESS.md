@@ -1,17 +1,19 @@
 # Work Progress — Orbital
 
 ## Status
-v0.0.28 — SCM commit fix + **Verify Celebrations** harness + setup wizard
+v0.0.29 — SCM commit via **state.onDidChange + reflog** (Cursor-reliable)
 
-## Commit celebrations (SCM)
-- Cursor often skips classic `onDidCommit`
-- Now also listens to `onDidRunOperation` (Commit*) + SHA dedupe
-- Output → Orbital: look for `Commit win detected`
+## Why SCM still failed on 0.0.28
+- Public `vscode.git` API does **not** expose `onDidRunOperation` (internal only)
+- Cursor often never fires `onDidCommit` for Source Control commits
+- So 0.0.28 wired hooks that never ran
 
-## Agent / user verification
-- Command: **Orbital: Verify Celebrations** — checks settings, git wire, fires preview + commit path, logs PASS/FAIL
-- Command: **Orbital: Setup Wizard** — pack, intensity, commit surface, sound, orbit, Giphy key, optional verify
+## Fix (0.0.29)
+- Keep onDidCommit / onDidRunOperation when present
+- Add `state.onDidChange` → read `.git/logs/HEAD` → celebrate only if last line is `commit:` / `commit (amend):` …
+- Pull/checkout/reset ignored; SHA dedupe avoids double-fire
 
-## Install
-`orbital-0.0.28.vsix` packaged + installed (`orbital.orbital@0.0.28`); 115 tests pass
-**Reload Window** → **Orbital: Setup Wizard** (or Verify Celebrations)
+## Verify
+Reload → Output → Orbital: `Git repo wired` should list `state.onDidChange=true`
+SCM commit → `Commit win detected` with `state.onDidChange+reflog`
+Or run **Orbital: Verify Celebrations**
