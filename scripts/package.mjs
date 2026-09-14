@@ -60,7 +60,8 @@ try {
   console.log('\n  Install in Cursor:');
   console.log(`  "${cursorCli}" --install-extension "${abs}" --force`);
   console.log('\n  If `cursor` is not on PATH, add the line above (full path on macOS).');
-  console.log('\n  Then run: Developer → Reload Window\n');
+  console.log('\n  Then: Developer → Reload Window');
+  console.log('  Then: npm run verify:agent   # agent/terminal celebration trail\n');
 } catch (err) {
   console.error('\n✗ Package failed — see errors above.');
   if (err?.status) {

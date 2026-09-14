@@ -4,6 +4,10 @@ node_modules/
 .DS_Store
 out/
 .orbital/
+.vscode/orbital-verify-request.json
+.vscode/orbital-verify-result.json
+.vscode/orbital-test-pass.json
+.vscode/orbital-streak.json
 .vscode-test/
 .tmp-tenor-test/
 .tmp-giphy-test/

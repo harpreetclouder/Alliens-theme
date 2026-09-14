@@ -68,3 +68,13 @@ describe('formatVerifySummary', () => {
     expect(text).toContain('✗ git-wire');
   });
 });
+
+describe('agent verify IPC paths', () => {
+  it('uses stable .vscode filenames', async () => {
+    const { VERIFY_REQUEST_REL, VERIFY_RESULT_REL } = await import(
+      '../verification/agentIpc'
+    );
+    expect(VERIFY_REQUEST_REL).toBe('.vscode/orbital-verify-request.json');
+    expect(VERIFY_RESULT_REL).toBe('.vscode/orbital-verify-result.json');
+  });
+});
