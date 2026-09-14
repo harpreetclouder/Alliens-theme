@@ -14,12 +14,14 @@ export function registerTriggers(
   engine: CelebrationEngine,
   getSettings: () => OrbitalSettings,
 ): vscode.Disposable[] {
+  // Register agent verify + git before terminal hooks — a proposed-API throw
+  // used to abort activate() and kill every celebration path.
   return [
-    ...registerTestTrigger(engine, getSettings),
-    registerVitestSignalTrigger(engine, getSettings),
     registerAgentVerifyTrigger(context, engine),
-    ...registerBuildTrigger(engine, getSettings),
     ...registerGitTrigger(engine, getSettings),
+    registerVitestSignalTrigger(engine, getSettings),
+    ...registerTestTrigger(engine, getSettings),
+    ...registerBuildTrigger(engine, getSettings),
     ...registerDebugTrigger(engine, getSettings),
     ...registerSaveTrigger(engine, getSettings),
   ];
