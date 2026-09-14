@@ -67,5 +67,15 @@ export function registerCommands(
     vscode.commands.registerCommand('orbital.openPanel', () => {
       void vscode.commands.executeCommand('orbital.celebrationView.focus');
     }),
+    vscode.commands.registerCommand('orbital.verifyCelebrations', async () => {
+      const { runVerificationHarness } = await import('../verification/harness');
+      const { formatVerifySummary } = await import('../verification/summary');
+      const results = await runVerificationHarness(engine, { playVisuals: true });
+      void vscode.window.showInformationMessage(formatVerifySummary(results));
+    }),
+    vscode.commands.registerCommand('orbital.setup', async () => {
+      const { resetAndRunSetup } = await import('../onboarding/firstRun');
+      await resetAndRunSetup(context, engine);
+    }),
   ];
 }

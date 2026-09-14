@@ -1,14 +1,17 @@
 # Work Progress — Orbital
 
 ## Status
-v0.0.27 — persistent status-bar level crumb `$(rocket) L{n} · 🔥{streak}`
+v0.0.28 — SCM commit fix + **Verify Celebrations** harness + setup wizard
 
-## Why level was missing
-Installed 0.0.26 build lacked Orbit status-bar crumb (old whisper-only StatusBar). Workspace had Orbit; Cursor was still on the earlier 0.0.26 package.
+## Commit celebrations (SCM)
+- Cursor often skips classic `onDidCommit`
+- Now also listens to `onDidRunOperation` (Commit*) + SHA dedupe
+- Output → Orbital: look for `Commit win detected`
 
-## Fix
-- Reinstall **0.0.27**
-- Reload window
-- Status bar (right): rocket + `L1 · 🔥0` (updates on wins)
-- Setting: `orbital.orbit.enabled` (default on)
-- Output → Orbital → `Orbit crumb — L…`
+## Agent / user verification
+- Command: **Orbital: Verify Celebrations** — checks settings, git wire, fires preview + commit path, logs PASS/FAIL
+- Command: **Orbital: Setup Wizard** — pack, intensity, commit surface, sound, orbit, Giphy key, optional verify
+
+## Install
+`orbital-0.0.28.vsix` packaged + installed (`orbital.orbital@0.0.28`); 115 tests pass
+**Reload Window** → **Orbital: Setup Wizard** (or Verify Celebrations)

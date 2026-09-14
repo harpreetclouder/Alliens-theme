@@ -64,7 +64,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   );
   context.subscriptions.push(...disposables);
 
-  void runFirstRunIfNeeded(context);
+  void runFirstRunIfNeeded(context, engine);
 }
 
 export function deactivate(): void {}
