@@ -12,6 +12,7 @@ export class CelebrationThrottle {
       event.kind === 'tests' ||
       event.kind === 'commit' ||
       event.kind === 'push' ||
+      event.kind === 'stash' ||
       event.kind === 'build' ||
       event.kind === 'debug'
     ) {

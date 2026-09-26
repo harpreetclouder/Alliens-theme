@@ -11,6 +11,7 @@ export interface SurfaceOverrides {
   build?: CelebrationSurfaceSetting;
   commit?: CelebrationSurfaceSetting;
   push?: CelebrationSurfaceSetting;
+  stash?: CelebrationSurfaceSetting;
   debug?: CelebrationSurfaceSetting;
   save?: CelebrationSurfaceSetting;
   task?: CelebrationSurfaceSetting;
@@ -27,6 +28,7 @@ export interface TriggerSettings {
   build: boolean;
   commit: boolean;
   push: boolean;
+  stash: boolean;
   debug: boolean;
   save: boolean;
   /** Lint, format, typecheck, and other successful tasks. */
@@ -64,6 +66,7 @@ const SURFACE_KEYS = [
   'build',
   'commit',
   'push',
+  'stash',
   'debug',
   'save',
   'task',
@@ -101,7 +104,7 @@ const DEFAULTS: OrbitalSettings = {
   display: 'terminal',
   surfaces: {},
   intensity: 'normal',
-  triggers: { tests: true, build: true, commit: true, push: true, debug: true, save: false, tasks: true },
+  triggers: { tests: true, build: true, commit: true, push: true, stash: true, debug: true, save: false, tasks: true },
   soundEnabled: true,
   mutedPacks: [],
   reduceMotion: 'auto',
@@ -147,6 +150,7 @@ export function readSettings(getConfig: () => ConfigLike): OrbitalSettings {
       build: c.get('celebrations.triggers.build', true),
       commit: c.get('celebrations.triggers.commit', true),
       push: c.get('celebrations.triggers.push', true),
+      stash: c.get('celebrations.triggers.stash', true),
       debug: c.get('celebrations.triggers.debug', true),
       save: c.get('celebrations.triggers.save', false),
       tasks: c.get('celebrations.triggers.tasks', true),

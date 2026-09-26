@@ -17,6 +17,44 @@ export function isPushReflogMessage(message: string): boolean {
   return /^update by push\b/i.test(msg) || /^push\b/i.test(msg);
 }
 
+export function isStashOperationKind(kind: string | undefined): boolean {
+  if (!kind) {
+    return false;
+  }
+  const normalized = kind.toLowerCase();
+  if (normalized.includes('drop') || normalized.includes('list') || normalized.includes('show')) {
+    return false;
+  }
+  return normalized === 'stash' || normalized.startsWith('stash');
+}
+
+/** `logs/refs/stash` lines: `WIP on …`, `On branch: …`, or `stash:`. */
+export function isStashReflogMessage(message: string): boolean {
+  const msg = message.trim();
+  return /^stash\b/i.test(msg) || /^WIP on\b/i.test(msg) || /^On\s+\S+:/i.test(msg);
+}
+
+/** Creating or applying a stash. List, show, and drop are not wins. */
+export function isStashShellCommand(command: string): boolean {
+  return /\bgit\s+stash\b/.test(command) && !/\bstash\s+(?:list|show|drop)\b/.test(command);
+}
+
+export function stashEntryCount(marker: string | undefined): number {
+  if (!marker) {
+    return 0;
+  }
+  const count = Number(marker.split(':')[0]);
+  return Number.isFinite(count) ? count : 0;
+}
+
+/** A new stash appends a line. A drop rewrites the log and does not grow it. */
+export function isNewStashEntry(previous: string | undefined, next: string | undefined): boolean {
+  if (!next || next === previous) {
+    return false;
+  }
+  return stashEntryCount(next) > stashEntryCount(previous);
+}
+
 export function isCommitOperationKind(kind: string | undefined): boolean {
   if (!kind) {
     return false;

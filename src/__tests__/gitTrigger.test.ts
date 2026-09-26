@@ -67,6 +67,20 @@ describe('push detection', () => {
     expect(isPushReflogMessage('commit: ship it')).toBe(false);
     expect(isPushReflogMessage('pull: Fast-forward')).toBe(false);
   });
+
+  it('accepts stash operations and stash reflog messages', async () => {
+    const { isStashOperationKind, isStashReflogMessage, isStashShellCommand, isNewStashEntry } = await import('../triggers/gitCommitDetect');
+    expect(isStashOperationKind('Stash')).toBe(true);
+    expect(isStashOperationKind('StashDrop')).toBe(false);
+    expect(isStashReflogMessage('WIP on main: ship it')).toBe(true);
+    expect(isStashReflogMessage('commit: ship it')).toBe(false);
+    expect(isStashShellCommand('git stash')).toBe(true);
+    expect(isStashShellCommand('git stash drop')).toBe(false);
+    expect(isStashShellCommand('git stash list')).toBe(false);
+    expect(isNewStashEntry('1:aaaaaaa', '2:bbbbbbb')).toBe(true);
+    expect(isNewStashEntry('2:bbbbbbb', '1:aaaaaaa')).toBe(false);
+    expect(isNewStashEntry('1:aaaaaaa', '1:aaaaaaa')).toBe(false);
+  });
 });
 describe('formatVerifySummary', () => {
   it('formats pass/fail lines', () => {

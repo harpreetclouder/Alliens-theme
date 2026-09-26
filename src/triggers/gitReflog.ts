@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { isPushReflogMessage, parseCommitShaFromReflogLine } from './gitCommitDetect';
+import { isPushReflogMessage, isStashReflogMessage, parseCommitShaFromReflogLine } from './gitCommitDetect';
 
 /** Resolve path to logs/HEAD (handles linked worktrees via gitdir: file). */
 export function resolveHeadReflogPath(repoFsPath: string): string | undefined {
@@ -99,6 +99,39 @@ export function readLatestPushMarker(repoFsPath: string): string | undefined {
     }
   }
   return best;
+}
+
+/**
+ * Latest `logs/refs/stash` line. Marker is `lineCount:sha`.
+ * A file touch that does not add a line does not look like a new stash.
+ */
+export function readLatestStashMarker(repoFsPath: string): string | undefined {
+  const gitDir = gitDirForRepo(repoFsPath);
+  if (!gitDir) {
+    return undefined;
+  }
+  const stashLog = path.join(gitDir, 'logs', 'refs', 'stash');
+  let text = '';
+  try {
+    text = fs.readFileSync(stashLog, 'utf8').trimEnd();
+  } catch {
+    return undefined;
+  }
+  const lines = text.split('\n').filter((line) => line.trim().length > 0);
+  const last = lines[lines.length - 1];
+  if (!last) {
+    return undefined;
+  }
+  const tab = last.indexOf('\t');
+  if (tab < 0) {
+    return undefined;
+  }
+  const sha = last.slice(0, tab).split(' ')[1];
+  const message = last.slice(tab + 1);
+  if (!sha || !isStashReflogMessage(message)) {
+    return undefined;
+  }
+  return `${lines.length}:${sha}`;
 }
 
 /** Read last reflog line; return SHA if that line is a real commit. */

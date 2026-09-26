@@ -1,7 +1,8 @@
 import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { PackId } from '../packs/types';
 import { GIFS, GifDef } from './gifs';
-import { fetchGiphyGif, isGiphyFailure } from './giphy';
+import { fetchGiphyGif } from './giphy';
 import {
   getRegionDef,
   getRegionsData,
@@ -31,6 +32,8 @@ export interface ContentBrainOpts {
   regionsPath: string;
   giphyCacheDir: string;
   recentGifIds: string[];
+  /** Offline GIFs already on disk. Not a network fetch. */
+  extraGifs?: GifDef[];
   random?: () => number;
 }
 
@@ -67,7 +70,10 @@ function pickLocal(
   detail?: string,
 ): BrainGifPick {
   const exclude = new Set(opts.recentGifIds);
-  const packPool = GIFS.filter((g) => g.pack === opts.pack);
+  const packPool = [
+    ...GIFS.filter((g) => g.pack === opts.pack),
+    ...(opts.extraGifs ?? []),
+  ];
   const allLocal = packPool.length > 0 ? packPool : GIFS;
   const freshLocal = allLocal.filter((g) => !exclude.has(g.id));
   const localPool = freshLocal.length > 0 ? freshLocal : allLocal;
@@ -97,9 +103,26 @@ function pickLocal(
   };
 }
 
+function installedCacheGifs(cacheDir: string, pack: PackId): GifDef[] {
+  let names: string[] = [];
+  try {
+    names = fs.readdirSync(cacheDir);
+  } catch {
+    return [];
+  }
+  return names
+    .filter((name) => name.endsWith('.gif'))
+    .map((name) => ({
+      id: `cache:${name}`,
+      pack,
+      file: '',
+      absoluteFsPath: path.join(cacheDir, name),
+    }));
+}
+
 /**
- * With Giphy SDK key: always try live search first, then local fallback.
- * Without key → local only.
+ * Installed `@giphy/js-fetch-api` cache first. A celebration never waits on the
+ * network. An empty cache is filled in the background when an SDK key is set.
  */
 export async function pickJoyGif(opts: ContentBrainOpts): Promise<BrainGifPick> {
   const random = opts.random ?? Math.random;
@@ -112,42 +135,32 @@ export async function pickJoyGif(opts: ContentBrainOpts): Promise<BrainGifPick> 
     data,
   });
   const def = getRegionDef(region, data);
+  const installed = installedCacheGifs(opts.giphyCacheDir, opts.pack);
+  if (installed.length > 0) {
+    const exclude = new Set(opts.recentGifIds);
+    const fresh = installed.filter((gif) => !exclude.has(gif.id));
+    const pool = fresh.length > 0 ? fresh : installed;
+    const gif = pool[Math.floor(random() * pool.length)];
+    return {
+      gif,
+      region,
+      source: 'giphy',
+      detail: 'installed @giphy/js-fetch-api cache',
+    };
+  }
+
+  const local = pickLocal(opts, region, def, random, 'local gif library');
   const key = opts.giphySdkKey?.trim() ?? '';
-
-  if (!key) {
-    return pickLocal(opts, region, def, random, 'no giphy.sdkKey / giphy.apiKey');
+  if (key) {
+    const query = pickRegionQuery(region, opts.kind, random, data);
+    void fetchGiphyGif({
+      apiKey: key,
+      query,
+      lang: def.giphyLang,
+      excludeIds: new Set(opts.recentGifIds),
+      cacheDir: opts.giphyCacheDir,
+      random,
+    }).catch(() => undefined);
   }
-
-  const query = pickRegionQuery(region, opts.kind, random, data);
-  const exclude = new Set(opts.recentGifIds);
-  const result = await fetchGiphyGif({
-    apiKey: key,
-    query,
-    lang: def.giphyLang,
-    excludeIds: new Set(
-      [...exclude].map((id) => id.replace(/^giphy:/, '').replace(/^tenor:/, '')),
-    ),
-    cacheDir: opts.giphyCacheDir,
-    random,
-  });
-
-  if (isGiphyFailure(result) || !result.fsPath || !fs.existsSync(result.fsPath)) {
-    const why = isGiphyFailure(result)
-      ? result.reason
-      : 'gif not cached yet';
-    return pickLocal(opts, region, def, random, `giphy skipped → local (${why})`);
-  }
-
-  return {
-    gif: {
-      id: result.id,
-      pack: opts.pack,
-      file: '',
-      absoluteFsPath: result.fsPath,
-    },
-    region,
-    source: 'giphy',
-    query,
-    detail: `giphy ok · q="${query}" · lang=${def.giphyLang}`,
-  };
+  return local;
 }

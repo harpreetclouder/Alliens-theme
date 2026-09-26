@@ -8,8 +8,13 @@ import {
   COMMIT_DETECTED_REL,
   type CommitDetectedFile,
 } from '../verification/agentIpc';
-import { isCommitOperationKind, isPushOperationKind } from './gitCommitDetect';
-import { readLatestCommitShaFromReflog, readLatestPushMarker, resolveHeadReflogPath } from './gitReflog';
+import { isCommitOperationKind, isPushOperationKind, isStashOperationKind, isStashShellCommand, isNewStashEntry } from './gitCommitDetect';
+import {
+  readLatestCommitShaFromReflog,
+  readLatestPushMarker,
+  readLatestStashMarker,
+  resolveHeadReflogPath,
+} from './gitReflog';
 
 export { isCommitOperationKind } from './gitCommitDetect';
 
@@ -64,6 +69,7 @@ export function registerGitTrigger(
   let lastCelebratedSha = '';
   let lastCelebratedAt = 0;
   let lastPushAt = 0;
+  let lastStashAt = 0;
 
   const writeDetected = (sha: string, source: string): void => {
     const folder = vscode.workspace.workspaceFolders?.[0];
@@ -127,6 +133,22 @@ export function registerGitTrigger(
     engine.handle('push');
   };
 
+  const celebrateStash = (source: string): void => {
+    const settings = getSettings();
+    if (!settings.triggers.stash) {
+      orbitalLog('Stash ignored', 'stash trigger disabled in settings');
+      return;
+    }
+    const now = Date.now();
+    if (now - lastStashAt < DEDUPE_MS) {
+      orbitalLog('Stash ignored', 'deduped · recent stash');
+      return;
+    }
+    lastStashAt = now;
+    orbitalLog('Stash win detected', source);
+    engine.handle('stash');
+  };
+
   const wireReflogFastPath = (repoFsPath: string, key: string): void => {
     if (wiredReflogRoots.has(repoFsPath)) {
       return;
@@ -140,6 +162,7 @@ export function registerGitTrigger(
 
     let lastReflogSha = readLatestCommitShaFromReflog(repoFsPath);
     let lastPushMarker = readLatestPushMarker(repoFsPath);
+    let lastStashMarker = readLatestStashMarker(repoFsPath);
     const checkReflog = (source: string): void => {
       const sha = readLatestCommitShaFromReflog(repoFsPath);
       if (sha && sha !== lastReflogSha) {
@@ -150,6 +173,13 @@ export function registerGitTrigger(
       if (pushMarker && pushMarker !== lastPushMarker) {
         lastPushMarker = pushMarker;
         celebratePush(`${source}-push · ${key}`, pushMarker);
+      }
+      const stashMarker = readLatestStashMarker(repoFsPath);
+      if (isNewStashEntry(lastStashMarker, stashMarker)) {
+        lastStashMarker = stashMarker;
+        celebrateStash(`${source}-stash · ${key}`);
+      } else if (stashMarker) {
+        lastStashMarker = stashMarker;
       }
     };
 
@@ -181,6 +211,10 @@ export function registerGitTrigger(
       disposables.push(
         repo.onDidRunOperation((ev) => {
           if (ev?.error) {
+            return;
+          }
+          if (isStashOperationKind(ev?.operation?.kind)) {
+            celebrateStash(`onDidRunOperation · ${ev?.operation?.kind} · ${key}`);
             return;
           }
           if (isPushOperationKind(ev?.operation?.kind)) {
@@ -336,6 +370,10 @@ export function registerGitTrigger(
             return;
           }
           const cmd = event.execution?.commandLine?.value ?? '';
+          if (isStashShellCommand(cmd)) {
+            celebrateStash('terminal-stash');
+            return;
+          }
           if (/\bgit\s+push\b/.test(cmd) && !/--dry-run\b/.test(cmd)) {
             celebratePush('terminal-push');
           }

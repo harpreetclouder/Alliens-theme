@@ -19,6 +19,12 @@ describe('decideWinMoment', () => {
     expect(d.forceSurface).toBeUndefined();
   });
 
+  it('gives a stash the same full celebration as a commit', () => {
+    const d = decideWinMoment({ ...base, kind: 'stash' });
+    expect(d.show).toBe(true);
+    expect(d.forceSurface).toBeUndefined();
+  });
+
   it('whispers a commit while typing instead of opening an overlay', () => {
     const d = decideWinMoment({ ...base, kind: 'push', typing: true });
     expect(d.show).toBe(true);
@@ -34,7 +40,8 @@ describe('decideWinMoment', () => {
   it('whispers the next chore and skips a burst of the same chore', () => {
     const recent = [{ kind: 'task' as const, atMs: base.nowMs - 30_000 }];
     const whisper = decideWinMoment({ ...base, kind: 'task', recent });
-    expect(whisper.forceSurface).toBe('statusbar');
+    expect(whisper.show).toBe(true);
+    expect(whisper.forceSurface).toBe('overlay');
 
     const burst = decideWinMoment({
       ...base,
@@ -65,6 +72,8 @@ describe('decideWinMoment', () => {
 describe('day-to-day task signals', () => {
   it('treats lint and format as finished chores', () => {
     expect(isCompletedChoreCommand('npm run lint')).toBe(true);
+    expect(isCompletedChoreCommand('npm run generate')).toBe(true);
+    expect(isCompletedChoreCommand('npm run dev')).toBe(false);
     expect(isCompletedChoreCommand('eslint src')).toBe(true);
     expect(isCompletedChoreCommand('npm test')).toBe(false);
     expect(isCompletedChoreCommand('npm run build')).toBe(false);

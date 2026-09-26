@@ -3,6 +3,7 @@ export type WinKind =
   | 'build'
   | 'commit'
   | 'push'
+  | 'stash'
   | 'debug'
   | 'save'
   | 'task'

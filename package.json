@@ -2,7 +2,7 @@
   "name": "orbital",
   "displayName": "Orbital",
   "description": "Alien/UFO theme and celebration companion for Cursor/VS Code",
-  "version": "0.0.39",
+  "version": "0.0.42",
   "publisher": "orbital",
   "engines": {
     "vscode": "^1.85.0"
@@ -221,6 +221,11 @@
           "default": true,
           "description": "Celebrate on git push"
         },
+        "orbital.celebrations.triggers.stash": {
+          "type": "boolean",
+          "default": true,
+          "description": "Celebrate on git stash"
+        },
         "orbital.celebrations.triggers.debug": {
           "type": "boolean",
           "default": true,
@@ -293,7 +298,7 @@
   },
   "scripts": {
     "build:scene": "node scripts/build-scene.mjs",
-    "compile": "npm run build:scene && tsc -p ./",
+    "compile": "npm run build:scene && tsc -p ./ && esbuild src/celebrations/giphy.ts --bundle --platform=node --format=cjs --outfile=out/celebrations/giphy.js",
     "watch": "tsc -watch -p ./",
     "test": "vitest run",
     "posttest": "node scripts/signal-test-pass.mjs",
@@ -332,6 +337,7 @@
     "vitest": "^4.1.11"
   },
   "dependencies": {
+    "@giphy/js-fetch-api": "^5.7.0",
     "three": "^0.170.0"
   }
 }

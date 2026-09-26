@@ -29,7 +29,7 @@ export function toOrbitWinSize(
   if (size === 'big') {
     return 'big';
   }
-  if (kind === 'tests' || kind === 'commit' || kind === 'push' || kind === 'preview') {
+  if (kind === 'tests' || kind === 'commit' || kind === 'push' || kind === 'stash' || kind === 'preview') {
     return 'big';
   }
   if (surface === 'overlay') {

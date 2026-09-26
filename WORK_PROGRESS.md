@@ -1,17 +1,13 @@
 # Work Progress — Orbital
 
 ## Status
-**v0.0.39** — celebrations show a drawn pack GIF instead of a blank or "content not available" frame
+**v0.0.42** — `@giphy/js-fetch-api` is a real dependency and is bundled into the extension
 
-## GIF
-Most pack files were the same Giphy unavailable placeholder. They are replaced with generated pack loops. A remote Giphy URL is not shown until the file is on disk. `npm run verify:gif` opens the celebration in Chromium and fails if the hero image is blank or still that placeholder.
+## GIFs
+- Package: `@giphy/js-fetch-api` in `package.json`
+- A celebration uses GIFs already saved in the local cache
+- If the cache is empty and `orbital.giphy.sdkKey` is set, the package fills the cache in the background
+- No key: the pack GIFs in `media/gifs` play, and the network is not called
 
 ## Evidence
-150 tests. GIF harness PASS: mothership saucer painted 160×96, broken URL falls back to a visible tint.
-
-
-## GIF
-Giphy is used only when the file is already on disk. Otherwise the pack GIF shows. A failed image swaps to a tinted fallback instead of an empty box.
-
-## Harness
-`npm run verify:gif` opens the celebration in Chromium (Playwright), checks the hero GIF has real pixels, and checks a dead URL still leaves a visible fallback. Part of packaging and `verify:release`.
+[orbital-verifier](1a583887-921e-42af-8c2f-a4920fbb73e5) **PASS**. Typecheck clean, 152 tests. `@giphy/js-fetch-api` is inlined in `out/celebrations/giphy.js`. Celebrations use the cache and do not wait on the network.

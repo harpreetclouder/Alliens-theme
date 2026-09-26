@@ -9,6 +9,7 @@ export const QUIET_STRETCH_MS = 90_000;
 const SPOTLIGHT = new Set<WinKind>([
   'commit',
   'push',
+  'stash',
   'build',
   'mission',
   'levelup',
@@ -63,13 +64,29 @@ export function decideWinMoment(ctx: WinMomentContext): WinMomentDecision {
   }
 
   const spotlight = isSpotlight(ctx.kind, ctx.size);
-  const small = ctx.kind === 'task' || ctx.kind === 'save';
+  const small = ctx.kind === 'save';
+  const finishedTask = ctx.kind === 'task';
 
   if (ctx.quietMode) {
     if (!spotlight) {
       return { show: false, reason: 'quiet → skip small moment' };
     }
     return { show: true, forceSurface: 'statusbar', reason: 'quiet → spotlight whisper' };
+  }
+
+  if (finishedTask) {
+    const prev = lastSameAt(ctx.recent, ctx.kind);
+    if (prev != null && ctx.nowMs - prev < SMALL_TASK_GAP_MS) {
+      return { show: false, reason: 'small task burst → wait' };
+    }
+    if (ctx.typing || ctx.intensity === 'chill') {
+      return {
+        show: true,
+        forceSurface: 'statusbar',
+        reason: ctx.typing ? 'typing → whisper the chore' : 'chill → whisper',
+      };
+    }
+    return { show: true, forceSurface: 'overlay', reason: 'finished task → celebration' };
   }
 
   if (small) {

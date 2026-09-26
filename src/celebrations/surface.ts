@@ -9,6 +9,7 @@ export const DEFAULT_SURFACES: Record<WinKind, CelebrationSurface> = {
   build: 'overlay',
   commit: 'overlay',
   push: 'overlay',
+  stash: 'overlay',
   debug: 'overlay',
   save: 'statusbar',
   task: 'statusbar',
@@ -54,7 +55,7 @@ export function resolveSurface(
     return override;
   }
 
-  if (intensity === 'hype' && (size === 'big' || kind === 'commit' || kind === 'push')) {
+  if (intensity === 'hype' && (size === 'big' || kind === 'commit' || kind === 'push' || kind === 'stash')) {
     return 'overlay';
   }
 

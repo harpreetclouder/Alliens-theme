@@ -17,7 +17,7 @@ function settings(partial: Partial<OrbitalSettings> = {}): OrbitalSettings {
     display: 'terminal',
     surfaces: {},
     intensity: 'normal',
-    triggers: { tests: true, build: true, commit: true, push: true, debug: true, save: false, tasks: true },
+    triggers: { tests: true, build: true, commit: true, push: true, stash: true, debug: true, save: false, tasks: true },
     soundEnabled: false,
     mutedPacks: [],
     reduceMotion: 'never',
