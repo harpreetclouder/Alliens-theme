@@ -1,0 +1,16 @@
+{
+  "id": "visual-pack-invariant",
+  "description": "Brain outcome identity is pack-independent; presentation labels differ in unit tests",
+  "timeline": [
+    { "atMs": 0, "signal": "session_start" },
+    {
+      "atMs": 2700000,
+      "signal": "long_session",
+      "patch": { "sessionActiveMs": 2700000, "idleMs": 5000, "typing": false }
+    }
+  ],
+  "expect": {
+    "outcome": "intermission",
+    "allowedIncludes": ["intermission"]
+  }
+}

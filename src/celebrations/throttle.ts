@@ -7,7 +7,14 @@ export class CelebrationThrottle {
 
   allow(event: WinEvent, now = Date.now()): boolean {
     // Intentional wins should celebrate every time.
-    if (event.size === 'big' || event.kind === 'tests' || event.kind === 'commit') {
+    if (
+      event.size === 'big' ||
+      event.kind === 'tests' ||
+      event.kind === 'commit' ||
+      event.kind === 'push' ||
+      event.kind === 'build' ||
+      event.kind === 'debug'
+    ) {
       return true;
     }
     if (now - this.lastSmallAt < this.windowMs) {

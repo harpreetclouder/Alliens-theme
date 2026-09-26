@@ -1,0 +1,20 @@
+{
+  "id": "task-after-pause",
+  "packId": "glitch",
+  "win": {
+    "kind": "task",
+    "size": "small",
+    "typing": false,
+    "quietMode": false,
+    "celebrationsEnabled": true,
+    "intensity": "normal",
+    "nowMs": 200000,
+    "recent": [{ "kind": "task", "atMs": 1000 }]
+  },
+  "expect": {
+    "show": true,
+    "forceSurface": "overlay",
+    "colorTheme": "Orbital — Glitch Transmission",
+    "tint": true
+  }
+}

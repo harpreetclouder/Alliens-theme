@@ -147,9 +147,13 @@ body.reduce-motion .collage-board {
   }
 }
 
-.collage-gif.placeholder {
+.collage-gif.gif-broken,
+.hero-gif.gif-broken {
+  min-width: 180px;
   min-height: 180px;
-  background: color-mix(in srgb, var(--tint) 25%, #fff6e8);
+  background:
+    radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--tint) 55%, #fff) 0 18%, transparent 19%),
+    color-mix(in srgb, var(--tint) 22%, #fff6e8);
 }
 
 .sticker-layer {

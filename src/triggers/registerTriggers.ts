@@ -6,6 +6,7 @@ import { registerBuildTrigger } from './buildTrigger';
 import { registerDebugTrigger } from './debugTrigger';
 import { registerGitTrigger } from './gitTrigger';
 import { registerSaveTrigger } from './saveTrigger';
+import { registerTaskTrigger } from './taskTrigger';
 import { registerTestTrigger } from './testTrigger';
 import { registerVitestSignalTrigger } from './vitestSignalTrigger';
 
@@ -25,5 +26,6 @@ export function registerTriggers(
     ...registerBuildTrigger(engine, getSettings),
     ...registerDebugTrigger(engine, getSettings),
     ...registerSaveTrigger(engine, getSettings),
+    ...registerTaskTrigger(engine, getSettings),
   ];
 }

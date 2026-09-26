@@ -1,6 +1,9 @@
 import * as path from 'node:path';
 import * as vscode from 'vscode';
 import { resolveSfxUri } from '../audio/sfxPlayer';
+import { decideWinMoment, type MomentStamp } from '../brain/winMoment';
+import { ThemeHost } from '../theme/themeHost';
+import { themeFrameForMoment } from '../theme/themeFrame';
 import { readSettings, type Intensity } from '../config/settings';
 import {
   bigFollowUpCopy,
@@ -13,7 +16,10 @@ import {
   localDayKey,
   toOrbitWinSize,
 } from '../orbit/winMapping';
-import { getPack } from '../packs/registry';
+import {
+  presentationForWin,
+  resolveCaption,
+} from '../packs/winPresentation';
 import { pickCaption } from './captions';
 import { classifyKind, resolveDisplay } from './classifier';
 import { pickJoyGif } from './contentBrain';
@@ -48,6 +54,10 @@ export class CelebrationEngine {
   private readonly recentBiteIds: string[] = [];
   private readonly recentGifIds: string[] = [];
   private readonly followUpTimers: ReturnType<typeof setTimeout>[] = [];
+  private readonly recentMoments: MomentStamp[] = [];
+  private typing = false;
+  private typingTimer: ReturnType<typeof setTimeout> | undefined;
+  private readonly themeHost: ThemeHost;
   private static readonly RECENT_WINDOW = 12;
   private static readonly GIF_WINDOW = 16;
   private static readonly FOLLOW_UP_DELAY_MS = 1400;
@@ -58,10 +68,23 @@ export class CelebrationEngine {
     private readonly orbitStore: OrbitStore,
   ) {
     this.library = loadLibrary(ctx.extensionUri);
+    this.themeHost = new ThemeHost(ctx);
   }
 
   handle(kind: WinKind, meta?: CelebrationMeta): void {
     void this.showCelebration(kind, meta, kind === 'preview');
+  }
+
+  /** True while the user is editing. Overlays wait; a whisper can still land. */
+  noteTyping(): void {
+    this.typing = true;
+    if (this.typingTimer) {
+      clearTimeout(this.typingTimer);
+    }
+    this.typingTimer = setTimeout(() => {
+      this.typing = false;
+      this.typingTimer = undefined;
+    }, 1500);
   }
 
   preview(): void {
@@ -69,10 +92,14 @@ export class CelebrationEngine {
   }
 
   dispose(): void {
+    if (this.typingTimer) {
+      clearTimeout(this.typingTimer);
+    }
     for (const timer of this.followUpTimers) {
       clearTimeout(timer);
     }
     this.followUpTimers.length = 0;
+    this.themeHost.dispose();
     this.host.dispose();
   }
 
@@ -89,10 +116,43 @@ export class CelebrationEngine {
     }
 
     const size = classifyKind(kind, meta);
+    const moment = decideWinMoment({
+      kind,
+      size,
+      typing: this.typing,
+      quietMode: settings.quietMode,
+      celebrationsEnabled: settings.celebrationsEnabled,
+      intensity: settings.intensity,
+      nowMs: Date.now(),
+      recent: this.recentMoments,
+    });
+    if (!moment.show) {
+      this.themeHost.sync(
+        themeFrameForMoment(settings.pack, moment, {
+          typing: this.typing,
+          quietMode: settings.quietMode,
+        }),
+      );
+      orbitalLogSkip(moment.reason, kind);
+      return;
+    }
 
-    if (!bypassThrottle && !this.throttle.allow({ kind, size })) {
+    const brainOwnsRate = kind === 'task' || kind === 'save';
+    if (!bypassThrottle && !brainOwnsRate && !this.throttle.allow({ kind, size })) {
       orbitalLogSkip('throttled (small win — retry in ~45s)', kind);
       return;
+    }
+
+    this.themeHost.sync(
+      themeFrameForMoment(settings.pack, moment, {
+        typing: this.typing,
+        quietMode: settings.quietMode,
+      }),
+    );
+
+    this.recentMoments.push({ kind, atMs: Date.now() });
+    while (this.recentMoments.length > 12) {
+      this.recentMoments.shift();
     }
 
     const mode = resolveDisplay(kind, size, settings.intensity, this.celebrationIndex);
@@ -104,9 +164,15 @@ export class CelebrationEngine {
         this.recentBiteIds.shift();
       }
     }
-    const packDef = getPack(settings.pack);
+    const presentation = presentationForWin(settings.pack, kind, {
+      reduceMotion: settings.reduceMotion === 'always',
+      celebrationsEnabled: settings.celebrationsEnabled,
+      quietMode: settings.quietMode,
+      typing: this.typing,
+    });
+    const caption = resolveCaption(kind, presentation, picked.line);
     const fallbackDisplay = settings.display === 'overlay' ? 'overlay' : 'panel';
-    const surface = resolveSurface(
+    let surface = resolveSurface(
       kind,
       size,
       settings.surfaces,
@@ -114,6 +180,19 @@ export class CelebrationEngine {
       meta,
       fallbackDisplay,
     );
+    // Pack presentation can prefer statusbar for soft identity beats (never force panel steal).
+    if (
+      presentation.surfaceHints.preferStatusbar &&
+      settings.intensity === 'chill' &&
+      surface !== 'terminal'
+    ) {
+      surface = 'statusbar';
+    }
+    if (moment.forceSurface === 'statusbar') {
+      surface = 'statusbar';
+    } else if (moment.forceSurface === 'overlay' && !settings.surfaces[kind]) {
+      surface = 'overlay';
+    }
     const visual = pickCelebrationVisual(
       settings.pack,
       mode,
@@ -165,7 +244,7 @@ export class CelebrationEngine {
         }),
       ]);
       brainDetail = brain.detail;
-      if (brain.gif) {
+      if (brain.gif && (brain.gif.absoluteFsPath || brain.gif.file) && !brain.gif.remoteUrl) {
         gif = brain.gif;
         gifSource = brain.source === 'giphy' ? 'giphy' : 'local';
         this.recentGifIds.push(brain.gif.id);
@@ -221,11 +300,11 @@ export class CelebrationEngine {
       mode,
       loop: visual.loop,
       gif,
-      caption: picked.line,
+      caption,
       subline: picked.subline,
       emoji: visual.emojis.hero,
       orbitEmojis: visual.emojis.orbit,
-      tint: packDef.tint,
+      tint: presentation.tint,
       reduceMotion,
       dataReduceAuto,
       durationMs,
@@ -254,7 +333,9 @@ export class CelebrationEngine {
       gifSource === 'giphy' ? 'src:giphy' : 'src:local',
       picked.source === 'library' ? `bite:${picked.biteId}` : 'pack-line',
       `anim:${picked.anim}`,
-      picked.line,
+      `viz:${presentation.visualState}`,
+      `style:${presentation.celebrationStyle}`,
+      caption,
       streakForHost ? `streak:${streakForHost}` : undefined,
       orbitResult ? `xp:+${orbitResult.xpGained}` : undefined,
     ]

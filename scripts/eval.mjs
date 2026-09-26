@@ -59,3 +59,29 @@ if (failed) {
   process.exit(1);
 }
 console.log(`✓ ${files.length}/${files.length} scenarios passed`);
+
+const themeRunnerPath = path.join(root, 'out', 'theme', 'evalRunner.js');
+const themeDir = path.join(root, 'evals', 'theme');
+if (!fs.existsSync(themeRunnerPath)) {
+  console.error('✗ Missing out/theme — run npm run compile first');
+  process.exit(1);
+}
+const { runThemeScenario } = require(themeRunnerPath);
+const themeFiles = fs.readdirSync(themeDir).filter((f) => f.endsWith('.json')).sort();
+let themeFailed = 0;
+console.log('\n🎨 Theme harness\n');
+for (const file of themeFiles) {
+  const scenario = JSON.parse(fs.readFileSync(path.join(themeDir, file), 'utf8'));
+  const result = runThemeScenario(scenario);
+  const mark = result.pass ? '✓' : '✗';
+  console.log(`${mark} ${result.id}  theme=${result.frame.colorTheme} tint=${Object.keys(result.frame.colorCustomizations).length > 0}`);
+  if (!result.pass) {
+    themeFailed += 1;
+    for (const f of result.failures) console.log(`  FAIL: ${f}`);
+  }
+}
+if (themeFailed) {
+  console.error(`\n✗ ${themeFailed}/${themeFiles.length} theme scenarios failed`);
+  process.exit(1);
+}
+console.log(`\n✓ ${themeFiles.length}/${themeFiles.length} theme scenarios passed`);

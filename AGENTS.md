@@ -56,6 +56,7 @@ Never: prompt → dump code → claim done. **Evidence required** (commands + re
 ## Docs
 
 - `docs/AI_ENGINEERING.md` — how to work here
+- `docs/VISUAL_SYSTEM.md` — pack worlds, visual states, motion/ambient rules
 - `docs/MCP_SETUP.md` — engineering MCP only (not runtime)
 - `docs/specs/` · `docs/adr/` · `evals/scenarios/`
 

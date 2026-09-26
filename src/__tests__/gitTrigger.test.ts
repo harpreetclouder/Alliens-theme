@@ -56,6 +56,18 @@ describe('parseCommitShaFromReflogLine', () => {
   });
 });
 
+describe('push detection', () => {
+  it('accepts Push operations and remote reflog messages', async () => {
+    const { isPushOperationKind, isPushReflogMessage } = await import('../triggers/gitCommitDetect');
+    expect(isPushOperationKind('Push')).toBe(true);
+    expect(isPushOperationKind('PushFollowTags')).toBe(true);
+    expect(isPushOperationKind('Pull')).toBe(false);
+    expect(isPushReflogMessage('update by push')).toBe(true);
+    expect(isPushReflogMessage('push: origin main')).toBe(true);
+    expect(isPushReflogMessage('commit: ship it')).toBe(false);
+    expect(isPushReflogMessage('pull: Fast-forward')).toBe(false);
+  });
+});
 describe('formatVerifySummary', () => {
   it('formats pass/fail lines', () => {
     const results: VerifyScenarioResult[] = [

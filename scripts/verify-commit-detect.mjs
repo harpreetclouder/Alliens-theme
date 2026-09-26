@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 /**
  * HARD offline commit-detection simulation (no Cursor UI required).
- * Creates a temp git repo, commits / amends / checkouts, asserts reflog parser
- * only fires on real commits. Runs automatically before every package.
+ * Writes a fake .git/logs/HEAD tree and asserts reflog parser behavior.
+ * Runs automatically before every package.
  */
-import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,21 +12,16 @@ import { createRequire } from 'node:module';
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(import.meta.url);
 
-// Compiled JS after compile step; fall back to ts via vitest path is package-only.
 const detectPath = path.join(root, 'out', 'triggers', 'gitCommitDetect.js');
-const reflogPath = path.join(root, 'out', 'triggers', 'gitReflog.js');
+const reflogModPath = path.join(root, 'out', 'triggers', 'gitReflog.js');
 
-if (!fs.existsSync(detectPath) || !fs.existsSync(reflogPath)) {
+if (!fs.existsSync(detectPath) || !fs.existsSync(reflogModPath)) {
   console.error('✗ Run npm run compile first (missing out/triggers/*.js)');
   process.exit(1);
 }
 
 const { parseCommitShaFromReflogLine } = require(detectPath);
-const { readLatestCommitShaFromReflog, resolveHeadReflogPath } = require(reflogPath);
-
-function git(cwd, args) {
-  return execSync(`git ${args}`, { cwd, encoding: 'utf8' }).trim();
-}
+const { readLatestCommitShaFromReflog, resolveHeadReflogPath } = require(reflogModPath);
 
 function assert(cond, msg) {
   if (!cond) {
@@ -35,39 +29,46 @@ function assert(cond, msg) {
   }
 }
 
+function reflogLine(oldSha, newSha, msg) {
+  return `${oldSha} ${newSha} Orbital Sim <orbital@test.local> 1 +0000\t${msg}`;
+}
+
 console.log('🛸 Orbital hard commit-detect simulation');
 
 const tmp = path.join(root, '.tmp-commit-sim');
 fs.rmSync(tmp, { recursive: true, force: true });
-fs.mkdirSync(tmp, { recursive: true });
+const logsDir = path.join(tmp, '.git', 'logs');
+fs.mkdirSync(logsDir, { recursive: true });
+
 try {
-  git(tmp, 'init');
-  git(tmp, 'config user.email "orbital@test.local"');
-  git(tmp, 'config user.name "Orbital Sim"');
+  const sha1 = 'a'.repeat(40);
+  const sha2 = 'b'.repeat(40);
+  const sha3 = 'c'.repeat(40);
+  const zero = '0'.repeat(40);
 
-  fs.writeFileSync(path.join(tmp, 'a.txt'), 'one\n');
-  git(tmp, 'add a.txt');
-  git(tmp, 'commit -m "first"');
-  const sha1 = git(tmp, 'rev-parse HEAD');
+  const headLog = path.join(logsDir, 'HEAD');
+  fs.writeFileSync(
+    headLog,
+    [
+      reflogLine(zero, sha1, 'commit: first'),
+      reflogLine(sha1, sha2, 'commit: second'),
+    ].join('\n') + '\n',
+    'utf8',
+  );
 
-  assert(resolveHeadReflogPath(tmp), 'reflog path missing');
-  assert(readLatestCommitShaFromReflog(tmp) === sha1, `expected sha1 ${sha1}`);
-
-  fs.writeFileSync(path.join(tmp, 'a.txt'), 'two\n');
-  git(tmp, 'add a.txt');
-  git(tmp, 'commit -m "second"');
-  const sha2 = git(tmp, 'rev-parse HEAD');
+  assert(resolveHeadReflogPath(tmp) === headLog, 'reflog path missing');
   assert(readLatestCommitShaFromReflog(tmp) === sha2, `expected sha2 ${sha2}`);
 
-  git(tmp, 'commit --amend -m "second-amended"');
-  const shaAmend = git(tmp, 'rev-parse HEAD');
-  assert(readLatestCommitShaFromReflog(tmp) === shaAmend, `expected amend ${shaAmend}`);
+  fs.appendFileSync(headLog, reflogLine(sha2, sha3, 'commit (amend): second-amended') + '\n');
+  assert(readLatestCommitShaFromReflog(tmp) === sha3, `expected amend ${sha3}`);
 
-  git(tmp, 'checkout -b other');
-  const afterCheckout = readLatestCommitShaFromReflog(tmp);
+  fs.appendFileSync(
+    headLog,
+    reflogLine(sha3, sha1, 'checkout: moving from main to other') + '\n',
+  );
   assert(
-    afterCheckout === undefined,
-    `checkout must not look like commit (got ${afterCheckout})`,
+    readLatestCommitShaFromReflog(tmp) === undefined,
+    'checkout must not look like commit',
   );
 
   const old = 'b'.repeat(40);
@@ -85,7 +86,7 @@ try {
 
   console.log('✓ Hard commit-detect PASS');
   console.log(`   tmp=${tmp}`);
-  console.log(`   commits: ${sha1.slice(0, 7)} → ${sha2.slice(0, 7)} → ${shaAmend.slice(0, 7)}`);
+  console.log(`   commits: ${sha1.slice(0, 7)} → ${sha2.slice(0, 7)} → ${sha3.slice(0, 7)}`);
 } catch (err) {
   console.error('✗ Hard commit-detect FAIL');
   console.error(err instanceof Error ? err.message : err);

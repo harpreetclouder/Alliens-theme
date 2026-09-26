@@ -2,7 +2,7 @@
   "name": "orbital",
   "displayName": "Orbital",
   "description": "Alien/UFO theme and celebration companion for Cursor/VS Code",
-  "version": "0.0.33",
+  "version": "0.0.39",
   "publisher": "orbital",
   "engines": {
     "vscode": "^1.85.0"
@@ -110,6 +110,11 @@
           "default": true,
           "description": "Enable celebrations on dev wins"
         },
+        "orbital.quietMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Quiet mode: big wins whisper in the status bar, small chores stay silent"
+        },
         "orbital.orbit.enabled": {
           "type": "boolean",
           "default": true,
@@ -211,6 +216,11 @@
           "default": true,
           "description": "Celebrate on commit"
         },
+        "orbital.celebrations.triggers.push": {
+          "type": "boolean",
+          "default": true,
+          "description": "Celebrate on git push"
+        },
         "orbital.celebrations.triggers.debug": {
           "type": "boolean",
           "default": true,
@@ -220,6 +230,11 @@
           "type": "boolean",
           "default": false,
           "description": "Celebrate on file save"
+        },
+        "orbital.celebrations.triggers.tasks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Celebrate finished chores: lint, format, typecheck, and other successful tasks"
         },
         "orbital.sound.enabled": {
           "type": "boolean",
@@ -289,6 +304,7 @@
     "verify:commit-live": "node scripts/verify-commit-live.mjs",
     "verify:release": "node scripts/verify-release.mjs",
     "eval": "npm run compile && node scripts/eval.mjs",
+    "verify:gif": "npm run compile && node scripts/verify-gif-visual.mjs",
     "generate:sfx": "node scripts/generate-sfx.mjs",
     "generate:acid-gifs": "node scripts/generate-acid-gifs.mjs",
     "generate:bites": "node scripts/expand-bites.mjs",
@@ -311,6 +327,7 @@
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
+    "playwright": "^1.55.0",
     "typescript": "^7.0.2",
     "vitest": "^4.1.11"
   },

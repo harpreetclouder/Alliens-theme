@@ -1,41 +1,24 @@
-import { PackDefinition, PackId } from './types';
+import { EXPERIENCE_PACKS } from './experiencePacks';
+import type { PackDefinition, PackId } from './types';
 
+function toPackDefinition(id: PackId): PackDefinition {
+  const xp = EXPERIENCE_PACKS[id];
+  return {
+    id,
+    label: xp.name,
+    themePath: xp.visualTheme.colorThemePath,
+    sfxFile: xp.sound?.sfxFile ?? `${id}.wav`,
+    tint: xp.visualTheme.tokens.accent,
+  };
+}
+
+/** Compatibility registry — backed by experience pack manifests. */
 export const PACKS: Record<PackId, PackDefinition> = {
-  mothership: {
-    id: 'mothership',
-    label: 'Mothership OS',
-    themePath: './themes/mothership-color-theme.json',
-    sfxFile: 'mothership.wav',
-    tint: '#1cff9a',
-  },
-  glitch: {
-    id: 'glitch',
-    label: 'Glitch Transmission',
-    themePath: './themes/glitch-color-theme.json',
-    sfxFile: 'glitch.wav',
-    tint: '#b8ff40',
-  },
-  soft: {
-    id: 'soft',
-    label: 'Soft Abduction',
-    themePath: './themes/soft-abduction-color-theme.json',
-    sfxFile: 'soft.wav',
-    tint: '#f4a261',
-  },
-  root: {
-    id: 'root',
-    label: 'Root Access',
-    themePath: './themes/root-access-color-theme.json',
-    sfxFile: 'root.wav',
-    tint: '#33ff66',
-  },
-  acid: {
-    id: 'acid',
-    label: 'Acid Scrapbook',
-    themePath: './themes/acid-scrapbook-color-theme.json',
-    sfxFile: 'acid.wav',
-    tint: '#d6ff3c',
-  },
+  mothership: toPackDefinition('mothership'),
+  glitch: toPackDefinition('glitch'),
+  soft: toPackDefinition('soft'),
+  root: toPackDefinition('root'),
+  acid: toPackDefinition('acid'),
 };
 
 export function isPackId(value: string): value is PackId {
@@ -45,3 +28,16 @@ export function isPackId(value: string): value is PackId {
 export function getPack(id: PackId): PackDefinition {
   return PACKS[id];
 }
+
+/** workbench.colorTheme labels — single source from manifests */
+export const PACK_THEME_LABELS: Record<PackId, string> = {
+  mothership: EXPERIENCE_PACKS.mothership.themeLabel,
+  glitch: EXPERIENCE_PACKS.glitch.themeLabel,
+  soft: EXPERIENCE_PACKS.soft.themeLabel,
+  root: EXPERIENCE_PACKS.root.themeLabel,
+  acid: EXPERIENCE_PACKS.acid.themeLabel,
+};
+
+export { getExperiencePack, listExperiencePackIds, EXPERIENCE_PACKS } from './experiencePacks';
+export { resolveVisualState } from './visualState';
+export { resolvePresentation } from './presentation';

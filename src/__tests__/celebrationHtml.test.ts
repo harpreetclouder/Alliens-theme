@@ -49,7 +49,7 @@ describe('buildCelebrationHtml joy collage', () => {
       gifUri: 'https://media.giphy.com/x.gif',
       surface: 'panel',
     });
-    expect(html).toContain('img-src https://csp.example https:');
+    expect(html).toContain('img-src https://csp.example https: https://media.giphy.com');
   });
 
   it('shows Powered by GIPHY when attribution flag is set', () => {
@@ -61,6 +61,16 @@ describe('buildCelebrationHtml joy collage', () => {
       giphyAttribution: true,
     });
     expect(html).toContain('Powered by GIPHY');
+  });
+
+  it('legacy overlay allows the gif origin and a broken-image fallback', () => {
+    const html = buildCelebrationHtml({
+      ...base,
+      mode: 'overlay',
+      gifUri: 'https://i.giphy.com/x.gif',
+    });
+    expect(html).toContain('img-src https://csp.example https: https://i.giphy.com');
+    expect(html).toContain('gif-broken');
   });
 });
 

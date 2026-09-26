@@ -10,8 +10,10 @@ export interface SurfaceOverrides {
   tests?: CelebrationSurfaceSetting;
   build?: CelebrationSurfaceSetting;
   commit?: CelebrationSurfaceSetting;
+  push?: CelebrationSurfaceSetting;
   debug?: CelebrationSurfaceSetting;
   save?: CelebrationSurfaceSetting;
+  task?: CelebrationSurfaceSetting;
   preview?: CelebrationSurfaceSetting;
   checkin?: CelebrationSurfaceSetting;
   pack?: CelebrationSurfaceSetting;
@@ -24,13 +26,18 @@ export interface TriggerSettings {
   tests: boolean;
   build: boolean;
   commit: boolean;
+  push: boolean;
   debug: boolean;
   save: boolean;
+  /** Lint, format, typecheck, and other successful tasks. */
+  tasks: boolean;
 }
 
 export interface OrbitalSettings {
   pack: PackId;
   celebrationsEnabled: boolean;
+  /** Spotlight wins whisper. Small chores stay quiet. */
+  quietMode: boolean;
   orbitEnabled: boolean;
   display: CelebrationDisplay;
   surfaces: SurfaceOverrides;
@@ -56,8 +63,10 @@ const SURFACE_KEYS = [
   'tests',
   'build',
   'commit',
+  'push',
   'debug',
   'save',
+  'task',
   'preview',
   'checkin',
   'pack',
@@ -87,11 +96,12 @@ function readSurfaceOverrides(c: ConfigLike): SurfaceOverrides {
 const DEFAULTS: OrbitalSettings = {
   pack: 'mothership',
   celebrationsEnabled: true,
+  quietMode: false,
   orbitEnabled: true,
   display: 'terminal',
   surfaces: {},
   intensity: 'normal',
-  triggers: { tests: true, build: true, commit: true, debug: true, save: false },
+  triggers: { tests: true, build: true, commit: true, push: true, debug: true, save: false, tasks: true },
   soundEnabled: true,
   mutedPacks: [],
   reduceMotion: 'auto',
@@ -127,6 +137,7 @@ export function readSettings(getConfig: () => ConfigLike): OrbitalSettings {
   return {
     pack: isPackId(packRaw) ? packRaw : 'mothership',
     celebrationsEnabled: c.get('celebrations.enabled', true),
+    quietMode: c.get('quietMode', DEFAULTS.quietMode),
     orbitEnabled: c.get('orbit.enabled', DEFAULTS.orbitEnabled),
     display,
     surfaces: readSurfaceOverrides(c),
@@ -135,8 +146,10 @@ export function readSettings(getConfig: () => ConfigLike): OrbitalSettings {
       tests: c.get('celebrations.triggers.tests', true),
       build: c.get('celebrations.triggers.build', true),
       commit: c.get('celebrations.triggers.commit', true),
+      push: c.get('celebrations.triggers.push', true),
       debug: c.get('celebrations.triggers.debug', true),
       save: c.get('celebrations.triggers.save', false),
+      tasks: c.get('celebrations.triggers.tasks', true),
     },
     soundEnabled: c.get('sound.enabled', DEFAULTS.soundEnabled),
     mutedPacks: muted.filter(isPackId),

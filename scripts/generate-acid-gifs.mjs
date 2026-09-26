@@ -134,38 +134,40 @@ function lzwEncode(indexStream, minCodeSize) {
   return Buffer.concat([Buffer.from([minCodeSize]), ...blocks]);
 }
 
-function writeGif(filePath, kind) {
+function writeGif(filePath, kind, opt = {}) {
+  const width = opt.width ?? W;
+  const height = opt.height ?? H;
+  const palette = opt.palette ?? PALETTE;
+  const frameCount = opt.frames ?? FRAMES;
+  const pixelsFor = opt.pixels ?? ((t) => framePixels(kind, t));
   const parts = [];
   parts.push(Buffer.from('GIF89a'));
 
   const header = Buffer.alloc(7);
-  header.writeUInt16LE(W, 0);
-  header.writeUInt16LE(H, 2);
-  header[4] = 0x80 | 0x70 | 0x02; // global color table, 8-bit, 4 bits → 8 colors? 2^(N+1)=8 → N=2
-  // Actually: size of GCT = 2^(N+1). For 8 colors N=2. We have 6 colors → pad to 8. N=2.
-  header[5] = 0; // bg
-  header[6] = 0; // aspect
+  header.writeUInt16LE(width, 0);
+  header.writeUInt16LE(height, 2);
+  header[4] = 0x80 | 0x70 | 0x02;
+  header[5] = 0;
+  header[6] = 0;
   parts.push(header);
 
   const gct = Buffer.alloc(8 * 3);
   for (let i = 0; i < 8; i++) {
-    const c = PALETTE[i] || [0, 0, 0];
+    const c = palette[i] || [0, 0, 0];
     gct[i * 3] = c[0];
     gct[i * 3 + 1] = c[1];
     gct[i * 3 + 2] = c[2];
   }
   parts.push(gct);
 
-  // Netscape loop
   parts.push(Buffer.from([0x21, 0xff, 0x0b]));
   parts.push(Buffer.from('NETSCAPE2.0'));
   parts.push(Buffer.from([0x03, 0x01, 0x00, 0x00, 0x00]));
 
-  for (let f = 0; f < FRAMES; f++) {
-    const t = f / FRAMES;
-    const pixels = framePixels(kind, t);
+  for (let f = 0; f < frameCount; f++) {
+    const t = f / frameCount;
+    const pixels = pixelsFor(t);
 
-    // Graphic Control Extension
     const gce = Buffer.alloc(8);
     gce[0] = 0x21;
     gce[1] = 0xf9;
@@ -176,17 +178,16 @@ function writeGif(filePath, kind) {
     gce[7] = 0;
     parts.push(gce);
 
-    // Image Descriptor
     const id = Buffer.alloc(10);
     id[0] = 0x2c;
     id.writeUInt16LE(0, 1);
     id.writeUInt16LE(0, 3);
-    id.writeUInt16LE(W, 5);
-    id.writeUInt16LE(H, 7);
+    id.writeUInt16LE(width, 5);
+    id.writeUInt16LE(height, 7);
     id[9] = 0;
     parts.push(id);
 
-    parts.push(lzwEncode(pixels, 3)); // min code size 3 for 8-color table
+    parts.push(lzwEncode(pixels, 3));
   }
 
   parts.push(Buffer.from([0x3b]));
@@ -199,4 +200,102 @@ for (const kind of ['sticker-orbit', 'pin-drift', 'collage-pulse']) {
   writeGif(file, kind);
   console.log(`✓ ${kind}.gif (${(fs.statSync(file).size / 1024).toFixed(1)} KB)`);
 }
+const GIF_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'media', 'gifs');
+const BW = 160;
+const BH = 96;
+
+function fillScene(pixels, w, h, paint) {
+  pixels.fill(0);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      pixels[y * w + x] = paint(x, y);
+    }
+  }
+  return pixels;
+}
+
+function ellipse(x, y, cx, cy, rx, ry) {
+  const dx = (x - cx) / rx;
+  const dy = (y - cy) / ry;
+  return dx * dx + dy * dy <= 1;
+}
+
+const PACK_SCENES = {
+  mothership: {
+    palette: [[4, 16, 24], [28, 255, 154], [180, 255, 220], [8, 40, 48], [255, 246, 232], [20, 80, 70], [0, 0, 0], [0, 0, 0]],
+    paint(t) {
+      const buf = new Uint8Array(BW * BH);
+      const lift = Math.sin(t * Math.PI * 2) * 8;
+      return fillScene(buf, BW, BH, (x, y) => {
+        if (ellipse(x, y, 80, 42 + lift, 36, 12)) return 1;
+        if (ellipse(x, y, 80, 38 + lift, 14, 8)) return 2;
+        if (Math.abs(x - 80) < 10 && y > 50 + lift && y < 88) return 5;
+        if ((x + y) % 28 === 0) return 4;
+        return 0;
+      });
+    },
+  },
+  glitch: {
+    palette: [[8, 6, 12], [184, 255, 64], [255, 45, 149], [94, 242, 255], [30, 24, 36], [255, 246, 232], [0, 0, 0], [0, 0, 0]],
+    paint(t) {
+      const buf = new Uint8Array(BW * BH);
+      const shift = Math.floor(Math.sin(t * Math.PI * 2) * 6);
+      return fillScene(buf, BW, BH, (x, y) => {
+        if (y % 8 === 0) return 4;
+        const bar = (x + shift + y) % 24 < 6;
+        if (bar && y > 28 && y < 68) return y % 2 === 0 ? 2 : 3;
+        if ((x * 3 + Math.floor(t * 16)) % 31 === 0) return 1;
+        return 0;
+      });
+    },
+  },
+  soft: {
+    palette: [[255, 236, 220], [244, 162, 97], [255, 214, 186], [94, 242, 255], [255, 246, 232], [180, 120, 90], [0, 0, 0], [0, 0, 0]],
+    paint(t) {
+      const buf = new Uint8Array(BW * BH);
+      const drift = Math.sin(t * Math.PI * 2) * 10;
+      return fillScene(buf, BW, BH, (x, y) => {
+        if (ellipse(x, y, 80, 48 + drift * 0.3, 22, 14)) return 1;
+        if (ellipse(x, y, 40 + drift, 24, 3, 3) || ellipse(x, y, 120 - drift, 30, 2, 2)) return 3;
+        return 0;
+      });
+    },
+  },
+  root: {
+    palette: [[4, 8, 4], [51, 255, 102], [16, 48, 20], [180, 255, 180], [8, 16, 8], [255, 255, 255], [0, 0, 0], [0, 0, 0]],
+    paint(t) {
+      const buf = new Uint8Array(BW * BH);
+      const drop = Math.floor(t * BH);
+      return fillScene(buf, BW, BH, (x, y) => {
+        const col = x % 16 === 4 || x % 16 === 12;
+        if (col && (y + drop) % 10 < 4) return 1;
+        if (ellipse(x, y, 80, 48, 8, 8)) return 3;
+        return 0;
+      });
+    },
+  },
+};
+
+const NAMES = {
+  mothership: ['ufo-beam', 'alien-wave', 'saucer-lift'],
+  glitch: ['static-burst', 'pixel-glitch', 'vhs-tracking'],
+  soft: ['floating-ufo', 'sparkle-drift', 'cozy-stars'],
+  root: ['matrix-rain', 'hacker-pulse', 'shell-access'],
+};
+
+for (const [pack, scene] of Object.entries(PACK_SCENES)) {
+  const dir = path.join(GIF_ROOT, pack);
+  fs.mkdirSync(dir, { recursive: true });
+  for (const name of NAMES[pack]) {
+    const file = path.join(dir, `${name}.gif`);
+    writeGif(file, name, {
+      width: BW,
+      height: BH,
+      palette: scene.palette,
+      pixels: scene.paint,
+    });
+    console.log(`✓ ${pack}/${name}.gif`);
+  }
+}
+
 console.log(`\nGIFs written to ${OUT}`);

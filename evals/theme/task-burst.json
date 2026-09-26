@@ -1,0 +1,19 @@
+{
+  "id": "task-burst",
+  "packId": "acid",
+  "win": {
+    "kind": "task",
+    "size": "small",
+    "typing": false,
+    "quietMode": false,
+    "celebrationsEnabled": true,
+    "intensity": "normal",
+    "nowMs": 100000,
+    "recent": [{ "kind": "task", "atMs": 99000 }]
+  },
+  "expect": {
+    "show": false,
+    "colorTheme": "Orbital — Acid Scrapbook",
+    "tint": false
+  }
+}

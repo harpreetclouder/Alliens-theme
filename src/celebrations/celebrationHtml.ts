@@ -41,6 +41,19 @@ function particleSpans(count: number): string {
   return Array.from({ length: count }, (_, i) => `<i class="p" style="--i:${i}"></i>`).join('');
 }
 
+export function gifImgSrcDirective(gifUri: string | undefined, cspSource: string): string {
+  if (!gifUri || !/^https?:/i.test(gifUri)) {
+    return cspSource;
+  }
+  const parts = [cspSource, gifUri.startsWith('https:') ? 'https:' : 'http:'];
+  try {
+    parts.push(new URL(gifUri).origin);
+  } catch {
+    /* keep scheme only */
+  }
+  return parts.join(' ');
+}
+
 export function buildCelebrationHtml(opts: CelebrationHtmlOpts): string {
   const useCollage =
     Boolean(opts.collage) && (opts.mode === 'overlay' || opts.mode === 'panel');
@@ -68,7 +81,7 @@ export function buildCelebrationHtml(opts: CelebrationHtmlOpts): string {
     .map((s, i) => `<span class="sticker s${i + 1}" style="--i:${i}">${s}</span>`)
     .join('');
   const gifHtml = opts.gifUri
-    ? `<img class="collage-gif" id="heroGif" src="${opts.gifUri}" alt="" />`
+    ? `<img class="collage-gif" id="heroGif" src="${opts.gifUri}" alt="" onerror="this.classList.add('gif-broken');this.removeAttribute('src')" />`
     : `<div class="collage-gif placeholder loop ${opts.loopClass}" aria-hidden="true"></div>`;
   const visualClass = opts.gifUri ? 'has-gif' : 'has-loop';
   const animClass = opts.animFlavor ? `anim-${opts.animFlavor}` : 'anim-pulse-zoom';
@@ -83,9 +96,7 @@ export function buildCelebrationHtml(opts: CelebrationHtmlOpts): string {
       ? ` · ${escapeHtml(opts.regionId.toUpperCase())}`
       : '';
 
-  const imgSrc = opts.gifUri?.startsWith('http')
-    ? `${opts.cspSource} https:`
-    : opts.cspSource;
+  const imgSrc = gifImgSrcDirective(opts.gifUri, opts.cspSource);
 
   if (useCollage) {
     return `<!DOCTYPE html>
@@ -184,7 +195,7 @@ export function buildCelebrationHtml(opts: CelebrationHtmlOpts): string {
           .join('')}</div>`
       : '';
   const legacyGifHtml = opts.gifUri
-    ? `<img class="hero-gif" id="heroGif" src="${opts.gifUri}" alt="" aria-hidden="true" />`
+    ? `<img class="hero-gif" id="heroGif" src="${opts.gifUri}" alt="" aria-hidden="true" onerror="this.classList.add('gif-broken');this.removeAttribute('src')" />`
     : '';
   const loopHtml = opts.gifUri
     ? ''
@@ -196,7 +207,7 @@ export function buildCelebrationHtml(opts: CelebrationHtmlOpts): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${opts.cspSource} 'unsafe-inline'; media-src ${opts.cspSource}; img-src ${opts.cspSource}; ${scriptSrc};">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${opts.cspSource} 'unsafe-inline'; media-src ${opts.cspSource}; img-src ${imgSrc}; ${scriptSrc};">
   <link rel="stylesheet" href="${opts.cssUri}">
   <style>
     body {

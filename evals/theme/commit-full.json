@@ -1,0 +1,20 @@
+{
+  "id": "commit-full",
+  "packId": "mothership",
+  "win": {
+    "kind": "commit",
+    "size": "small",
+    "typing": false,
+    "quietMode": false,
+    "celebrationsEnabled": true,
+    "intensity": "normal",
+    "nowMs": 100000,
+    "recent": []
+  },
+  "expect": {
+    "show": true,
+    "forceSurface": null,
+    "colorTheme": "Orbital — Mothership OS",
+    "tint": true
+  }
+}

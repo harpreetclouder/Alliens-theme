@@ -1,0 +1,19 @@
+{
+  "id": "quiet-task",
+  "packId": "soft",
+  "win": {
+    "kind": "task",
+    "size": "small",
+    "typing": false,
+    "quietMode": true,
+    "celebrationsEnabled": true,
+    "intensity": "normal",
+    "nowMs": 100000,
+    "recent": []
+  },
+  "expect": {
+    "show": false,
+    "colorTheme": "Orbital — Soft Abduction",
+    "tint": false
+  }
+}

@@ -1,3 +1,4 @@
+import * as fs from 'node:fs';
 import { PackId } from '../packs/types';
 import { GIFS, GifDef } from './gifs';
 import { fetchGiphyGif, isGiphyFailure } from './giphy';
@@ -130,8 +131,11 @@ export async function pickJoyGif(opts: ContentBrainOpts): Promise<BrainGifPick> 
     random,
   });
 
-  if (isGiphyFailure(result)) {
-    return pickLocal(opts, region, def, random, `giphy failed → local (${result.reason})`);
+  if (isGiphyFailure(result) || !result.fsPath || !fs.existsSync(result.fsPath)) {
+    const why = isGiphyFailure(result)
+      ? result.reason
+      : 'gif not cached yet';
+    return pickLocal(opts, region, def, random, `giphy skipped → local (${why})`);
   }
 
   return {
@@ -140,7 +144,6 @@ export async function pickJoyGif(opts: ContentBrainOpts): Promise<BrainGifPick> 
       pack: opts.pack,
       file: '',
       absoluteFsPath: result.fsPath,
-      remoteUrl: result.fsPath ? undefined : result.url,
     },
     region,
     source: 'giphy',

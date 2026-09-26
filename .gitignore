@@ -11,5 +11,7 @@ out/
 .vscode/orbital-streak.json
 .vscode-test/
 .tmp-commit-sim/
+.tmp-git-template/
 .tmp-tenor-test/
 .tmp-giphy-test/
+.tmp-gif-verify/

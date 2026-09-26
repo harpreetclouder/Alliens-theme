@@ -1,0 +1,20 @@
+{
+  "id": "push-spotlight",
+  "packId": "glitch",
+  "win": {
+    "kind": "push",
+    "size": "small",
+    "typing": false,
+    "quietMode": false,
+    "celebrationsEnabled": true,
+    "intensity": "normal",
+    "nowMs": 100000,
+    "recent": []
+  },
+  "expect": {
+    "show": true,
+    "forceSurface": null,
+    "colorTheme": "Orbital — Glitch Transmission",
+    "tint": true
+  }
+}

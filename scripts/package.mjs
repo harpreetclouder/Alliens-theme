@@ -31,9 +31,10 @@ try {
   step(2, 5, 'Unit tests (npm test)');
   run('npm test', { env: { ...process.env, ORBITAL_SKIP_SIGNAL: '1' } });
 
-  step(3, 5, 'Orbital Brain evals + hard commit-detect');
+  step(3, 5, 'Orbital Brain evals + hard commit-detect + GIF paint');
   run('node scripts/eval.mjs');
   run('node scripts/verify-commit-detect.mjs');
+  run('node scripts/verify-gif-visual.mjs');
 
   step(4, 5, 'Bundling VSIX (vsce package)');
   run(

@@ -1,0 +1,20 @@
+{
+  "id": "quiet-commit",
+  "packId": "root",
+  "win": {
+    "kind": "commit",
+    "size": "small",
+    "typing": false,
+    "quietMode": true,
+    "celebrationsEnabled": true,
+    "intensity": "normal",
+    "nowMs": 100000,
+    "recent": []
+  },
+  "expect": {
+    "show": true,
+    "forceSurface": "statusbar",
+    "colorTheme": "Orbital — Root Access",
+    "tint": false
+  }
+}

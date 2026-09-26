@@ -1,16 +1,10 @@
 import * as vscode from 'vscode';
 import { CelebrationEngine } from '../celebrations/engine';
-import { PACKS } from '../packs/registry';
+import { PACKS, PACK_THEME_LABELS } from '../packs/registry';
 import { orbitalLog } from '../util/log';
 import type { PackId } from '../packs/types';
 
-export const PACK_THEME_LABELS: Record<PackId, string> = {
-  mothership: 'Orbital — Mothership OS',
-  glitch: 'Orbital — Glitch Transmission',
-  soft: 'Orbital — Soft Abduction',
-  root: 'Orbital — Root Access',
-  acid: 'Orbital — Acid Scrapbook',
-};
+export { PACK_THEME_LABELS } from '../packs/registry';
 
 export async function pickPack(): Promise<PackId | undefined> {
   const items = (Object.keys(PACKS) as PackId[]).map((id) => ({

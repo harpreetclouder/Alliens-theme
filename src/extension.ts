@@ -64,6 +64,19 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   );
   context.subscriptions.push(...disposables);
 
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeTextDocument((event) => {
+      const scheme = event.document.uri.scheme;
+      if (scheme !== 'file' && scheme !== 'untitled') {
+        return;
+      }
+      if (event.contentChanges.length === 0) {
+        return;
+      }
+      engine.noteTyping();
+    }),
+  );
+
   void runFirstRunIfNeeded(context, engine);
 }
 

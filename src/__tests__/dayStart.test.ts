@@ -12,11 +12,12 @@ function settings(partial: Partial<OrbitalSettings> = {}): OrbitalSettings {
   return {
     pack: 'mothership',
     celebrationsEnabled: true,
+    quietMode: false,
     orbitEnabled: true,
     display: 'terminal',
     surfaces: {},
     intensity: 'normal',
-    triggers: { tests: true, build: true, commit: true, debug: true, save: false },
+    triggers: { tests: true, build: true, commit: true, push: true, debug: true, save: false, tasks: true },
     soundEnabled: false,
     mutedPacks: [],
     reduceMotion: 'never',

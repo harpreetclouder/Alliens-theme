@@ -40,6 +40,9 @@ try {
   step('Orbital Brain evals');
   run('node scripts/eval.mjs');
 
+  step('GIF visual harness');
+  run('node scripts/verify-gif-visual.mjs');
+
   if (live) {
     step('Agent verify (preview + commit path)');
     run('npm run verify:agent');

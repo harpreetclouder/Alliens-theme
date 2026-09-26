@@ -1,5 +1,22 @@
 /** Pure helpers for git commit detection (no vscode import — unit-testable). */
 
+export function isPushOperationKind(kind: string | undefined): boolean {
+  if (!kind) {
+    return false;
+  }
+  const normalized = kind.toLowerCase();
+  if (normalized.includes('pull')) {
+    return false;
+  }
+  return normalized === 'push' || normalized.startsWith('push');
+}
+
+/** Message after the reflog tab — `update by push` or `push: …`, not commit text. */
+export function isPushReflogMessage(message: string): boolean {
+  const msg = message.trim();
+  return /^update by push\b/i.test(msg) || /^push\b/i.test(msg);
+}
+
 export function isCommitOperationKind(kind: string | undefined): boolean {
   if (!kind) {
     return false;

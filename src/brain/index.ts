@@ -4,3 +4,4 @@ export * from './decide';
 export * from './state';
 export * from './adaptive';
 export * from './intelligence';
+export * from './winMoment';

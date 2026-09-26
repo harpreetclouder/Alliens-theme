@@ -8,8 +8,8 @@ import {
   COMMIT_DETECTED_REL,
   type CommitDetectedFile,
 } from '../verification/agentIpc';
-import { isCommitOperationKind } from './gitCommitDetect';
-import { readLatestCommitShaFromReflog, resolveHeadReflogPath } from './gitReflog';
+import { isCommitOperationKind, isPushOperationKind } from './gitCommitDetect';
+import { readLatestCommitShaFromReflog, readLatestPushMarker, resolveHeadReflogPath } from './gitReflog';
 
 export { isCommitOperationKind } from './gitCommitDetect';
 
@@ -63,6 +63,7 @@ export function registerGitTrigger(
   let enablementListenerAttached = false;
   let lastCelebratedSha = '';
   let lastCelebratedAt = 0;
+  let lastPushAt = 0;
 
   const writeDetected = (sha: string, source: string): void => {
     const folder = vscode.workspace.workspaceFolders?.[0];
@@ -108,6 +109,24 @@ export function registerGitTrigger(
     engine.handle('commit');
   };
 
+  const celebratePush = (source: string, marker?: string): void => {
+    const settings = getSettings();
+    if (!settings.triggers.push) {
+      orbitalLog('Push ignored', 'push trigger disabled in settings');
+      return;
+    }
+    const now = Date.now();
+    if (now - lastPushAt < DEDUPE_MS) {
+      orbitalLog('Push ignored', 'deduped · recent push');
+      return;
+    }
+    lastPushAt = now;
+    lastCelebratedAt = now;
+    orbitalLog('Push win detected', source);
+    writeDetected(marker || 'push', source);
+    engine.handle('push');
+  };
+
   const wireReflogFastPath = (repoFsPath: string, key: string): void => {
     if (wiredReflogRoots.has(repoFsPath)) {
       return;
@@ -120,13 +139,18 @@ export function registerGitTrigger(
     wiredReflogRoots.add(repoFsPath);
 
     let lastReflogSha = readLatestCommitShaFromReflog(repoFsPath);
+    let lastPushMarker = readLatestPushMarker(repoFsPath);
     const checkReflog = (source: string): void => {
       const sha = readLatestCommitShaFromReflog(repoFsPath);
-      if (!sha || sha === lastReflogSha) {
-        return;
+      if (sha && sha !== lastReflogSha) {
+        lastReflogSha = sha;
+        celebrateCommit(`${source} · ${key}`, sha);
       }
-      lastReflogSha = sha;
-      celebrateCommit(`${source} · ${key}`, sha);
+      const pushMarker = readLatestPushMarker(repoFsPath);
+      if (pushMarker && pushMarker !== lastPushMarker) {
+        lastPushMarker = pushMarker;
+        celebratePush(`${source}-push · ${key}`, pushMarker);
+      }
     };
 
     try {
@@ -157,6 +181,10 @@ export function registerGitTrigger(
       disposables.push(
         repo.onDidRunOperation((ev) => {
           if (ev?.error) {
+            return;
+          }
+          if (isPushOperationKind(ev?.operation?.kind)) {
+            celebratePush(`onDidRunOperation · ${ev?.operation?.kind} · ${key}`);
             return;
           }
           if (!isCommitOperationKind(ev?.operation?.kind)) {
@@ -291,6 +319,32 @@ export function registerGitTrigger(
     activateGit();
   } else {
     void gitExt.activate().then(activateGit);
+  }
+
+  try {
+    const win = vscode.window as typeof vscode.window & {
+      onDidEndTerminalShellExecution?: vscode.Event<{
+        exitCode?: number;
+        execution?: { commandLine?: { value?: string } };
+      }>;
+    };
+    const onEnd = win.onDidEndTerminalShellExecution;
+    if (typeof onEnd === 'function') {
+      disposables.push(
+        onEnd((event) => {
+          if (event.exitCode !== 0) {
+            return;
+          }
+          const cmd = event.execution?.commandLine?.value ?? '';
+          if (/\bgit\s+push\b/.test(cmd) && !/--dry-run\b/.test(cmd)) {
+            celebratePush('terminal-push');
+          }
+        }),
+      );
+      orbitalLog('Terminal push listener active', 'git push exit 0');
+    }
+  } catch (err) {
+    orbitalLog('Terminal push API blocked', String(err));
   }
 
   return disposables;

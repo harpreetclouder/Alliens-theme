@@ -14,14 +14,21 @@ describe('readSettings', () => {
     const s = readSettings(() => fakeConfig({}) as never);
     expect(s.pack).toBe('mothership');
     expect(s.celebrationsEnabled).toBe(true);
+    expect(s.quietMode).toBe(false);
     expect(s.display).toBe('terminal');
     expect(s.surfaces).toEqual({});
     expect(s.intensity).toBe('normal');
     expect(s.soundEnabled).toBe(true);
     expect(s.triggers.tests).toBe(true);
     expect(s.triggers.save).toBe(false);
+    expect(s.triggers.push).toBe(true);
     expect(s.joyRegion).toBe('auto');
     expect(s.giphySdkKey).toBe('');
+  });
+
+  it('reads quiet mode', () => {
+    const s = readSettings(() => fakeConfig({ quietMode: true }) as never);
+    expect(s.quietMode).toBe(true);
   });
 
   it('prefers giphy.sdkKey over legacy apiKey', () => {
